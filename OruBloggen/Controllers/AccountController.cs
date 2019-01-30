@@ -165,11 +165,13 @@ namespace OruBloggen.Controllers
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
                     var ctx = new OruBloggenDbContext();
-                    
-                    ctx.Teams.Add(new TeamModel
-                    {
-                        TeamName = "Informatik"
-                    });
+                    if(!ctx.Teams.Any(p => p.TeamName == "Informatik"))
+                    { 
+                        ctx.Teams.Add(new TeamModel
+                        {
+                            TeamName = "Informatik"
+                        });
+                    }
 
                     ctx.Users.Add(new UserModel
                     {
