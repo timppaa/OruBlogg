@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
@@ -139,6 +140,7 @@ namespace OruBloggen.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
+            ListTeams();
             return View();
         }
 
@@ -165,14 +167,6 @@ namespace OruBloggen.Controllers
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
                     var ctx = new OruBloggenDbContext();
-                    if(!ctx.Teams.Any(p => p.TeamName == "Informatik"))
-                    { 
-                        ctx.Teams.Add(new TeamModel
-                        {
-                            TeamName = "Informatik"
-                        });
-                    }
-
                     ctx.Users.Add(new UserModel
                     {
                         UserID = user.Id,
@@ -180,7 +174,7 @@ namespace OruBloggen.Controllers
                         UserLastname = model.Lastname,
                         UserBirthDate = model.Birthdate,
                         UserPhoneNumber = model.Phonenumber,
-                        UserTeamID = 1
+                        UserTeamID = int.Parse(model.Team)
                     });
 
                     
@@ -192,6 +186,18 @@ namespace OruBloggen.Controllers
 
             // If we got this far, something failed, redisplay form
             return View(model);
+        }
+
+        public void ListTeams()
+        {
+            var ctx = new OruBloggenDbContext();
+            List<SelectListItem> List = new List<SelectListItem>();
+            foreach(var item in ctx.Teams)
+            {
+                List.Add(new SelectListItem() { Text = item.TeamName, Value = item.TeamID.ToString() });
+            }
+            ViewData["Teams"] = List; 
+
         }
 
         //
