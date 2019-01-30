@@ -11,7 +11,8 @@ namespace OruBloggen.Models
     {
         [Key]
         public string UserID { get; set; }
-        public string UserName { get; set; }
+        public string UserFirstname { get; set; }
+        public string UserLastname { get; set; }
         public DateTime UserBirthDate { get; set; }
         public int UserPhoneNumber { get; set; }
         public string UserImagePath { get; set; }
