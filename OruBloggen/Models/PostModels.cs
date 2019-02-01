@@ -16,9 +16,11 @@ namespace OruBloggen.Models
         public DateTime PostDate { get; set; }
         public string PostFilePath { get; set; }
         public bool PostFormal { get; set; }
+
         [ForeignKey("PostUserID")]
         public virtual UserModel UserModel { get; set; } 
         public string PostUserID { get; set; }
+
         [ForeignKey("PostCategoryID")]
         public virtual CategoryModel CategoryModel { get; set; }
         public int PostCategoryID { get; set; }
