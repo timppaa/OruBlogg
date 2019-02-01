@@ -1,0 +1,50 @@
+﻿@model OruBloggen.Models.AdminViewModel
+@{
+    ViewBag.Title = "PostDetails";
+}
+
+<h2>PostDetails</h2>
+
+<div>
+    <h4>PostModel</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.postModel.PostTitle)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.postModel.PostTitle)
+        </dd>
+
+        @*<dt>
+            @Html.DisplayNameFor(model => model.Author)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Author)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Reciever)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Reciever)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Message)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Message)
+        </dd>*@
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Delete", "DeletePost", new { id = Model.postModel.PostID }) |
+    @Html.ActionLink("Back to List", "Posts")
+</p>
+

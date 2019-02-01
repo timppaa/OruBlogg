@@ -21,30 +21,30 @@ namespace OruBloggen.Controllers
             var ctx = new OruBloggenDbContext();
             var userID = User.Identity.GetUserId();
 
-            //if (post != null) {
+            if (title != null)
+            {
 
-            //    if (post.PostText.Length >= 1 && post.PostTitle.Length >= 1)
-            //    {
+                if (text.Length >= 1 && title.Length >= 1)
+                {
 
-            //        ctx.Posts.Add(new PostModel
-            //        {
-            //            PostTitle = post.PostTitle,
-            //            PostText = post.PostText,
-            //            PostDate = DateTime.Now,
-            //            PostFilePath = post.PostFilePath,
-            //            PostFormal = post.PostFormal,
-            //            PostUserID = userID,
-            //            PostCategoryID = post.PostCategoryID
-            ////        });
+                    ctx.Posts.Add(new PostModel
+                    {
+                        PostTitle = title,
+                        PostText = text,
+                        PostDate = DateTime.Now,
+                        PostFormal = formal,
+                        PostUserID = userID,
+                        PostCategoryID = category
+                   });
 
-            //        ctx.SaveChanges();
-            //    }
-            //}
+                    ctx.SaveChanges();
+                }
+            }
 
-            //else
-            //{
+            else
+            {
 
-            //}
+            }
         }
 
 

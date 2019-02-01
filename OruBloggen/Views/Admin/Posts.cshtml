@@ -4,24 +4,26 @@
 }
 
 <h2>Posts</h2>
+<table class="table">
 
-@foreach (var item in Model.postModels)
-{
+    @foreach (var item in Model.postModelList)
+    {
     <tr>
+        <td>
+            @Model.userModelList.FirstOrDefault(p => p.UserID == item.PostUserID).UserFirstname
+        </td>
         <td>
             @Html.DisplayFor(modelItem => item.PostTitle)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.PostText)
-        </td>
-        <td>
             @Html.DisplayFor(modelItem => item.PostDate)
         </td>
-        @*<td>
-            @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id = item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id = item.ID })
-        </td>*@
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id = item.PostID }) |
+            @Html.ActionLink("Details", "PostDetails", new { id = item.PostID }) |
+            @Html.ActionLink("Delete", "DeletePost", new { id = item.PostID })
+        </td>
     </tr>
-}
+    }
+    </table>
 

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
@@ -19,19 +20,54 @@ namespace OruBloggen.Controllers
         public ActionResult Posts ()
         {
 
-            ctx.Posts.Add(new PostModel() {
-                PostTitle = "Hej",
-                PostDate = DateTime.Now,
-                PostFormal = true,
-                PostText = "Första Inlägget",
-                PostUserID = "5a55a092-765d-4948-bf31-e43062ba3c40",
-            });
-            ctx.SaveChanges();
             
 
-            AVM.postModels = ctx.Posts.ToList();
-
+            AVM.postModelList = ctx.Posts.ToList();
+            AVM.userModelList = ctx.Users.ToList();
             return View(AVM);
+        }
+
+        public ActionResult PostDetails (int? id)
+        {
+
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            AVM.postModel = ctx.Posts.Find(id);
+            if (AVM.postModel == null)
+            {
+                Console.WriteLine("Test");
+                return HttpNotFound();
+            }
+            return View(AVM);
+        }
+
+        public ActionResult DeletePost(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            AVM.postModel = ctx.Posts.Find(id);
+            AVM.userModelList = ctx.Users.ToList();
+            if (AVM.postModel == null)
+            {
+                return HttpNotFound();
+            }
+            return View(AVM);
+        }
+
+        // POST: PostModels/Delete/5
+        [HttpPost, ActionName("DeletePost")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            PostModel postModel = ctx.Posts.Find(id);
+            
+            ctx.Posts.Remove(postModel);
+            ctx.SaveChanges();
+            return RedirectToAction("Posts");
         }
     }
 }
