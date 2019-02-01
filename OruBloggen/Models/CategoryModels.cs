@@ -12,6 +12,7 @@ namespace OruBloggen.Models
         [Key]
         public int CategoryID { get; set; }
         public string CategoryName { get; set; }
+        public bool IsFormel { get; set; }
 
         [InverseProperty("CategoryModel")]
         public virtual List<PostModel> PostModel { get; set; }
