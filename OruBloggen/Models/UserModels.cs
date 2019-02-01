@@ -15,7 +15,10 @@ namespace OruBloggen.Models
         public string UserLastname { get; set; }
         public DateTime UserBirthDate { get; set; }
         public int UserPhoneNumber { get; set; }
+
+        [DataType(DataType.ImageUrl)]
         public string UserImagePath { get; set; }
+
         public bool UserIsAdmin { get; set; }
         [ForeignKey("UserTeamID")]
         public virtual TeamModel TeamModel { get; set; }
