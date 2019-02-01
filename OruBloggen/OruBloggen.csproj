@@ -190,12 +190,18 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\PostApiController.cs" />
+    <Compile Include="Controllers\PostController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Migrations\201901301421398_initial.cs" />
     <Compile Include="Migrations\201901301421398_initial.Designer.cs">
       <DependentUpon>201901301421398_initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901310937019_FormelPost.cs" />
+    <Compile Include="Migrations\201901310937019_FormelPost.Designer.cs">
+      <DependentUpon>201901310937019_FormelPost.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -272,6 +278,7 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Post\Post.cshtml" />
     <Content Include="Views\Admin\Posts.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -293,6 +300,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201901301421398_initial.resx">
       <DependentUpon>201901301421398_initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901310937019_FormelPost.resx">
+      <DependentUpon>201901310937019_FormelPost.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
