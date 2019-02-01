@@ -15,43 +15,47 @@ namespace OruBloggen.Controllers
         {
             var ctx = new OruBloggenDbContext();
             var meetingView = new MeetingViewModel();
-            foreach(var item in ctx.Users)
+            var users = new List<SelectListItem>();
+
+            foreach (var item in ctx.Users)
             {
-                meetingView.Users.Add(
+                users.Add(
                     new SelectListItem() { Text = item.UserFirstname + " " + item.UserLastname, Value = item.UserID }
                     );
             }
+            meetingView.Users = users;
+            meetingView.SelectedUsers = new List<SelectListItem>();
             return View(meetingView);
         }
 
         //public void ListUsers()
         //{
         //    var ctx = new OruBloggenDbContext();
-        //    List<SelectListItem> userList = new List<SelectListItem>();
+        //    List<SelectListItem> users = new List<SelectListItem>();
         //    foreach (var item in ctx.Users)
         //    {
-        //        userList.Add(new SelectListItem() { Text = item.UserFirstname + " " + item.UserLastname, Value = item.UserID });
+        //        users.Add(new SelectListItem() { Text = item.UserFirstname + " " + item.UserLastname, Value = item.UserID });
         //    }
-        //    ViewData["Users"] = userList;
+        //    ViewData["Users"] = users;
         //}
 
         [HttpPost]
-        public ActionResult CreateMeeting(MeetingModel model)
+        public ActionResult CreateMeeting(MeetingViewModel model)
         {
             var ctx = new OruBloggenDbContext();
 
             ctx.Meetings.Add(new MeetingModel
             {
-                MeetingTitle = model.MeetingTitle,
-                MeetingDesc = model.MeetingDesc,
-                MeetingStartDate = model.MeetingStartDate,
-                MeetingEndDate = model.MeetingEndDate,
+                MeetingTitle = model.Meeting.MeetingTitle,
+                MeetingDesc = model.Meeting.MeetingDesc,
+                MeetingStartDate = model.Meeting.MeetingStartDate,
+                MeetingEndDate = model.Meeting.MeetingEndDate,
                 MeetingUserID = User.Identity.GetUserId()
             });
 
             ctx.SaveChanges();
 
-            foreach(var item in ViewData["SelectedUsers"] as List<SelectListItem>) {
+            foreach(var item in model.SelectedUsers) {
                 ctx.UserMeetings.Add(new UserMeetingModel
                 {
                     MeetingID = ctx.Meetings.Last().MeetingID,

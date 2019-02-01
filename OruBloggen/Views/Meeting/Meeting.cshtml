@@ -50,7 +50,7 @@
     <div class="form-group">
         @Html.LabelFor(model => model.Users, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.ListBoxFor(model => model.Users, Model.Users, new { @class = "form-control", id = "usersLb" })
+            @Html.ListBoxFor(model => model.Users, Model.Users, new { @class = "form-control"@*, id = "usersLb"*@ })
             <input class="btn btn-default" type="button" name="+" id="add" value="+" />
             <input class="btn btn-default" type="button" name="-" id="remove" value="-" />
         </div>
@@ -59,7 +59,7 @@
     <div class="form-group">
         @Html.LabelFor(model => model.SelectedUsers, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.ListBoxFor(model => model.SelectedUsers, Model.SelectedUsers, new { @class = "form-control", id = "selectedUsersLb" })
+            @Html.ListBoxFor(model => model.SelectedUsers, Model.SelectedUsers, new { @class = "form-control"@*, id = "selectedUsersLb"*@ })
         </div>
     </div>
 
