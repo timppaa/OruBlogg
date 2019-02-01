@@ -1,4 +1,4 @@
-﻿@model OruBloggen.Models.MeetingModel
+﻿@model OruBloggen.Models.MeetingViewModel
 
 @{
     ViewBag.Title = "Meeting";
@@ -16,50 +16,50 @@
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <div class="form-group">
-        @Html.LabelFor(model => model.MeetingTitle, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.Meeting.MeetingTitle, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.MeetingTitle, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.MeetingTitle, "", new { @class = "text-danger" })
+            @Html.EditorFor(model => model.Meeting.MeetingTitle, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Meeting.MeetingTitle, "", new { @class = "text-danger" })
         </div>
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.MeetingDesc, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.Meeting.MeetingDesc, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.MeetingDesc, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.MeetingDesc, "", new { @class = "text-danger" })
+            @Html.EditorFor(model => model.Meeting.MeetingDesc, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Meeting.MeetingDesc, "", new { @class = "text-danger" })
         </div>
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.MeetingStartDate, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.Meeting.MeetingStartDate, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.MeetingStartDate, "{0:yyyy-MM-ddThh:mm:ss}", new { htmlAttributes = new { @class = "form-control", type = "datetime-local" } })
-            @Html.ValidationMessageFor(model => model.MeetingStartDate, "", new { @class = "text-danger" })
+            @Html.EditorFor(model => model.Meeting.MeetingStartDate, "{0:yyyy-MM-ddThh:mm:ss}", new { htmlAttributes = new { @class = "form-control", type = "datetime-local" } })
+            @Html.ValidationMessageFor(model => model.Meeting.MeetingStartDate, "", new { @class = "text-danger" })
         </div>
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.MeetingEndDate, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.Meeting.MeetingEndDate, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.MeetingEndDate, "{0:yyyy-MM-ddThh:mm:ss}", new { htmlAttributes = new { @class = "form-control", type = "datetime-local" } })
-            @Html.ValidationMessageFor(model => model.MeetingEndDate, "", new { @class = "text-danger" })
+            @Html.EditorFor(model => model.Meeting.MeetingEndDate, "{0:yyyy-MM-ddThh:mm:ss}", new { htmlAttributes = new { @class = "form-control", type = "datetime-local" } })
+            @Html.ValidationMessageFor(model => model.Meeting.MeetingEndDate, "", new { @class = "text-danger" })
         </div>
     </div>
 
     <div class="form-group">
-        @Html.Label("Users", new { @class = "col-md-2 control-label" })
+        @Html.LabelFor(model => model.Users, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.ListBox("Users", ViewData["Users"] as List<SelectListItem>, new { @class = "form-control", id = "usersLb" })
+            @Html.ListBoxFor(model => model.Users, Model.Users, new { @class = "form-control", id = "usersLb" })
             <input class="btn btn-default" type="button" name="+" id="add" value="+" />
             <input class="btn btn-default" type="button" name="-" id="remove" value="-" />
         </div>
     </div>
     
     <div class="form-group">
-        @Html.Label("Users", new { @class = "col-md-2 control-label" })
+        @Html.LabelFor(model => model.SelectedUsers, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.ListBox("SelectedUsers", ViewData["SelectedUsers"] as List<SelectListItem>, new { @class = "form-control", id = "selectedUsersLb" })
+            @Html.ListBoxFor(model => model.SelectedUsers, Model.SelectedUsers, new { @class = "form-control", id = "selectedUsersLb" })
         </div>
     </div>
 
@@ -77,8 +77,6 @@
         $(document)
             .on("click", "#add", function () {
                 $("#usersLb :selected").remove().appendTo("#selectedUsersLb");
-                var selected = $("usersLb :selected").text();
-                $.post("SelectedUserList", "Meeting", selected);
             })
             .on("click", "#remove", function () {
                 $("#selectedUsersLb :selected").remove().appendTo("#usersLb");

@@ -202,6 +202,7 @@
     <Compile Include="Models\CategoryModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\MeetingViewModels.cs" />
     <Compile Include="Models\OruBloggenDbContext.cs" />
     <Compile Include="Models\PostReportModels.cs" />
     <Compile Include="Models\UserMeetingModels.cs" />
