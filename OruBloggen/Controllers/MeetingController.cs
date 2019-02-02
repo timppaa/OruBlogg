@@ -14,30 +14,23 @@ namespace OruBloggen.Controllers
         public ActionResult Meeting()
         {
             var ctx = new OruBloggenDbContext();
-            var meetingView = new MeetingViewModel();
+            
             var users = new List<SelectListItem>();
-
             foreach (var item in ctx.Users)
             {
                 users.Add(
                     new SelectListItem() { Text = item.UserFirstname + " " + item.UserLastname, Value = item.UserID }
                     );
             }
-            meetingView.Users = users;
-            meetingView.SelectedUsers = new List<SelectListItem>();
+
+            var meetingView = new MeetingViewModel
+            {
+                Users = users,
+                SelectedUsers = new List<SelectListItem>()
+            };
+
             return View(meetingView);
         }
-
-        //public void ListUsers()
-        //{
-        //    var ctx = new OruBloggenDbContext();
-        //    List<SelectListItem> users = new List<SelectListItem>();
-        //    foreach (var item in ctx.Users)
-        //    {
-        //        users.Add(new SelectListItem() { Text = item.UserFirstname + " " + item.UserLastname, Value = item.UserID });
-        //    }
-        //    ViewData["Users"] = users;
-        //}
 
         [HttpPost]
         public ActionResult CreateMeeting(MeetingViewModel model)
@@ -52,17 +45,15 @@ namespace OruBloggen.Controllers
                 MeetingEndDate = model.Meeting.MeetingEndDate,
                 MeetingUserID = User.Identity.GetUserId()
             });
-
             ctx.SaveChanges();
 
-            foreach(var item in model.SelectedUsers) {
+            foreach(var item in model.SelectedUserIds) {
                 ctx.UserMeetings.Add(new UserMeetingModel
                 {
-                    MeetingID = ctx.Meetings.Last().MeetingID,
-                    UserID = item.Value
+                    MeetingID = ctx.Meetings.OrderByDescending(m => m.MeetingID).First().MeetingID,
+                    UserID = item
                 });
             };
-
             ctx.SaveChanges();
 
             return RedirectToAction("Meeting");
