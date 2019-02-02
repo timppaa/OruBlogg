@@ -18,9 +18,11 @@ namespace OruBloggen.Controllers
             var users = new List<SelectListItem>();
             foreach (var item in ctx.Users)
             {
-                users.Add(
-                    new SelectListItem() { Text = item.UserFirstname + " " + item.UserLastname, Value = item.UserID }
-                    );
+                users.Add(new SelectListItem
+                {
+                    Text = item.UserFirstname + " " + item.UserLastname,
+                    Value = item.UserID
+                });
             }
 
             var meetingView = new MeetingViewModel
