@@ -1,0 +1,101 @@
+﻿@model OruBloggen.Models.MeetingViewModel
+
+@{
+    ViewBag.Title = "Meeting";
+}
+
+<h2>Meeting</h2>
+
+
+@using (Html.BeginForm("CreateMeeting", "Meeting", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <h4>MeetingModel</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(model => model.Meeting.MeetingTitle, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Meeting.MeetingTitle, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Meeting.MeetingTitle, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Meeting.MeetingDesc, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Meeting.MeetingDesc, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Meeting.MeetingDesc, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Meeting.MeetingStartDate, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Meeting.MeetingStartDate, "{0:yyyy-MM-ddThh:mm:ss}", new { htmlAttributes = new { @class = "form-control", type = "datetime-local" } })
+            @Html.ValidationMessageFor(model => model.Meeting.MeetingStartDate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <input placeholder="Date" class="textbox-n" type="text" onfocus="(this.type='datetime-local')" onblur="(this.type='text')" id="date">
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Meeting.MeetingEndDate, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Meeting.MeetingEndDate, "{0:yyyy-MM-ddThh:mm:ss}", new { htmlAttributes = new { @class = "form-control", type = "datetime-local" } })
+            @Html.ValidationMessageFor(model => model.Meeting.MeetingEndDate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class=" form-group">
+        @Html.Label("Search users", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <input class="form-control" type="text" id="searchString" />
+            <input class="btn btn-default" type="button" id="search" value="Search" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Users, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.ListBoxFor(model => model.UserIds, Model.Users, new { @class = "form-control", id = "usersLb" })
+            <input class="btn btn-default" type="button" name="+" id="add" value="+" />
+            <input class="btn btn-default" type="button" name="-" id="remove" value="-" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.SelectedUsers, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.ListBoxFor(model => model.SelectedUserIds, Model.SelectedUsers, new { @class = "form-control", id = "selectedUsersLb" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Create" class="btn btn-default" />
+        </div>
+    </div>
+</div>
+}
+
+@section Scripts {
+<script>
+    $(function () {
+        $(document)
+            .on("click", "#add", function () {
+                $("#usersLb :selected").remove().appendTo("#selectedUsersLb");
+            })
+            .on("click", "#remove", function () {
+                $("#selectedUsersLb :selected").remove().appendTo("#usersLb");
+            })
+            .on("click", "#search", function () {
+                var searchString = $("#searchString").val();
+                location.href='/Meeting/Meeting?searchString=' + searchString;
+            });
+    });
+</script>
+
+    @Scripts.Render("~/bundles/jqueryval")
+}
