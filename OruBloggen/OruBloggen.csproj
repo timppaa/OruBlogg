@@ -202,11 +202,13 @@
     <Compile Include="Models\AddPostViewModels.cs" />
     <Compile Include="Models\AdminViewModel.cs" />
     <Compile Include="Models\CategoryModels.cs" />
+    <Compile Include="Models\HomePostViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MeetingViewModels.cs" />
     <Compile Include="Models\OruBloggenDbContext.cs" />
     <Compile Include="Models\PostReportModels.cs" />
+    <Compile Include="Models\PostViewModels.cs" />
     <Compile Include="Models\UserMeetingModels.cs" />
     <Compile Include="Models\MeetingModels.cs" />
     <Compile Include="Models\MessageModels.cs" />
@@ -252,8 +254,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />

@@ -14,7 +14,7 @@ namespace OruBloggen.Models
         [Required(ErrorMessage = "Inlägget måste ha en text.")]
         public string PostText { get; set; }
 
-        [FileExtensions(Extensions = "doc, docx, zip, rar, pptx, ppt, xls, xlsx, txt, word, jpg, png, jpeg, gif", ErrorMessage = "Filformatet stöds ej.")]
+        [FileExtensions(Extensions = "pdf, doc, docx, zip, rar, pptx, ppt, xls, xlsx, txt, word, jpg, png, jpeg, gif", ErrorMessage = "Filformatet stöds ej.")]
         public string File { get; set; }
 
         public bool PostFormal { get; set; }
