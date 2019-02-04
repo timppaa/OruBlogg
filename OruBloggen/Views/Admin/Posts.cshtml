@@ -11,21 +11,26 @@
 
         @foreach (var item in Model.postModelList)
         {
-            <tr>
-                <td>
-                    @Model.userModelList.FirstOrDefault(p => p.UserID == item.PostUserID).UserFirstname
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PostTitle)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PostDate)
-                </td>
-                <td>
-                    @Html.ActionLink("Visa inlägg", "PostDetails", new { id = item.PostID }) |
-                    @Html.ActionLink("Ta bort", "DeletePost", new { id = item.PostID })
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @Model.userModelList.FirstOrDefault(p => p.UserID == item.PostUserID).UserFirstname @Model.userModelList.FirstOrDefault(p => p.UserID == item.PostUserID).UserLastname
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.PostTitle)
+            </td>
+            <td>
+                @Utility.getCategoryById(item.PostCategoryID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PostDate)
+            </td>
+
+            <td>
+                @Html.ActionLink("Visa inlägg", "PostDetails", new { id = item.PostID }) |
+                @Html.ActionLink("Ta bort", "DeletePost", new { id = item.PostID })
+            </td>
+        </tr>
         }
     </table>
 }

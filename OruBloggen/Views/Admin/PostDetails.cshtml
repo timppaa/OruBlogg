@@ -11,9 +11,9 @@
     <div>
         <hr />
         <dl class="dl-horizontal">
-            <dt>
-                @Html.DisplayNameFor(model => model.postModel.PostTitle)
-            </dt>
+            <dd>
+                @Model.userModel.UserFirstname @Model.userModel.UserLastname
+            </dd>
 
             <dd>
                 @Html.DisplayFor(model => model.postModel.PostTitle)

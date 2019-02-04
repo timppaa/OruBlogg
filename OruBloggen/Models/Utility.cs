@@ -16,5 +16,10 @@ namespace OruBloggen.Models
 
             return ctx.Users.FirstOrDefault(u => u.UserID == userId).UserIsAdmin;
         }
+        public static string getCategoryById(int categoryId)
+        {
+            var ctx = new OruBloggenDbContext();
+            return ctx.Categories.FirstOrDefault(u => u.CategoryID == categoryId).CategoryName;
+        }
     }
 }

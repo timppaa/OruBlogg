@@ -37,6 +37,7 @@ namespace OruBloggen.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             AVM.postModel = ctx.Posts.Find(id);
+            AVM.userModel = ctx.Users.FirstOrDefault(u => u.UserID == AVM.postModel.PostUserID);
             if (AVM.postModel == null)
             {
                 Console.WriteLine("Test");
