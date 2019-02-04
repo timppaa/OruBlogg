@@ -11,12 +11,12 @@ namespace OruBloggen.Controllers
     public class MeetingController : Controller
     {
         // GET: Meeting
-        public ActionResult Meeting()
+        public ActionResult Meeting(string searchString)
         {
-            var ctx = new OruBloggenDbContext();
-            
+            var userList = SearchUser(searchString);
+
             var users = new List<SelectListItem>();
-            foreach (var item in ctx.Users)
+            foreach (var item in userList)
             {
                 users.Add(new SelectListItem
                 {
@@ -32,6 +32,17 @@ namespace OruBloggen.Controllers
             };
 
             return View(meetingView);
+        }
+
+        public List<UserModel> SearchUser(string searchString)
+        {
+            var ctx = new OruBloggenDbContext();
+
+            var userList = ctx.Users.Where(u => String.Concat(u.UserFirstname, " ", u.UserLastname)
+                                    .Contains(searchString) || 
+                                    searchString == null).ToList();
+
+            return userList;
         }
 
         [HttpPost]
