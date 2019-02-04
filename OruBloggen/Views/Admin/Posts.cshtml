@@ -6,7 +6,7 @@
 }
 @if (Utility.isAdmin(User.Identity.GetUserId()))
 {
-    <h2>Posts</h2>
+    <h2>Inlägg</h2>
     <table class="table">
 
         @foreach (var item in Model.postModelList)
@@ -22,8 +22,8 @@
                     @Html.DisplayFor(modelItem => item.PostDate)
                 </td>
                 <td>
-                    @Html.ActionLink("Details", "PostDetails", new { id = item.PostID }) |
-                    @Html.ActionLink("Delete", "DeletePost", new { id = item.PostID })
+                    @Html.ActionLink("Visa inlägg", "PostDetails", new { id = item.PostID }) |
+                    @Html.ActionLink("Ta bort", "DeletePost", new { id = item.PostID })
                 </td>
             </tr>
         }
@@ -31,5 +31,5 @@
 }
 else
 {
-    <h3>You do not have access to this page.</h3>
+    <h3>Du har inte behörighet till denna sidan.</h3>
 }

@@ -6,7 +6,7 @@
 }
 @if (Utility.isAdmin(User.Identity.GetUserId()))
 {
-    <h2>Post</h2>
+    <h2>Inlägg</h2>
 
     <div>
         <hr />
@@ -24,10 +24,10 @@
         </dl>
     </div>
     <p>
-        @Html.ActionLink("Delete", "DeletePost", new { id = Model.postModel.PostID }) |
-        @Html.ActionLink("Back to List", "Posts")
+        @Html.ActionLink("Ta bort", "DeletePost", new { id = Model.postModel.PostID }) |
+        @Html.ActionLink("Tillbaka till listan", "Posts")
     </p>
 } else
 {
-    <h3>You do not have access to this page.</h3>
+    <h3>Du har inte behörighet till denna sidan.</h3>
 }

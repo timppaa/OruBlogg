@@ -2,11 +2,11 @@
 @using Microsoft.AspNet.Identity;
 @model OruBloggen.Models.AdminViewModel
 @{
-    ViewBag.Title = "User List";
+    ViewBag.Title = "Användarlista";
 }
 @if (Utility.isAdmin(User.Identity.GetUserId()))
 {
-    <h2>Users</h2>
+    <h2>Användare</h2>
     <table class="table">
 
         @foreach (var item in Model.userModelList)
@@ -49,5 +49,5 @@
 }
 else
 {
-    <h3>You do not have access to this page!</h3>
+    <h3>Du har inte behörighet till denna sidan.</h3>
 }
