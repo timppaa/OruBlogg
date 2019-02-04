@@ -38,7 +38,7 @@
             @Html.ValidationMessageFor(model => model.Meeting.MeetingStartDate, "", new { @class = "text-danger" })
         </div>
     </div>
-    <input placeholder="Date" class="textbox-n" type="text" onfocus="(this.type='datetime-local')" onblur="(this.type='text')" id="date">
+    
 
     <div class="form-group">
         @Html.LabelFor(model => model.Meeting.MeetingEndDate, htmlAttributes: new { @class = "control-label col-md-2" })
