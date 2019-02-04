@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -149,8 +150,9 @@ namespace OruBloggen.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model)
+        public async Task<ActionResult> Register(RegisterViewModel model, HttpPostedFileBase image)
         {
+
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
@@ -167,6 +169,17 @@ namespace OruBloggen.Controllers
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
                     var ctx = new OruBloggenDbContext();
+
+                    if (image != null)
+                    {
+                        string fileType = Path.GetExtension(image.FileName).ToLower();
+                        string fileName = user.Id;
+                        string path = Path.Combine(Server.MapPath("~/Images/" + fileName + fileType));
+                        model.ImagePath = fileName + fileType;
+                        image.SaveAs(path); 
+                    }
+
+
                     ctx.Users.Add(new UserModel
                     {
                         UserID = user.Id,
@@ -174,7 +187,8 @@ namespace OruBloggen.Controllers
                         UserLastname = model.Lastname,
                         UserBirthDate = model.Birthdate,
                         UserPhoneNumber = model.Phonenumber,
-                        UserTeamID = int.Parse(model.Team)
+                        UserTeamID = int.Parse(model.Team),
+                        UserImagePath = model.ImagePath
                     });
 
                     
