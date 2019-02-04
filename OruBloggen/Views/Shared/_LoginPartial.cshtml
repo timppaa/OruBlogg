@@ -1,19 +1,31 @@
 ﻿@using Microsoft.AspNet.Identity
+@using OruBloggen.Models;
 @if (Request.IsAuthenticated)
 {
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
     {
-    @Html.AntiForgeryToken()
+        @Html.AntiForgeryToken()
 
-<ul class="nav navbar-nav navbar-right">
-    <li>
-        @Html.ActionLink("Välkommen " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
-    </li>
-    <li>
-        @Html.ActionLink("Inlägg", "Post", "Post")
-    </li>
-    <li><a href="javascript:document.getElementById('logoutForm').submit()">Logga ut</a></li>
-</ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                @Html.ActionLink("Välkommen " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+            </li>
+            <li>
+                @Html.ActionLink("Inlägg", "Post", "Post")
+            </li>
+            <li>
+                @Html.ActionLink("Möte", "Meeting", "Meeting")
+            </li>
+            @if (Request.IsAuthenticated)
+            {
+                if (Utility.isAdmin(User.Identity.GetUserId()))
+                {
+                    <li>@Html.ActionLink("Admin", "Index", "Admin")</li>
+                }
+
+            }
+            <li><a href="javascript:document.getElementById('logoutForm').submit()">Logga ut</a></li>
+        </ul>
     }
 }
 else
