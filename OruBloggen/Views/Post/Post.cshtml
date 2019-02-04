@@ -1,0 +1,48 @@
+﻿@model OruBloggen.Models.AddPostViewModel
+
+@{
+    ViewBag.Title = "PostView";
+}
+
+<h2>PostView</h2>
+
+@using (Html.BeginForm("AddPost", "Post", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div>
+    @Html.TextBoxFor(model => model.PostTitle)
+    </div>
+    <div>
+        @Html.TextAreaFor(model => model.PostText)
+    </div>
+
+    <div>@Html.DropDownList("PostFormal", ViewData["PostTypes"] as List<SelectListItem>, new { @class = "form-control", @onchange = "viewCategory(this.value)" }) </div>
+
+    <div id="formal" style="float:left;">@Html.DropDownList("CategoryFormal", ViewData["CategoriesFormal"] as List<SelectListItem>, new { @class = "form-control" })</div>
+    <div id="informal" style="display:none; float:left;">@Html.DropDownList("CategoryInformal", ViewData["CategoriesInformal"] as List<SelectListItem>, new { @class = "form-control" })</div>
+
+    <input type="file" name="file" />
+    <input type="submit" value="Skicka inlägg" />
+}
+
+
+
+@section scripts {
+    <script type="text/javascript">
+
+        function viewCategory(value) {
+            var formal = document.getElementById("formal");
+            var informal = document.getElementById("informal");
+
+            if (value == "false") {
+                informal.style.display = 'block';
+                formal.style.display = 'none';
+            }
+            else {
+                formal.style.display = 'block';
+                informal.style.display = 'none';
+            }
+        };
+    </script>
+}
