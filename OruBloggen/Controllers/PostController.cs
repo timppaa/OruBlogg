@@ -12,13 +12,17 @@ namespace OruBloggen.Controllers
     [Authorize]
     public class PostController : Controller
     {
+        HomePostViewModel HomePostList = new HomePostViewModel();
+
         // GET: Post
         public ActionResult Post()
         {
             ListFormelItems();
             ListInformelItems();
             ListPostTypes();
-            return View();
+            FillPostList();
+            HomePostList.PostViewModel.Reverse(); //Kika på en annan lösning?
+            return View(HomePostList);
         }
 
         public void ListFormelItems ()
@@ -63,41 +67,37 @@ namespace OruBloggen.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddPost(AddPostViewModel post, HttpPostedFileBase file)
+        public ActionResult AddPost(HomePostViewModel post, HttpPostedFileBase file)
         {
             var ctx = new OruBloggenDbContext();
             var userID = User.Identity.GetUserId();
             string categoryID = null;
             var filePath = SaveFile(file);
-            
-            if (post.PostFormal)
+
+            if (post.AddPostViewModel.PostFormal)
             {
-                categoryID = post.CategoryFormal;
+                categoryID = post.AddPostViewModel.CategoryFormal;
             }
 
             else
             {
-                categoryID = post.CategoryInformal;
+                categoryID = post.AddPostViewModel.CategoryInformal;
             }
 
-            if (!string.IsNullOrEmpty(post.PostTitle) && !string.IsNullOrEmpty(post.PostText))
+            if (!string.IsNullOrEmpty(post.AddPostViewModel.PostTitle) && !string.IsNullOrEmpty(post.AddPostViewModel.PostText))
             {
                 ctx.Posts.Add(new PostModel
                 {
-                    PostTitle = post.PostTitle,
-                    PostText = post.PostText,
+                    PostTitle = post.AddPostViewModel.PostTitle,
+                    PostText = post.AddPostViewModel.PostText,
                     PostDate = DateTime.Now,
                     PostFilePath = filePath,
-                    PostFormal = post.PostFormal,
+                    PostFormal = post.AddPostViewModel.PostFormal,
                     PostUserID = userID,
                     PostCategoryID = int.Parse(categoryID)
                 });
 
-                if (ModelState.IsValid)
-                {
-                    ctx.SaveChanges();
-                }
-
+                ctx.SaveChanges();
             }
 
             return RedirectToAction("Post");
@@ -108,8 +108,18 @@ namespace OruBloggen.Controllers
         {
             var ctx = new OruBloggenDbContext();
             string filePath = null;
-            var postID = ctx.Posts.OrderByDescending(p => p.PostID).FirstOrDefault().PostID;
-            postID += 1;
+            var postID = 1;
+
+            try
+            {
+                postID = ctx.Posts.OrderByDescending(p => p.PostID).FirstOrDefault().PostID;
+                postID += 1;
+            }
+
+            catch
+            {
+
+            }
 
             if (file != null)
             {
@@ -122,6 +132,31 @@ namespace OruBloggen.Controllers
             }
 
             return filePath;
+        }
+
+        private void FillPostList()
+        {
+            var ctx = new OruBloggenDbContext();
+            var list = new List<PostViewModel>();
+            var categories = ctx.Categories;
+
+            foreach (var post in ctx.Posts)
+            {
+                list.Add(new PostViewModel
+                {
+                    PostID = post.PostID,
+                    PostTitle = post.PostTitle,
+                    PostText = post.PostText,
+                    PostDate = post.PostDate,
+                    PostCategory = post.PostCategoryID.ToString(),
+                    PostFormal = post.PostFormal,
+                    PostSender = post.PostUserID,
+                    PostFilePath = post.PostFilePath
+                });
+            }
+
+            HomePostList.PostViewModel = list;
+
         }
 
     }

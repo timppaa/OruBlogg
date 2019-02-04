@@ -1,4 +1,4 @@
-﻿@model OruBloggen.Models.AddPostViewModel
+﻿@model OruBloggen.Models.HomePostViewModel
 
 @{
     ViewBag.Title = "PostView";
@@ -11,20 +11,52 @@
     @Html.AntiForgeryToken()
 
     <div>
-    @Html.TextBoxFor(model => model.PostTitle)
+        Titel:
+        @Html.EditorFor(model => model.AddPostViewModel.PostTitle)
     </div>
+    <br/>
     <div>
-        @Html.TextAreaFor(model => model.PostText)
+        Inlägg:
+        @Html.TextAreaFor(model => model.AddPostViewModel.PostText)
     </div>
 
-    <div>@Html.DropDownList("PostFormal", ViewData["PostTypes"] as List<SelectListItem>, new { @class = "form-control", @onchange = "viewCategory(this.value)" }) </div>
+    <div>
+    Välj typ av inlägg:
+    @Html.DropDownList("AddPostViewModel.PostFormal", ViewData["PostTypes"] as List<SelectListItem>, new { @class = "form-control", @onchange = "viewCategory(this.value)" }) </div>
 
-    <div id="formal" style="float:left;">@Html.DropDownList("CategoryFormal", ViewData["CategoriesFormal"] as List<SelectListItem>, new { @class = "form-control" })</div>
-    <div id="informal" style="display:none; float:left;">@Html.DropDownList("CategoryInformal", ViewData["CategoriesInformal"] as List<SelectListItem>, new { @class = "form-control" })</div>
+    <div id="formal" style="float:left;">
+    Välj en kategori:
+    @Html.DropDownList("AddPostViewModel.CategoryFormal", ViewData["CategoriesFormal"] as List<SelectListItem>, new { @class = "form-control" })
+    </div>
 
-    <input type="file" name="file" />
+    <div id="informal" style="display:none; float:left;">
+    Välj en kategori:
+    @Html.DropDownList("AddPostViewModel.CategoryInformal", ViewData["CategoriesInformal"] as List<SelectListItem>, new { @class = "form-control" })
+    </div>
+
+    <input type="file" name="file" value="Ladda upp en fil"/>
     <input type="submit" value="Skicka inlägg" />
 }
+
+<hr />
+
+@foreach (var post in Model.PostViewModel)
+{
+<div>
+    <a class="list-group-item">
+        @post.PostSender
+    </a>
+    <a class="list-group-item">
+        @post.PostTitle , @post.PostDate
+    </a>
+    <a class="list-group-item">
+        @post.PostCategory
+    </a>
+    <p class="list-group-item"> @post.PostText </p>
+</div>
+    <br />
+}
+
 
 
 
