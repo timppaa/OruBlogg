@@ -38,10 +38,11 @@ namespace OruBloggen.Controllers
         {
             var ctx = new OruBloggenDbContext();
 
+            
             var userList = ctx.Users.Where(u => String.Concat(u.UserFirstname, " ", u.UserLastname)
                                     .Contains(searchString) || 
                                     searchString == null).ToList();
-
+          
             return userList;
         }
 
