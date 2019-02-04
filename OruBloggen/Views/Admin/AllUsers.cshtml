@@ -1,11 +1,12 @@
-﻿@using OruBloggen.Models
+﻿@using OruBloggen.Models;
+@using Microsoft.AspNet.Identity;
 @model OruBloggen.Models.AdminViewModel
 @{
     ViewBag.Title = "User List";
 }
-@if (Model.userModel.UserIsAdmin)
+@if (Utility.isAdmin(User.Identity.GetUserId()))
 {
-    <h2>Posts</h2>
+    <h2>Users</h2>
     <table class="table">
 
         @foreach (var item in Model.userModelList)

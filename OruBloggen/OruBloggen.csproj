@@ -285,7 +285,6 @@
     <Content Include="Views\Admin\PostDetails.cshtml" />
     <Content Include="Views\Admin\DeletePost.cshtml" />
     <Content Include="Views\Admin\AllUsers.cshtml" />
-    <Content Include="Views\Admin\AssignRoooles.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>

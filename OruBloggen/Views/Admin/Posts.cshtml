@@ -1,28 +1,35 @@
 ﻿@model OruBloggen.Models.AdminViewModel
+@using Microsoft.AspNet.Identity;
+@using OruBloggen.Models;
 @{
     ViewBag.Title = "Posts";
 }
+@if (Utility.isAdmin(User.Identity.GetUserId()))
+{
+    <h2>Posts</h2>
+    <table class="table">
 
-<h2>Posts</h2>
-<table class="table">
-
-    @foreach (var item in Model.postModelList)
-    {
-    <tr>
-        <td>
-            @Model.userModelList.FirstOrDefault(p => p.UserID == item.PostUserID).UserFirstname
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PostTitle)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PostDate)
-        </td>
-        <td>
-            @Html.ActionLink("Details", "PostDetails", new { id = item.PostID }) |
-            @Html.ActionLink("Delete", "DeletePost", new { id = item.PostID })
-        </td>
-    </tr>
-    }
+        @foreach (var item in Model.postModelList)
+        {
+            <tr>
+                <td>
+                    @Model.userModelList.FirstOrDefault(p => p.UserID == item.PostUserID).UserFirstname
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PostTitle)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PostDate)
+                </td>
+                <td>
+                    @Html.ActionLink("Details", "PostDetails", new { id = item.PostID }) |
+                    @Html.ActionLink("Delete", "DeletePost", new { id = item.PostID })
+                </td>
+            </tr>
+        }
     </table>
-
+}
+else
+{
+    <h3>You do not have access to this page.</h3>
+}
