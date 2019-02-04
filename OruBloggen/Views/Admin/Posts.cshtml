@@ -19,7 +19,6 @@
             @Html.DisplayFor(modelItem => item.PostDate)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id = item.PostID }) |
             @Html.ActionLink("Details", "PostDetails", new { id = item.PostID }) |
             @Html.ActionLink("Delete", "DeletePost", new { id = item.PostID })
         </td>

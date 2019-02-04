@@ -1,0 +1,52 @@
+﻿@using OruBloggen.Models
+@model OruBloggen.Models.AdminViewModel
+@{
+    ViewBag.Title = "User List";
+}
+@if (Model.userModel.UserIsAdmin)
+{
+    <h2>Posts</h2>
+    <table class="table">
+
+        @foreach (var item in Model.userModelList)
+        {
+
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserFirstname)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserLastname)
+                </td>
+                <td>
+                    @item.UserBirthDate.ToShortDateString()
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserPhoneNumber)
+                </td>
+                <td>
+
+                    @*<input type="button" value="@item.UserIsAdmin.ToString()" onclick="location.href = '@Url.Action("AssignRoles", "Admin", new {id = item.UserID})'"/>*@
+                    @Html.ActionLink(item.UserIsAdmin.ToString(), "AssignRoles", new {id = item.UserID})
+                </td>
+
+                <td>
+                    <input class="user-id" type="hidden" value="@item.UserID"/>
+                </td>
+                <td>
+                    @*@Html.ActionLink("Details", "PostDetails", new { id = item.PostID }) |
+            @Html.ActionLink("Delete", "DeletePost", new { id = item.PostID })*@
+                </td>
+            </tr>
+
+        }
+    </table>
+}
+else
+{
+    <h3>You do not have access to this page!</h3>
+}

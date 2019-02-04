@@ -1,0 +1,57 @@
+﻿@model OruBloggen.Models.AdminViewModel
+
+@{
+    ViewBag.Title = "AssignRoles";
+}
+
+<h2>Assign Roles</h2>
+
+<h3>Are you sure you want to assign this role?</h3>
+<div>
+    <h4>PostModel</h4>
+    <hr />
+    <dl class="dl-horizontal">
+
+
+        <td>
+            @Html.DisplayFor(modelItem => Model.userModel.UserID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => Model.userModel.UserFirstname)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => Model.userModel.UserLastname)
+        </td>
+        <td>
+            @Model.userModel.UserBirthDate.ToShortDateString()
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UserPhoneNumber)
+        </td>
+
+        <dd>
+            @Html.DisplayFor(model => model.postModel.PostTitle)
+        </dd>
+
+
+        <dd>
+            @Html.DisplayFor(model => model.postModel.PostText)
+        </dd>
+
+        <dd>
+            @Html.DisplayFor(model => model.postModel.PostDate)
+        </dd>
+
+
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Posts")
+        </div>
+    }
+</div>
