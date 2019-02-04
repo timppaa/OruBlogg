@@ -176,7 +176,7 @@ namespace OruBloggen.Controllers
                         string fileName = user.Id;
                         string path = Path.Combine(Server.MapPath("~/Images/" + fileName + fileType));
                         model.ImagePath = fileName + fileType;
-                        image.SaveAs(path);
+                        image.SaveAs(path); 
                     }
 
 
