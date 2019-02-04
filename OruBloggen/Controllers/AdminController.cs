@@ -63,6 +63,7 @@ namespace OruBloggen.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+
             PostModel postModel = ctx.Posts.Find(id);
             
             ctx.Posts.Remove(postModel);

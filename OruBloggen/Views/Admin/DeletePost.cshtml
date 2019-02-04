@@ -19,8 +19,6 @@
         <dd>
             @Model.userModelList.FirstOrDefault(p => p.UserID == @Model.postModel.PostUserID).UserLastname
         </dd>
-
-
         <dd>
             @Html.DisplayFor(model => model.postModel.PostTitle)
         </dd>
