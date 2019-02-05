@@ -81,6 +81,18 @@ namespace OruBloggen.Controllers
 
             var model = ctx.Meetings.Where(m => m.MeetingUserID.Equals(userId)).ToList();
 
+            foreach(var meeting in model)
+            {
+                if (meeting.MeetingActive)
+                {
+                    if (DateTime.Now > meeting.MeetingEndDate)
+                    {
+                        meeting.MeetingActive = false;
+                    }                            
+                }              
+            }
+            ctx.SaveChanges();
+
             return View(model);
         }
 

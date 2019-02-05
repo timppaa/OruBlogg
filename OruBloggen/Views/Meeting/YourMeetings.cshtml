@@ -44,7 +44,14 @@
         <td>
             @if (item.MeetingActive)
             {
-                @Html.DisplayName("Aktivt")
+                if (DateTime.Now > item.MeetingStartDate && DateTime.Now < item.MeetingEndDate)
+                {
+                    @Html.DisplayName("Pågående")
+                }
+                else
+                {
+                    @Html.DisplayName("Kommande")
+                }
             }
             else
             {
