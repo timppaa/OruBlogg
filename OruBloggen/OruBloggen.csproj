@@ -193,8 +193,13 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MeetingController.cs" />
     <Compile Include="Controllers\PostController.cs" />
+    <Compile Include="Controllers\ProfilePageController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902051358068_AddPOsition.cs" />
+    <Compile Include="Migrations\201902051358068_AddPOsition.Designer.cs">
+      <DependentUpon>201902051358068_AddPOsition.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -208,6 +213,7 @@
     <Compile Include="Models\OruBloggenDbContext.cs" />
     <Compile Include="Models\PostReportModels.cs" />
     <Compile Include="Models\PostViewModels.cs" />
+    <Compile Include="Models\ProfilePageViewModel.cs" />
     <Compile Include="Models\UserMeetingModels.cs" />
     <Compile Include="Models\MeetingModels.cs" />
     <Compile Include="Models\MessageModels.cs" />
@@ -281,6 +287,7 @@
     <Content Include="Views\Admin\AllUsers.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Post\Post.cshtml" />
+    <Content Include="Views\ProfilePage\ShowInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -300,6 +307,11 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201902051358068_AddPOsition.resx">
+      <DependentUpon>201902051358068_AddPOsition.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
