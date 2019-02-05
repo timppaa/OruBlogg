@@ -72,5 +72,7 @@ namespace OruBloggen.Controllers
 
             return RedirectToAction("Meeting");
         }
+
+        public ActionResult YourMeetings
     }
 }

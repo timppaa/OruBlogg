@@ -281,6 +281,7 @@
     <Content Include="Views\Admin\AllUsers.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Post\Post.cshtml" />
+    <Content Include="Views\Meeting\YourMeetings.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

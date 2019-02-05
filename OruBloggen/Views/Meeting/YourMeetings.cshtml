@@ -1,0 +1,63 @@
+﻿@model IEnumerable<OruBloggen.Models.MeetingModel>
+
+@{
+    ViewBag.Title = "YourMeetings";
+}
+
+<h2>YourMeetings</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.MeetingTitle)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MeetingDesc)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MeetingStartDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MeetingEndDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MeetingActive)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MeetingUserID)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.MeetingTitle)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MeetingDesc)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MeetingStartDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MeetingEndDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MeetingActive)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MeetingUserID)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.MeetingID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.MeetingID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.MeetingID })
+        </td>
+    </tr>
+}
+
+</table>
