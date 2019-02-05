@@ -4,7 +4,7 @@
     ViewBag.Title = "YourMeetings";
 }
 
-<h2>YourMeetings</h2>
+<h2>Dina skapade möten</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -12,24 +12,19 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.MeetingTitle)
+            @Html.DisplayName("Titel")
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.MeetingDesc)
+            @Html.DisplayName("Beskrivning")
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.MeetingStartDate)
+            @Html.DisplayName("Startdatum")
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.MeetingEndDate)
+            @Html.DisplayName("Slutdatum")
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.MeetingActive)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.MeetingUserID)
-        </th>
-        <th></th>
     </tr>
 
 @foreach (var item in Model) {
@@ -47,15 +42,18 @@
             @Html.DisplayFor(modelItem => item.MeetingEndDate)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.MeetingActive)
+            @if (item.MeetingActive)
+            {
+                @Html.DisplayName("Aktivt")
+            }
+            else
+            {
+                @Html.DisplayName("Avslutat/Inställt")
+            }
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.MeetingUserID)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.MeetingID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.MeetingID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.MeetingID })
+            @Html.ActionLink("Details", "Details", new { meetingId=item.MeetingID }) |
+            @Html.ActionLink("Ställ in möte", "CancelMeeting", new { meetingId=item.MeetingID })
         </td>
     </tr>
 }

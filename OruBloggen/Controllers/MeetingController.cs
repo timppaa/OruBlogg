@@ -73,6 +73,26 @@ namespace OruBloggen.Controllers
             return RedirectToAction("Meeting");
         }
 
-        public ActionResult YourMeetings
+        //GET
+        public ActionResult YourMeetings()
+        {
+            var userId = User.Identity.GetUserId();
+            var ctx = new OruBloggenDbContext();
+
+            var model = ctx.Meetings.Where(m => m.MeetingUserID.Equals(userId)).ToList();
+
+            return View(model);
+        }
+
+        public ActionResult CancelMeeting(int meetingId)
+        {
+            var ctx = new OruBloggenDbContext();
+
+            ctx.Meetings.FirstOrDefault(m => m.MeetingID == meetingId).MeetingActive = false;
+
+            ctx.SaveChanges();
+
+            return RedirectToAction("YourMeetings");
+        }
     }
 }
