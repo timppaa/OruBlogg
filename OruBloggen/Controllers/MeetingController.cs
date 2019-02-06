@@ -3,6 +3,7 @@ using OruBloggen.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
@@ -14,6 +15,7 @@ namespace OruBloggen.Controllers
         public ActionResult Meeting(string searchString)
         {
             var userList = SearchUser(searchString);
+            //var userList = GetSearchingData(searchString);
 
             var users = new List<SelectListItem>();
             foreach (var item in userList)
@@ -46,12 +48,24 @@ namespace OruBloggen.Controllers
             return userList;
         }
 
+        //public JsonResult GetSearchingData(string searchString)
+        //{
+        //    var ctx = new OruBloggenDbContext();
+
+
+        //    var userList = ctx.Users.Where(u => String.Concat(u.UserFirstname, " ", u.UserLastname)
+        //                            .Contains(searchString) ||
+        //                            searchString == null).ToList();
+
+        //    return Json(userList, JsonRequestBehavior.AllowGet);
+        //}
+
         [HttpPost]
         public ActionResult CreateMeeting(MeetingViewModel model)
         {
             var ctx = new OruBloggenDbContext();
 
-            ctx.Meetings.Add(new MeetingModel
+            var meeting = ctx.Meetings.Add(new MeetingModel
             {
                 MeetingTitle = model.Meeting.MeetingTitle,
                 MeetingDesc = model.Meeting.MeetingDesc,
@@ -70,7 +84,23 @@ namespace OruBloggen.Controllers
             };
             ctx.SaveChanges();
 
-            return RedirectToAction("Meeting");
+            return RedirectToAction("MeetingDetails", new { id = meeting.MeetingID});
+        }
+
+        public ActionResult MeetingDetails(int? id)
+        {
+            var ctx = new OruBloggenDbContext();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            MeetingModel meeting = ctx.Meetings.Find(id);
+            if (meeting == null)
+            {
+                Console.WriteLine("Test");
+                return HttpNotFound();
+            }
+            return View(meeting);
         }
     }
 }

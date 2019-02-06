@@ -90,10 +90,32 @@
             .on("click", "#remove", function () {
                 $("#selectedUsersLb :selected").remove().appendTo("#usersLb");
             })
-            .on("click", "#search", function () {
-                var searchString = $("#searchString").val();
-                location.href='/Meeting/Meeting?searchString=' + searchString;
-            });
+            //.on("click", "#search", function () {
+            //    var searchString = $("#searchString").val();
+            //    location.href='/Meeting/Meeting?searchString=' + searchString;
+            //});
+        $(document).ready(function () {
+            $("searchString").keyup(function () {
+                $.ajax({
+                    type: "post",
+                    url: "/Meeting/Meeting?searchString" + searchString,
+                    contentType: "html",
+                    success: function (result) {
+                        if (result.lenght == 0) {
+                            usersLb.append("No matching data")
+                        }
+                        else {
+                            $.each(result, function (index, value) {
+                                usersLb.append(value)
+                            })
+                        }
+                    }
+ 
+                })
+            })
+        }) 
+
+
     });
 </script>
 

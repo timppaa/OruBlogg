@@ -13,5 +13,23 @@ namespace OruBloggen.Models
         public IEnumerable<string> UserIds { get; set; }
         public IEnumerable<SelectListItem> SelectedUsers { get; set; }
         public IEnumerable<string> SelectedUserIds { get; set; }
+
+    }
+
+    public class CalenderViewModel
+    {
+        public int MeetingID { get; set; }
+        public string MeetingTitle { get; set; }
+        public string MeetingDesc { get; set; }
+        public 
+        public DateTime MeetingStartDate { get; set; }
+        public DateTime MeetingEndDate { get; set; }
+        
+    }
+
+    public class UserMeetingViewModel
+    {
+        public virtual UserModel UserModel { get; set; }
+        public string UserID { get; set; }
     }
 }
