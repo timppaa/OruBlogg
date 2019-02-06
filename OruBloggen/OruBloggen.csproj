@@ -189,6 +189,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\AllUsersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MeetingController.cs" />
@@ -205,6 +206,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AddPostViewModels.cs" />
     <Compile Include="Models\AdminViewModel.cs" />
+    <Compile Include="Models\AllUsersViewModelcs.cs" />
     <Compile Include="Models\CategoryModels.cs" />
     <Compile Include="Models\HomePostViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -288,6 +290,7 @@
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Post\Post.cshtml" />
     <Content Include="Views\ProfilePage\ShowInfo.cshtml" />
+    <Content Include="Views\AllUsers\ShowAllUsers.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -42,5 +42,40 @@ namespace OruBloggen.Controllers
 
             return View(model);
         }
+
+        public ActionResult ShowOtherUser(string id)
+        {
+            var ctx = new OruBloggenDbContext();
+            var identityCtx = new ApplicationDbContext();
+
+
+
+            var Users = ctx.Users.Find(id);
+            var identityUser = identityCtx.Users.Find(id);
+            var teamId = Users.UserTeamID;
+            var team = ctx.Teams.FirstOrDefault(t => t.TeamID == teamId).TeamName;
+            var path = "/Images/" + Users.UserImagePath;
+
+            var model = new ProfilePageViewModel
+            {
+                /*model.*/
+                ImagePath = path,
+                /*model.*/
+                Firstname = Users.UserFirstname,
+                /*model.*/
+                Lastname = Users.UserLastname,
+                /*model.*/
+                Email = identityUser.Email,
+                /*model*/
+                PhoneNumber = Users.UserPhoneNumber,
+                /*model.*/
+                Team = team,
+                /*model.*/
+                Position = Users.UserPosition
+            };
+
+            return View("ShowInfo", model);
+        }
+
     }
 }
