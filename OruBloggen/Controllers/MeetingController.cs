@@ -14,27 +14,10 @@ namespace OruBloggen.Controllers
         // GET: Meeting
         public ActionResult Meeting(string searchString)
         {
-            var ctx = new OruBloggenDbContext();
-            //var userList = SearchUser(searchString);
+            
+            var meetingView = ListUsersBeginning(searchString);
 
-            //var users = new List<SelectListItem>();
-            //foreach (var item in userList)
-            //{
-            //    users.Add(new SelectListItem
-            //    {
-            //        Text = item.UserFirstname + " " + item.UserLastname,
-            //        Value = item.UserID
-            //    });
-            //}
-
-            //var meetingView = new MeetingViewModel
-            //{
-            //    Users = users,
-            //    SelectedUsers = new List<SelectListItem>()
-            //};
-
-            //return View(meetingView);
-            return View(ctx.Users);
+            return View(meetingView);
         }
 
         public List<UserModel> SearchUser(string searchString)
@@ -49,7 +32,7 @@ namespace OruBloggen.Controllers
             return userList;
         }
 
-        public ActionResult ListUsersLB(string searchString)
+        public MeetingViewModel ListUsersBeginning(string searchString)
         {
             var userList = SearchUser(searchString);
             var users = new List<SelectListItem>();
@@ -68,21 +51,24 @@ namespace OruBloggen.Controllers
                 SelectedUsers = new List<SelectListItem>()
             };
 
-            return View(meetingView);
+            return meetingView;
         }
-
-
-        //public JsonResult GetSearchingData(string searchString)
-        //{
-        //    var ctx = new OruBloggenDbContext();
-
-
-        //    var userList = ctx.Users.Where(u => String.Concat(u.UserFirstname, " ", u.UserLastname)
-        //                            .Contains(searchString) ||
-        //                            searchString == null).ToList();
-
-        //    return Json(userList, JsonRequestBehavior.AllowGet);
-        //}
+        
+        public JsonResult ListSearchedUsers(string searchString)
+        {
+            var userList = SearchUser(searchString);
+            var users = new List<SelectListItem>();
+            foreach (var item in userList)
+            {
+                users.Add(new SelectListItem
+                {
+                    Text = item.UserFirstname + " " + item.UserLastname,
+                    Value = item.UserID
+                });
+            }
+            return new JsonResult { Data = users, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            
+        }
 
         [HttpPost]
         public ActionResult CreateMeeting(MeetingViewModel model)
@@ -108,7 +94,8 @@ namespace OruBloggen.Controllers
             };
             ctx.SaveChanges();
 
-            return RedirectToAction("MeetingDetails", new { id = meeting.MeetingID});
+            //return RedirectToAction("MeetingDetails", new { id = meeting.MeetingID});
+            return RedirectToAction("Index", "Calendar");
         }
 
         public ActionResult MeetingDetails(int? id)

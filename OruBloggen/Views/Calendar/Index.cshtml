@@ -4,7 +4,7 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Calender</h2>
+<h2>Kalender</h2>
 <div id="calender"></div>
 
 
@@ -91,14 +91,11 @@
 
                         $('#myModal #eventTitle').text(calEvent.title);
                         var $description = $('<div/>');
-                        $description.append($('<p/>').html('<b>Time: </b>' + calEvent.start.format("HH:mm") + " - " + calEvent.end.format("HH:mm")));
-                        $description.append($('<p/>').html('<b>Description: </b>' + calEvent.description));
-                        $description.append($('<p/>').html('<b>Creator: </b>' + calEvent.meetingCreator));
-                        $description.append($('<p/>').html('<b>Participants: </b>' + memberlist));
-                        //$description.append($('<p/>').html('<b>Start: </b>' + calEvent.start.format("YYYY-MM-DD HH:mm")));
-                        //if (calEvent.end != null) {
-                        //    $description.append($('<p/>').html('<b>End: </b>' + calEvent.end.format("YYYY-MM-DD HH:mm")));
-                        //}
+                        $description.append($('<p/>').html('<b>Tid: </b>' + calEvent.start.format("HH:mm") + " - " + calEvent.end.format("HH:mm")));
+                        $description.append($('<p/>').html('<b>Beskrivning: </b>' + calEvent.description));
+                        $description.append($('<p/>').html('<b>Skapare: </b>' + calEvent.meetingCreator));
+                        $description.append($('<p/>').html('<b>Deltagare: </b>' + memberlist));
+                        
 
                         $('#myModal #pDetails').empty().html($description);
 

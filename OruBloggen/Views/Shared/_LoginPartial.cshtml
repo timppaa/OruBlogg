@@ -6,26 +6,29 @@
     {
         @Html.AntiForgeryToken()
 
-        <ul class="nav navbar-nav navbar-right">
-            <li>
-                @Html.ActionLink("Välkommen " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
-            </li>
-            <li>
-                @Html.ActionLink("Inlägg", "Post", "Post")
-            </li>
-            <li>
-                @Html.ActionLink("Möte", "Meeting", "Meeting")
-            </li>
-            @if (Request.IsAuthenticated)
-            {
-                if (Utility.isAdmin(User.Identity.GetUserId()))
-                {
-                    <li>@Html.ActionLink("Admin", "Index", "Admin")</li>
-                }
+<ul class="nav navbar-nav navbar-right">
+    <li>
+        @Html.ActionLink("Välkommen " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+    </li>
+    <li>
+        @Html.ActionLink("Inlägg", "Post", "Post")
+    </li>
+    <li>
+        @Html.ActionLink("Möte", "Meeting", "Meeting")
+    </li>
+    <li>
+        @Html.ActionLink("Kalender", "Index", "Calendar")
+    </li>
+    @if (Request.IsAuthenticated)
+    {
+        if (Utility.isAdmin(User.Identity.GetUserId()))
+        {
+            <li>@Html.ActionLink("Admin", "Index", "Admin")</li>
+        }
 
-            }
-            <li><a href="javascript:document.getElementById('logoutForm').submit()">Logga ut</a></li>
-        </ul>
+    }
+    <li><a href="javascript:document.getElementById('logoutForm').submit()">Logga ut</a></li>
+</ul>
     }
 }
 else
