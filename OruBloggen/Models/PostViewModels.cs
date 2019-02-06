@@ -14,6 +14,8 @@ namespace OruBloggen.Models
         public string PostFilePath { get; set; }
         public bool PostFormal { get; set; }
         public string PostSender { get; set; }
+        public string PostSenderName { get; set; }
         public string PostCategory { get; set; }
+        public string SenderProfilePath { get; set; }
     }
 }
