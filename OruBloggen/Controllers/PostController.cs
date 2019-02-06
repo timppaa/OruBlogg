@@ -74,15 +74,15 @@ namespace OruBloggen.Controllers
             string categoryID = null;
             var filePath = SaveFile(file);
 
-            if (post.AddPostViewModel.PostFormal)
-            {
-                categoryID = post.AddPostViewModel.CategoryFormal;
-            }
+            //if (post.AddPostViewModel.PostFormal)
+            //{
+            //    categoryID = post.AddPostViewModel.CategoryFormal;
+            //}
 
-            else
-            {
-                categoryID = post.AddPostViewModel.CategoryInformal;
-            }
+            //else
+            //{
+            //    categoryID = post.AddPostViewModel.CategoryInformal;
+            //}
 
             if (!string.IsNullOrEmpty(post.AddPostViewModel.PostTitle) && !string.IsNullOrEmpty(post.AddPostViewModel.PostText))
             {
@@ -94,9 +94,8 @@ namespace OruBloggen.Controllers
                     PostFilePath = filePath,
                     PostFormal = post.AddPostViewModel.PostFormal,
                     PostUserID = userID,
-                    PostCategoryID = int.Parse(categoryID)
+                    PostCategoryID = int.Parse(post.AddPostViewModel.PostCategory)
                 });
-
                 ctx.SaveChanges();
             }
 
