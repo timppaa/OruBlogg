@@ -12,29 +12,9 @@ namespace OruBloggen.Controllers
     public class MeetingController : Controller
     {
         // GET: Meeting
-        public ActionResult Meeting(string searchString)
+        public ActionResult Meeting()
         {
-            var ctx = new OruBloggenDbContext();
-            //var userList = SearchUser(searchString);
-
-            //var users = new List<SelectListItem>();
-            //foreach (var item in userList)
-            //{
-            //    users.Add(new SelectListItem
-            //    {
-            //        Text = item.UserFirstname + " " + item.UserLastname,
-            //        Value = item.UserID
-            //    });
-            //}
-
-            //var meetingView = new MeetingViewModel
-            //{
-            //    Users = users,
-            //    SelectedUsers = new List<SelectListItem>()
-            //};
-
-            //return View(meetingView);
-            return View(ctx.Users);
+            return View();
         }
 
         public List<UserModel> SearchUser(string searchString)
@@ -97,34 +77,46 @@ namespace OruBloggen.Controllers
                 MeetingEndDate = model.Meeting.MeetingEndDate,
                 MeetingUserID = User.Identity.GetUserId()
             });
-            ctx.SaveChanges();
-
-            foreach(var item in model.SelectedUserIds) {
-                ctx.UserMeetings.Add(new UserMeetingModel
-                {
-                    MeetingID = ctx.Meetings.OrderByDescending(m => m.MeetingID).First().MeetingID,
-                    UserID = item
-                });
-            };
-            ctx.SaveChanges();
-
+            if(ModelState.IsValid) { 
+                ctx.SaveChanges();
+            }
             return RedirectToAction("MeetingDetails", new { id = meeting.MeetingID});
         }
 
-        public ActionResult MeetingDetails(int? id)
+        public ActionResult MeetingDetails(int? id, string searchString)
         {
-            var ctx = new OruBloggenDbContext();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            var ctx = new OruBloggenDbContext();
+            var userList = SearchUser(searchString);
             MeetingModel meeting = ctx.Meetings.Find(id);
+
+            var users = new List<SelectListItem>();
+            foreach (var item in userList)
+            {
+                users.Add(new SelectListItem
+                {
+                    Text = item.UserFirstname + " " + item.UserLastname,
+                    Value = item.UserID
+                });
+            }
+
+            MeetingViewModel meetingViewModel = new MeetingViewModel();
+
             if (meeting == null)
             {
+
                 Console.WriteLine("Test");
                 return HttpNotFound();
             }
-            return View(meeting);
+            meetingViewModel.Meeting = meeting;
+            meetingViewModel.Users = users;
+            meetingViewModel.SelectedUsers = new List<SelectListItem>();
+            return View(meetingViewModel);
         }
+
+
     }
 }

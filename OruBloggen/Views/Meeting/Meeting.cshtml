@@ -1,5 +1,5 @@
 ﻿@model OruBloggen.Models.MeetingViewModel
-    @using OruBloggen.Models;
+@using OruBloggen.Models;
 
 @{
     ViewBag.Title = "Meeting";
@@ -49,30 +49,6 @@
         </div>
     </div>
 
-    <div class=" form-group">
-        @Html.Label("Search users", htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            <input class="form-control" type="text" id="searchString" />
-            <input class="btn btn-default" type="button" id="search" value="Search" />
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.Users, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.ListBoxFor(model => model.UserIds, Model.Users, new { @class = "form-control", id = "usersLb" })
-            <input class="btn btn-default" type="button" name="+" id="add" value="+" />
-            <input class="btn btn-default" type="button" name="-" id="remove" value="-" />
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.SelectedUsers, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.ListBoxFor(model => model.SelectedUserIds, Model.SelectedUsers, new { @class = "form-control", id = "selectedUsersLb" })
-        </div>
-    </div>
-
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
             <input type="submit" value="Create" class="btn btn-default" />
@@ -82,44 +58,6 @@
 }
 
 @section Scripts {
-<script>
-    $(function () {
-        $(document)
-            .on("click", "#add", function () {
-                $("#usersLb :selected").remove().appendTo("#selectedUsersLb");
-            })
-            .on("click", "#remove", function () {
-                $("#selectedUsersLb :selected").remove().appendTo("#usersLb");
-            })
-            .on("click", "#search", function () {
-                var searchString = $("#searchString").val();
-                //var filteredList = Utility.getSearchedUsers(searchString);
-                location.href='/Meeting/Meeting?searchString=' + searchString;
-            });
-        //$(document).ready(function () {
-        //    $("searchString").keyup(function () {
-        //        $.ajax({
-        //            type: "post",
-        //            url: "/Meeting/Meeting?searchString" + searchString,
-        //            contentType: "html",
-        //            success: function (result) {
-        //                if (result.lenght == 0) {
-        //                    usersLb.append("No matching data")
-        //                }
-        //                else {
-        //                    $.each(result, function (index, value) {
-        //                        usersLb.append(value)
-        //                    })
-        //                }
-        //            }
- 
-        //        })
-        //    })
-        //}) 
-
-
-    });
-</script>
 
     @Scripts.Render("~/bundles/jqueryval")
 }
