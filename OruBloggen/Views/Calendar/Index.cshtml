@@ -51,7 +51,8 @@
                             description: v.MeetingDesc,
                             start: moment(v.MeetingStartDate),
                             end: v.MeetingEndDate != null ? moment(v.MeetingEndDate) : null,
-                            meetingID: v.MeetingID,  
+                            meetingID: v.MeetingID,
+                            meetingCreator: v.MeetingCreator
                     });
                   })
                     GenerateCalender(events);
@@ -92,6 +93,7 @@
                         var $description = $('<div/>');
                         $description.append($('<p/>').html('<b>Time: </b>' + calEvent.start.format("HH:mm") + " - " + calEvent.end.format("HH:mm")));
                         $description.append($('<p/>').html('<b>Description: </b>' + calEvent.description));
+                        $description.append($('<p/>').html('<b>Creator: </b>' + calEvent.meetingCreator));
                         $description.append($('<p/>').html('<b>Participants: </b>' + memberlist));
                         //$description.append($('<p/>').html('<b>Start: </b>' + calEvent.start.format("YYYY-MM-DD HH:mm")));
                         //if (calEvent.end != null) {

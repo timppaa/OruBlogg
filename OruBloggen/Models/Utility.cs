@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 namespace OruBloggen.Models
 {
@@ -21,5 +22,26 @@ namespace OruBloggen.Models
             var ctx = new OruBloggenDbContext();
             return ctx.Categories.FirstOrDefault(u => u.CategoryID == categoryId).CategoryName;
         }
+
+        //public static List<SelectListItem> getSearchedUsers(string searchString)
+        //{
+        //    var ctx = new OruBloggenDbContext();
+
+        //    var userList = ctx.Users.Where(u => String.Concat(u.UserFirstname, " ", u.UserLastname)
+        //                             .Contains(searchString) ||
+        //                             searchString == null).ToList();
+
+        //    var users = new List<SelectListItem>();
+        //    foreach (var item in userList)
+        //    {
+        //        users.Add(new SelectListItem
+        //        {
+        //            Text = item.UserFirstname + " " + item.UserLastname,
+        //            Value = item.UserID
+        //        });
+        //    }
+
+        //    return users;
+        //}
     }
 }

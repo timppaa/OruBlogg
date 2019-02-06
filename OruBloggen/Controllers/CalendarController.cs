@@ -24,15 +24,18 @@ namespace OruBloggen.Controllers
                 var events = ctx.Meetings.ToList();
                 foreach (var item in events)
                 {
-                    meetings.Add(new CalenderViewModel
+                    foreach (var user in ctx.Users.Where(u => u.UserID == item.MeetingUserID))
                     {
-                        MeetingTitle = item.MeetingTitle,
-                        MeetingDesc = item.MeetingDesc,
-                        MeetingEndDate = item.MeetingEndDate,
-                        MeetingStartDate = item.MeetingStartDate,
-                        MeetingID = item.MeetingID
-                        MeetingCreator = item.
-                    });
+                        meetings.Add(new CalenderViewModel
+                        {
+                            MeetingTitle = item.MeetingTitle,
+                            MeetingDesc = item.MeetingDesc,
+                            MeetingEndDate = item.MeetingEndDate,
+                            MeetingStartDate = item.MeetingStartDate,
+                            MeetingID = item.MeetingID,
+                            MeetingCreator = user.UserFirstname + " " + user.UserLastname
+                        });
+                    }
                 }
                 return new JsonResult { Data = meetings, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
             }
@@ -48,7 +51,7 @@ namespace OruBloggen.Controllers
             foreach(var item in lista)
             {
                 foreach(var user in ctx.Users.Where(u => u.UserID == item.UserID)) {
-                    viewList.Add(user.UserFirstname + " " + user.UserLastname);
+                    viewList.Add(" "+user.UserFirstname + " " + user.UserLastname);
                 }
             }
             return new JsonResult { Data = viewList, JsonRequestBehavior = JsonRequestBehavior.AllowGet };

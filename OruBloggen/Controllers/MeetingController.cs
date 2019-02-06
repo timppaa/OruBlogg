@@ -14,9 +14,44 @@ namespace OruBloggen.Controllers
         // GET: Meeting
         public ActionResult Meeting(string searchString)
         {
-            var userList = SearchUser(searchString);
-            //var userList = GetSearchingData(searchString);
+            var ctx = new OruBloggenDbContext();
+            //var userList = SearchUser(searchString);
 
+            //var users = new List<SelectListItem>();
+            //foreach (var item in userList)
+            //{
+            //    users.Add(new SelectListItem
+            //    {
+            //        Text = item.UserFirstname + " " + item.UserLastname,
+            //        Value = item.UserID
+            //    });
+            //}
+
+            //var meetingView = new MeetingViewModel
+            //{
+            //    Users = users,
+            //    SelectedUsers = new List<SelectListItem>()
+            //};
+
+            //return View(meetingView);
+            return View(ctx.Users);
+        }
+
+        public List<UserModel> SearchUser(string searchString)
+        {
+            var ctx = new OruBloggenDbContext();
+
+            
+            var userList = ctx.Users.Where(u => String.Concat(u.UserFirstname, " ", u.UserLastname)
+                                    .Contains(searchString) || 
+                                    searchString == null).ToList();
+          
+            return userList;
+        }
+
+        public ActionResult ListUsersLB(string searchString)
+        {
+            var userList = SearchUser(searchString);
             var users = new List<SelectListItem>();
             foreach (var item in userList)
             {
@@ -36,17 +71,6 @@ namespace OruBloggen.Controllers
             return View(meetingView);
         }
 
-        public List<UserModel> SearchUser(string searchString)
-        {
-            var ctx = new OruBloggenDbContext();
-
-            
-            var userList = ctx.Users.Where(u => String.Concat(u.UserFirstname, " ", u.UserLastname)
-                                    .Contains(searchString) || 
-                                    searchString == null).ToList();
-          
-            return userList;
-        }
 
         //public JsonResult GetSearchingData(string searchString)
         //{

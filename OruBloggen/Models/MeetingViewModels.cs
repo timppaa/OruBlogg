@@ -21,7 +21,7 @@ namespace OruBloggen.Models
         public int MeetingID { get; set; }
         public string MeetingTitle { get; set; }
         public string MeetingDesc { get; set; }
-        public 
+        public string MeetingCreator { get; set; }
         public DateTime MeetingStartDate { get; set; }
         public DateTime MeetingEndDate { get; set; }
         

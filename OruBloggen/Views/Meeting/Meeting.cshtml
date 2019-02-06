@@ -1,4 +1,5 @@
 ﻿@model OruBloggen.Models.MeetingViewModel
+    @using OruBloggen.Models;
 
 @{
     ViewBag.Title = "Meeting";
@@ -22,7 +23,7 @@
             @Html.ValidationMessageFor(model => model.Meeting.MeetingTitle, "", new { @class = "text-danger" })
         </div>
     </div>
-
+    @*@Utility.getSearchedUsers*@
     <div class="form-group">
         @Html.LabelFor(model => model.Meeting.MeetingDesc, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
@@ -90,30 +91,31 @@
             .on("click", "#remove", function () {
                 $("#selectedUsersLb :selected").remove().appendTo("#usersLb");
             })
-            //.on("click", "#search", function () {
-            //    var searchString = $("#searchString").val();
-            //    location.href='/Meeting/Meeting?searchString=' + searchString;
-            //});
-        $(document).ready(function () {
-            $("searchString").keyup(function () {
-                $.ajax({
-                    type: "post",
-                    url: "/Meeting/Meeting?searchString" + searchString,
-                    contentType: "html",
-                    success: function (result) {
-                        if (result.lenght == 0) {
-                            usersLb.append("No matching data")
-                        }
-                        else {
-                            $.each(result, function (index, value) {
-                                usersLb.append(value)
-                            })
-                        }
-                    }
+            .on("click", "#search", function () {
+                var searchString = $("#searchString").val();
+                //var filteredList = Utility.getSearchedUsers(searchString);
+                location.href='/Meeting/Meeting?searchString=' + searchString;
+            });
+        //$(document).ready(function () {
+        //    $("searchString").keyup(function () {
+        //        $.ajax({
+        //            type: "post",
+        //            url: "/Meeting/Meeting?searchString" + searchString,
+        //            contentType: "html",
+        //            success: function (result) {
+        //                if (result.lenght == 0) {
+        //                    usersLb.append("No matching data")
+        //                }
+        //                else {
+        //                    $.each(result, function (index, value) {
+        //                        usersLb.append(value)
+        //                    })
+        //                }
+        //            }
  
-                })
-            })
-        }) 
+        //        })
+        //    })
+        //}) 
 
 
     });
