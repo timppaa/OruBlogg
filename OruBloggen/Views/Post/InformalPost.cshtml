@@ -1,5 +1,6 @@
 ﻿@model OruBloggen.Models.HomePostViewModel
 @using Microsoft.AspNet.Identity
+@using OruBloggen.Models
 
 
 <h2>Informella inlägg</h2>
@@ -55,9 +56,9 @@
             <div style="width:100%; display:inline-block; padding-bottom:10px;">
                 <img id="profileImg" style="width:100px; height: 100px; float:left; margin-right:30px; border-radius: 50%;" src="/Images/@item.SenderProfilePath" /> &nbsp;
                 <a id="postlink" href="~/Manage/">
-                    <h5>@item.PostSenderName</h5>
+                    <h4>@item.PostSenderName</h4>
                 </a>
-                <p class="postcategory" style="font-size: xx-small;">#@item.PostCategory</p>
+                <p class="postcategory" style="font-size: x-small;">#@item.PostCategory</p>
             </div>
             <div>
                 <h4>@item.PostTitle</h4>
@@ -83,7 +84,7 @@
             </div>
 
             <div>
-                @if (item.PostSender == User.Identity.GetUserId())
+                @if (item.PostSender == User.Identity.GetUserId() || Utility.isAdmin(User.Identity.GetUserId()) )
                 {
                     <button class="btn btn-default" onclick="location.href ='@Url.Action("RemoveMyPost", "Post", new { postID = item.PostID })'">Ta bort inlägg</button>
                 }
