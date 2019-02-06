@@ -50,6 +50,9 @@
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="RazorEngine, Version=3.4.1.0, Culture=neutral, PublicKeyToken=9ee697374c7e744a, processorArchitecture=MSIL">
+      <HintPath>..\packages\RazorEngine.3.4.1\lib\net45\RazorEngine.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -192,6 +195,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MeetingController.cs" />
+    <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\PostController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -288,6 +292,7 @@
     <Folder Include="Images\" />
     <Folder Include="PostFiles\" />
     <Folder Include="Views\Image\" />
+    <Folder Include="Views\Notification\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

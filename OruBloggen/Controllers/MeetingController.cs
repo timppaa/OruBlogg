@@ -3,6 +3,8 @@ using OruBloggen.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Web;
 using System.Web.Mvc;
 
@@ -96,15 +98,30 @@ namespace OruBloggen.Controllers
             return View(model);
         }
 
-        public ActionResult CancelMeeting(int meetingId)
-        {
+        public ActionResult CancelMeeting(int meetingId, string title, DateTime startDate)
+        {   
             var ctx = new OruBloggenDbContext();
 
-            ctx.Meetings.FirstOrDefault(m => m.MeetingID == meetingId).MeetingActive = false;
+            if (ctx.Meetings.FirstOrDefault(m => m.MeetingID == meetingId).MeetingActive)
+            {
+                ctx.Meetings.FirstOrDefault(m => m.MeetingID == meetingId).MeetingActive = false;
 
-            ctx.SaveChanges();
+                var userMeetingList = ctx.UserMeetings.Where(m => m.MeetingID == meetingId);
 
-            return RedirectToAction("YourMeetings");
+                var appCtx = new ApplicationDbContext();
+
+                var emails = new List<string>();
+                foreach (var user in userMeetingList)
+                {
+                    emails.Add(appCtx.Users.FirstOrDefault(u => u.Id.Equals(user.UserID)).Email);
+                }
+
+                var notificationController = new NotificationController();
+                notificationController.SendEmail(emails, "Mötet är inställt", title + " " + startDate.ToShortDateString() + " är inställt.");
+
+                ctx.SaveChanges();
+            }
+            return RedirectToAction("YourMeetings"); 
         }
     }
 }
