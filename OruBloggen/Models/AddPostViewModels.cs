@@ -18,7 +18,6 @@ namespace OruBloggen.Models
         public string File { get; set; }
 
         public bool PostFormal { get; set; }
-        public string CategoryFormal { get; set; }
-        public string CategoryInformal { get; set; }        
+        public string PostCategory { get; set; }      
     }
 }

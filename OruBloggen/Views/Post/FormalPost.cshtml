@@ -1,0 +1,76 @@
+﻿@model OruBloggen.Models.HomePostViewModel
+
+
+<h2>Formella inlägg</h2>
+
+@using (Html.BeginForm("AddPost", "Post", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div>@Html.Hidden("AddPostViewModel.PostFormal", "true")</div>
+
+    <div class="userpost">
+        <div class="list-group">
+            <form id="add-post-form">
+                @Html.EditorFor(model => model.AddPostViewModel.PostTitle, new { htmlAttributes = new { placeholder = "Inläggets titel" } })
+                <div class="form-group">
+                    <div style="width: 100%;" class="input-group">
+                        @Html.TextAreaFor(model => model.AddPostViewModel.PostText, new { placeholder = "Skriv ditt inlägg här.", style = "min-width: 100%; width:100%", rows = "5" })
+                    </div>
+                    <div id="informal" class="form-inline">
+                        <div style="float:left; width:20%">
+                            Välj en kategori: @Html.DropDownList("AddPostViewModel.PostCategory", ViewData["CategoriesFormal"] as List<SelectListItem>, new { @class = "form-control", })
+                        </div>
+                        <div style="float:left; width:20%; padding-top:0.5%">
+                            <input type="file" name="file" value="Ladda upp en fil" />
+                        </div>
+                        <div style="float:right; width:40%">
+                            <button type="submit" class="btn btn-success" style="float:right;">Skicka inlägg</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <br />
+
+            <h3>Inlägg</h3>
+            @if (Model.PostViewModel != null)
+            {
+                foreach (var item in Model.PostViewModel)
+                {
+                    <div data-item-id="@item.PostID" class="todo-item list-group-item">
+                        <div style="width:100%; display:inline-block; padding-bottom:10px;">
+                            <img id="profileImg" class="img-circle" style="width:100px; height: auto; float:left; margin-right:30px;" src="/Images/@item.SenderProfilePath" /> &nbsp;
+                            <a id="postlink" href="~/Manage/">
+                                <h5>@item.PostSender</h5>
+                            </a>
+                            <p class="postcategory" style="font-size: xx-small;">#@item.PostCategory</p>
+                        </div>
+                        <div>
+                            <h4>@item.PostTitle</h4>
+
+                            <p class="message" style="font-size: small;"> @item.PostText</p>
+
+                            @if (item.PostFilePath != null)
+                            {
+                                if (item.PostFilePath.Contains("png") || item.PostFilePath.Contains("jpg") || item.PostFilePath.Contains("jpeg") || item.PostFilePath.Contains("gif"))
+                                {
+                                    <img src="/PostFiles/@item.PostFilePath" class="center-block" style="width:350px; height:auto;" />
+
+                                }
+
+                                else
+                                {
+                                    <a href="/PostFiles/@item.PostFilePath" download>Ladda ner dokument (@item.PostFilePath)</a>
+
+                                }
+                            }
+
+                            <p class="datetime" style="font-size: xx-small;"> @item.PostDate</p>
+                        </div>
+                    </div>
+                }
+            }
+
+        </div>
+    </div>
+}
