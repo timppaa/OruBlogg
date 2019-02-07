@@ -50,6 +50,9 @@
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="RazorEngine, Version=3.4.1.0, Culture=neutral, PublicKeyToken=9ee697374c7e744a, processorArchitecture=MSIL">
+      <HintPath>..\packages\RazorEngine.3.4.1\lib\net45\RazorEngine.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -193,6 +196,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MeetingCalendarController.cs" />
     <Compile Include="Controllers\MeetingController.cs" />
+    <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\PostController.cs" />
     <Compile Include="Controllers\ReportPostController.cs" />
     <Compile Include="Global.asax.cs">
@@ -281,6 +285,8 @@
     <Content Include="Views\Admin\DeletePost.cshtml" />
     <Content Include="Views\Admin\AllUsers.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Post\Post.cshtml" />
+    <Content Include="Views\Meeting\YourMeetings.cshtml" />
     <Content Include="Views\Post\FormalPost.cshtml" />
     <Content Include="Views\Post\InformalPost.cshtml" />
     <Content Include="Views\MeetingCalendar\Index.cshtml" />
@@ -292,6 +298,7 @@
     <Folder Include="PostFiles\" />
     <Folder Include="Views\Image\" />
     <Folder Include="Views\ReportPost\" />
+    <Folder Include="Views\Notification\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
