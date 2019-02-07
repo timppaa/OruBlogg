@@ -5,100 +5,23 @@
     ViewBag.Title = "PostDetails";
 }
 <h2>@Model.Meeting.MeetingTitle</h2>
-
+<h4>@Model.Meeting.MeetingStartDate.ToLongDateString()</h4>
 <div>
     <hr />
-    <dl class="dl-horizontal">
-        <dd>
-            @Model.Meeting.MeetingDesc
-        </dd>
-
-        <dd>
-            @Html.DisplayFor(model => model.Meeting.MeetingStartDate)
-        </dd>
-        <dd>
-            @Html.DisplayFor(model => model.Meeting.MeetingEndDate)
-        </dd>
-    </dl>
+    <p>
+        <b>Mötesledare: </b> @Model.AllUsers.FirstOrDefault(p => p.UserID == Model.Meeting.MeetingUserID).UserFirstname
+        @Model.AllUsers.FirstOrDefault(p => p.UserID == Model.Meeting.MeetingUserID).UserLastname
+    </p>
+    <p><b>Tid: </b>@Model.Meeting.MeetingStartDate.ToShortTimeString() till @Model.Meeting.MeetingEndDate.ToShortTimeString()</p>
+    <p><b>Omfattning: </b>@Model.Meeting.MeetingDesc</p>
+    <p>
+        <b>Deltagare: </b>@foreach (var item in Model.Members)
+        {
+        <span> @item.UserFirstname @item.UserLastname,</span>
+        }
+    </p>
 </div>
 <p>
     @*@Html.ActionLink("Ta bort", "DeletePost", new { id = Model.postModel.PostID }) |
         @Html.ActionLink("Tillbaka till listan", "Posts")*@
 </p>
-
-<div class=" form-group">
-    @Html.Label("Search users", htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="col-md-10">
-        <input class="form-control" type="text" id="searchString" />
-        <input class="btn btn-default" type="button" id="search" value="Search" />
-    </div>
-</div>
-
-<div class="form-group">
-    @Html.LabelFor(model => model.Users, new { @class = "col-md-2 control-label" })
-    <div class="col-md-10">
-        @Html.ListBoxFor(model => model.UserIds, Model.Users, new { @class = "form-control", id = "usersLb" })
-        <input class="btn btn-default" type="button" name="+" id="add" value="+" />
-        <input class="btn btn-default" type="button" name="-" id="remove" value="-" />
-    </div>
-</div>
-
-<div class="form-group">
-    @Html.LabelFor(model => model.SelectedUsers, new { @class = "col-md-2 control-label" })
-    <div class="col-md-10">
-        @Html.ListBoxFor(model => model.SelectedUserIds, Model.SelectedUsers, new { @class = "form-control", id = "selectedUsersLb" })
-    </div>
-</div>
-
-<div class="form-group">
-    <div class="col-md-offset-2 col-md-10">
-        <input type="submit" value="Create" class="btn btn-default" />
-    </div>
-</div>
-}
-
-@section Scripts {
-    <script>
-    $(function () {
-        $(document)
-            .on("click", "#add", function () {
-                $("#usersLb :selected").remove().appendTo("#selectedUsersLb");
-            })
-            .on("click", "#remove", function () {
-                $("#selectedUsersLb :selected").remove().appendTo("#usersLb");
-            })
-            .on("click", "#search", function () {
-                var searchString = $("#searchString").val();
-                location.href='/Meeting/Meeting?searchString=' + searchString;
-            });
-        //$(document).ready(function () {
-        //    $("searchString").keyup(function () {
-        //        $.ajax({
-        //            type: "post",
-        //            url: "/Meeting/Meeting?searchString" + searchString,
-        //            contentType: "html",
-        //            success: function (result) {
-        //                if (result.lenght == 0) {
-        //                    usersLb.append("No matching data")
-        //                }
-        //                else {
-        //                    $.each(result, function (index, value) {
-        //                        usersLb.append(value)
-        //                    })
-        //                }
-        //            }
-
-        //        })
-        //    })
-        //})
-
-
-    });
-    function test() {
-        var text = $('#searchString').val();
-        location.href = '/Utility/getSearchedUsers?searchString=' + text;
-    }
-    </script>
-
-    @Scripts.Render("~/bundles/jqueryval")
-}
