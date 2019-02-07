@@ -14,7 +14,7 @@ namespace OruBloggen.Controllers
         // GET: Meeting
         public ActionResult Meeting(string searchString)
         {
-            
+
             var meetingView = ListUsersBeginning(searchString);
 
             return View(meetingView);
@@ -24,11 +24,11 @@ namespace OruBloggen.Controllers
         {
             var ctx = new OruBloggenDbContext();
 
-            
+
             var userList = ctx.Users.Where(u => String.Concat(u.UserFirstname, " ", u.UserLastname)
-                                    .Contains(searchString) || 
+                                    .Contains(searchString) ||
                                     searchString == null).ToList();
-          
+
             return userList;
         }
 
@@ -53,7 +53,7 @@ namespace OruBloggen.Controllers
 
             return meetingView;
         }
-        
+
         public JsonResult ListSearchedUsers(string searchString)
         {
             var userList = SearchUser(searchString);
@@ -67,7 +67,7 @@ namespace OruBloggen.Controllers
                 });
             }
             return new JsonResult { Data = users, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-            
+
         }
 
         [HttpPost]
@@ -85,7 +85,8 @@ namespace OruBloggen.Controllers
             });
             ctx.SaveChanges();
 
-            foreach(var item in model.SelectedUserIds) {
+            foreach (var item in model.SelectedUserIds)
+            {
                 ctx.UserMeetings.Add(new UserMeetingModel
                 {
                     MeetingID = ctx.Meetings.OrderByDescending(m => m.MeetingID).First().MeetingID,
@@ -95,7 +96,7 @@ namespace OruBloggen.Controllers
             ctx.SaveChanges();
 
             //return RedirectToAction("MeetingDetails", new { id = meeting.MeetingID});
-            return RedirectToAction("Index", "Calendar");
+            return RedirectToAction("Index", "MeetingCalendar");
         }
 
         public ActionResult MeetingDetails(int? id)

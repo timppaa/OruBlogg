@@ -191,6 +191,7 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\MeetingCalendarController.cs" />
     <Compile Include="Controllers\MeetingController.cs" />
     <Compile Include="Controllers\PostController.cs" />
     <Compile Include="Controllers\ReportPostController.cs" />
@@ -282,6 +283,8 @@
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Post\FormalPost.cshtml" />
     <Content Include="Views\Post\InformalPost.cshtml" />
+    <Content Include="Views\MeetingCalendar\Index.cshtml" />
+    <Content Include="Views\Meeting\MeetingDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

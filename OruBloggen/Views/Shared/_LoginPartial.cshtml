@@ -19,6 +19,9 @@
     <li>
         @Html.ActionLink("Möte", "Meeting", "Meeting")
     </li>
+    <li>
+        @Html.ActionLink("Kalender", "Index", "MeetingCalendar")
+    </li>
     @if (Request.IsAuthenticated)
     {
         if (Utility.isAdmin(User.Identity.GetUserId()))
