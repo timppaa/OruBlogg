@@ -15,6 +15,7 @@ namespace OruBloggen.Models
         public string UserLastname { get; set; }
         public DateTime UserBirthDate { get; set; }
         public int UserPhoneNumber { get; set; }
+        public string UserPosition { get; set; }
 
         [DataType(DataType.ImageUrl)]
         public string UserImagePath { get; set; }

@@ -50,6 +50,9 @@
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="RazorEngine, Version=3.4.1.0, Culture=neutral, PublicKeyToken=9ee697374c7e744a, processorArchitecture=MSIL">
+      <HintPath>..\packages\RazorEngine.3.4.1\lib\net45\RazorEngine.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -189,19 +192,27 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\AllUsersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MeetingCalendarController.cs" />
     <Compile Include="Controllers\MeetingController.cs" />
+    <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\PostController.cs" />
+    <Compile Include="Controllers\ProfilePageController.cs" />
     <Compile Include="Controllers\ReportPostController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902051358068_AddPOsition.cs" />
+    <Compile Include="Migrations\201902051358068_AddPOsition.Designer.cs">
+      <DependentUpon>201902051358068_AddPOsition.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AddPostViewModels.cs" />
     <Compile Include="Models\AdminViewModel.cs" />
+    <Compile Include="Models\AllUsersViewModelcs.cs" />
     <Compile Include="Models\CategoryModels.cs" />
     <Compile Include="Models\HomePostViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -210,6 +221,7 @@
     <Compile Include="Models\OruBloggenDbContext.cs" />
     <Compile Include="Models\PostReportModels.cs" />
     <Compile Include="Models\PostViewModels.cs" />
+    <Compile Include="Models\ProfilePageViewModel.cs" />
     <Compile Include="Models\UserMeetingModels.cs" />
     <Compile Include="Models\MeetingModels.cs" />
     <Compile Include="Models\MessageModels.cs" />
@@ -281,6 +293,10 @@
     <Content Include="Views\Admin\DeletePost.cshtml" />
     <Content Include="Views\Admin\AllUsers.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Post\Post.cshtml" />
+    <Content Include="Views\ProfilePage\ShowInfo.cshtml" />
+    <Content Include="Views\AllUsers\ShowAllUsers.cshtml" />
+    <Content Include="Views\Meeting\YourMeetings.cshtml" />
     <Content Include="Views\Post\FormalPost.cshtml" />
     <Content Include="Views\Post\InformalPost.cshtml" />
     <Content Include="Views\MeetingCalendar\Index.cshtml" />
@@ -292,6 +308,7 @@
     <Folder Include="PostFiles\" />
     <Folder Include="Views\Image\" />
     <Folder Include="Views\ReportPost\" />
+    <Folder Include="Views\Notification\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -305,6 +322,11 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201902051358068_AddPOsition.resx">
+      <DependentUpon>201902051358068_AddPOsition.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

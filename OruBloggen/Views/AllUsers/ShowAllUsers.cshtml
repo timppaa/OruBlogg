@@ -1,0 +1,45 @@
+﻿@model OruBloggen.Models.AllUsersViewModelcs
+@{
+    ViewBag.Title = "ShowAllUsers";
+}
+
+<h2>ShowAllUsers</h2>
+@using (Html.BeginForm("ShowAllUsers", "AllUsers", FormMethod.Post))
+{
+    <link rel="stylesheet" type="text/css" href="~/Content/Site.css"/>
+    <table class="table textSize" >
+        <thead>
+            <tr>
+                <th>
+                    Foto
+                </th>
+                <th>
+                    Förnamn
+                </th>
+                <th>
+                    Efteranmn
+                </th>
+
+            </tr>
+        </thead>
+        <tbody class="hover">
+
+
+            @foreach (var item in Model.AllUsers)
+            {
+                <tr onclick="location.href = '@(Url.Action("ShowOtherUser" , "ProfilePage", new { id = item.UserID}))'">
+                    <td>
+                        <img src="/Images/@item.UserImagePath" class="images"/>
+                            
+                    </td>
+                    <td>
+                        @item.UserFirstname
+                    </td>
+                    <td>
+                        @item.UserLastname
+                    </td>
+                </tr>
+            }
+        </tbody>
+</table>
+}
