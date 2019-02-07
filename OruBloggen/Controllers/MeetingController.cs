@@ -3,6 +3,7 @@ using OruBloggen.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
@@ -13,8 +14,27 @@ namespace OruBloggen.Controllers
         // GET: Meeting
         public ActionResult Meeting(string searchString)
         {
-            var userList = SearchUser(searchString);
 
+            var meetingView = ListUsersBeginning(searchString);
+
+            return View(meetingView);
+        }
+
+        public List<UserModel> SearchUser(string searchString)
+        {
+            var ctx = new OruBloggenDbContext();
+
+
+            var userList = ctx.Users.Where(u => String.Concat(u.UserFirstname, " ", u.UserLastname)
+                                    .Contains(searchString) ||
+                                    searchString == null).ToList();
+
+            return userList;
+        }
+
+        public MeetingViewModel ListUsersBeginning(string searchString)
+        {
+            var userList = SearchUser(searchString);
             var users = new List<SelectListItem>();
             foreach (var item in userList)
             {
@@ -31,19 +51,23 @@ namespace OruBloggen.Controllers
                 SelectedUsers = new List<SelectListItem>()
             };
 
-            return View(meetingView);
+            return meetingView;
         }
 
-        public List<UserModel> SearchUser(string searchString)
+        public JsonResult ListSearchedUsers(string searchString)
         {
-            var ctx = new OruBloggenDbContext();
+            var userList = SearchUser(searchString);
+            var users = new List<SelectListItem>();
+            foreach (var item in userList)
+            {
+                users.Add(new SelectListItem
+                {
+                    Text = item.UserFirstname + " " + item.UserLastname,
+                    Value = item.UserID
+                });
+            }
+            return new JsonResult { Data = users, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
 
-            
-            var userList = ctx.Users.Where(u => String.Concat(u.UserFirstname, " ", u.UserLastname)
-                                    .Contains(searchString) || 
-                                    searchString == null).ToList();
-          
-            return userList;
         }
 
         [HttpPost]
@@ -51,7 +75,7 @@ namespace OruBloggen.Controllers
         {
             var ctx = new OruBloggenDbContext();
 
-            ctx.Meetings.Add(new MeetingModel
+            var meeting = ctx.Meetings.Add(new MeetingModel
             {
                 MeetingTitle = model.Meeting.MeetingTitle,
                 MeetingDesc = model.Meeting.MeetingDesc,
@@ -61,7 +85,8 @@ namespace OruBloggen.Controllers
             });
             ctx.SaveChanges();
 
-            foreach(var item in model.SelectedUserIds) {
+            foreach (var item in model.SelectedUserIds)
+            {
                 ctx.UserMeetings.Add(new UserMeetingModel
                 {
                     MeetingID = ctx.Meetings.OrderByDescending(m => m.MeetingID).First().MeetingID,
@@ -70,7 +95,24 @@ namespace OruBloggen.Controllers
             };
             ctx.SaveChanges();
 
-            return RedirectToAction("Meeting");
+            //return RedirectToAction("MeetingDetails", new { id = meeting.MeetingID});
+            return RedirectToAction("Index", "MeetingCalendar");
+        }
+
+        public ActionResult MeetingDetails(int? id)
+        {
+            var ctx = new OruBloggenDbContext();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            MeetingModel meeting = ctx.Meetings.Find(id);
+            if (meeting == null)
+            {
+                Console.WriteLine("Test");
+                return HttpNotFound();
+            }
+            return View(meeting);
         }
     }
 }

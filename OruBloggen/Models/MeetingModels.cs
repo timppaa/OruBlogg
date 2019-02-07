@@ -13,23 +13,23 @@ namespace OruBloggen.Models
         public int MeetingID { get; set; }
 
         [Required]
-        [Display(Name = "Title")]
+        [Display(Name = "Titel")]
         [DataType(DataType.DateTime)]
         public string MeetingTitle { get; set; }
 
         [Required]
-        [Display(Name = "Description")]
+        [Display(Name = "Beskrivning")]
         [DataType(DataType.MultilineText)]
         public string MeetingDesc { get; set; }
 
         [Required]
-        [Display(Name = "Start time")]
+        [Display(Name = "Start")]
         [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-ddThh:mm:ss}")]
         public DateTime MeetingStartDate { get; set; }
 
         [Required]
-        [Display(Name ="End time")]
+        [Display(Name ="Slut")]
         [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-ddThh:mm:ss}")]
         public DateTime MeetingEndDate { get; set; }
