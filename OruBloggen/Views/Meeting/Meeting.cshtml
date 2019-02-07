@@ -12,18 +12,18 @@
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        <h4>Skapa ett möte</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.Meeting.MeetingTitle, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Meeting.MeetingTitle, new { htmlAttributes = new { @class = "form-control", autocomplete = "off" } })
-                @Html.ValidationMessageFor(model => model.Meeting.MeetingTitle, "", new { @class = "text-danger" })
-            </div>
+<div class="form-horizontal">
+    <h4>Skapa ett möte</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(model => model.Meeting.MeetingTitle, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Meeting.MeetingTitle, new { htmlAttributes = new { @class = "form-control", autocomplete = "off" } })
+            @Html.ValidationMessageFor(model => model.Meeting.MeetingTitle, "", new { @class = "text-danger" })
         </div>
-        
+    </div>
+
         <div class="form-group">
             @Html.LabelFor(model => model.Meeting.MeetingDesc, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -52,10 +52,12 @@
         <div class=" form-group">
             @Html.Label("Sök användare", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <input class="form-control" type="text" id="searchString" autocomplete = "off" />
-               
+                <input class="form-control" type="text" id="searchString" autocomplete="off" />
+
             </div>
         </div>
+        
+
 
         <div class="form-group">
             @Html.Label("Användare", htmlAttributes: new { @class = "col-md-2 control-label" })
@@ -81,58 +83,58 @@
             </div>
         </div>
     </div>
-}
+    }
 
-@section Scripts {
-    <script>
-        $(function () {
-            $(document)
-                .on("click", "#add", function () {
-                    $("#usersLb :selected").remove().appendTo("#selectedUsersLb");
-                    $("#searchString").val("");
-                    populateListBox();
-                })
-                .on("click", "#remove", function () {
-                    $("#selectedUsersLb :selected").remove().appendTo("#usersLb");
-                })
+    @section Scripts {
+        <script>
+            $(function () {
+                $(document)
+                    .on("click", "#add", function () {
+                        $("#usersLb :selected").remove().appendTo("#selectedUsersLb");
+                        $("#searchString").val("");
+                        populateListBox();
+                    })
+                    .on("click", "#remove", function () {
+                        $("#selectedUsersLb :selected").remove().appendTo("#usersLb");
+                    })
 
-                .on("input", "#searchString", function () {
+                    .on("input", "#searchString", function () {
 
-                    populateListBox();
+                        populateListBox();
 
-                });
-
-            function populateListBox() {
-                $.ajax({
-                    url: '/Meeting/ListSearchedUsers',
-                    type: "get",
-                    dataType: "json",
-                    data: { searchString: $("#searchString").val() },
-                    success: function (data) {
-
-                        $("#usersLb").empty();
-                        $("#usersLb").addItems(data);
-
-                    }
-                });
-            }
-            $.fn.addItems = function (data) {
-                return this.each(function () {
-                    var list = this;
-                    $.each(data, function (index, itemData) {
-                        var option = new Option(itemData.Text, itemData.Value);
-                        list.add(option);
-                        var userlist = list;
-                        $('#usersLb').appendTo(userlist);
                     });
-                });
 
-            };
+                function populateListBox() {
+                    $.ajax({
+                        url: '/Meeting/ListSearchedUsers',
+                        type: "get",
+                        dataType: "json",
+                        data: { searchString: $("#searchString").val() },
+                        success: function (data) {
 
-        });
+                            $("#usersLb").empty();
+                            $("#usersLb").addItems(data);
 
-    </script>
+                        }
+                    });
+                }
+                $.fn.addItems = function (data) {
+                    return this.each(function () {
+                        var list = this;
+                        $.each(data, function (index, itemData) {
+                            var option = new Option(itemData.Text, itemData.Value);
+                            list.add(option);
+                            var userlist = list;
+                            $('#usersLb').appendTo(userlist);
+                        });
+                    });
+
+                };
+
+            });
+
+        </script>
 
 
-    @Scripts.Render("~/bundles/jqueryval")
-}
+        @Scripts.Render("~/bundles/jqueryval")
+    }
