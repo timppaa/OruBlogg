@@ -33,20 +33,4 @@ namespace OruBloggen.Models
         public string UserID { get; set; }
     }
 
-    public class CalenderViewModel
-    {
-        public int MeetingID { get; set; }
-        public string MeetingTitle { get; set; }
-        public string MeetingDesc { get; set; }
-        public string MeetingCreator { get; set; }
-        public DateTime MeetingStartDate { get; set; }
-        public DateTime MeetingEndDate { get; set; }
-
-    }
-
-    public class UserMeetingViewModel
-    {
-        public virtual UserModel UserModel { get; set; }
-        public string UserID { get; set; }
-    }
 }
