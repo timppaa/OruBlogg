@@ -193,6 +193,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MeetingController.cs" />
     <Compile Include="Controllers\PostController.cs" />
+    <Compile Include="Controllers\ReportPostController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -213,7 +214,6 @@
     <Compile Include="Models\MessageModels.cs" />
     <Compile Include="Models\PostModels.cs" />
     <Compile Include="Models\ProjectModels.cs" />
-    <Compile Include="Models\ReportModels.cs" />
     <Compile Include="Models\TeamModels.cs" />
     <Compile Include="Models\UserModels.cs" />
     <Compile Include="Models\Utility.cs" />
@@ -288,6 +288,7 @@
     <Folder Include="Images\" />
     <Folder Include="PostFiles\" />
     <Folder Include="Views\Image\" />
+    <Folder Include="Views\ReportPost\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

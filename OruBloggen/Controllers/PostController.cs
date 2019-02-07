@@ -140,14 +140,14 @@ namespace OruBloggen.Controllers
             return filePath;
         }
 
-        public ActionResult RemoveMyPost(int postID) //Ändra hårdkodning
+        public ActionResult RemoveMyPost(int postID, bool isFormal)
         {
             var ctx = new OruBloggenDbContext();
             var post = ctx.Posts.FirstOrDefault(p => p.PostID == postID);
             ctx.Posts.Remove(post);
             ctx.SaveChanges();
 
-            if (false)
+            if (isFormal)
             {
                 return RedirectToAction("FormalPost");
             }

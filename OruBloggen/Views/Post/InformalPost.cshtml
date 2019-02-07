@@ -5,6 +5,7 @@
 
 <h2>Informella inlägg</h2>
 
+
 @using (Html.BeginForm("AddPost", "Post", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
@@ -38,12 +39,12 @@
 }
 
 <hr />
-    <div class="form-inline">
-        Filtrera inlägg: @Html.DropDownList("AddPostViewModel.PostCategory", ViewData["CategoriesInformal"] as List<SelectListItem>, new {@class = "form-control", @id="filterBox" })
-        &nbsp;
-        <button class="btn btn-default" id="listPosts" onclick="document.location.href='/Post/InformalPost'">Lista alla inlägg</button>
-    
-    </div>
+<div class="form-inline">
+    Filtrera inlägg: @Html.DropDownList("AddPostViewModel.PostCategory", ViewData["CategoriesInformal"] as List<SelectListItem>, new { @class = "form-control", @id = "filterBox" })
+    &nbsp;
+    <button class="btn btn-default" id="listPosts" onclick="document.location.href='/Post/InformalPost'">Lista alla inlägg</button>
+
+</div>
 <hr />
 
 <h3>Inlägg</h3>
@@ -51,7 +52,7 @@
 {
     foreach (var item in Model.PostViewModel)
     {
-
+        
         <div data-item-id="@item.PostID" class="todo-item list-group-item">
             <div style="width:100%; display:inline-block; padding-bottom:10px;">
                 <img id="profileImg" style="width:100px; height: 100px; float:left; margin-right:30px; border-radius: 50%;" src="/Images/@item.SenderProfilePath" /> &nbsp;
@@ -81,18 +82,41 @@
                 }
 
                 <p class="datetime" style="font-size: xx-small;"> @item.PostDate</p>
+                <a id="reportPost" style="float:right; font-size: xx-small; cursor:pointer;" data-toggle="modal" data-target="#@item.PostID">Anmäl inlägg</a>
             </div>
 
+
+            <div id="@item.PostID" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4>Anmäl inlägg!</h4>
+                        </div>
+                        <div class="modal-body">
+                                <input type="radio" name="@item.PostID" value="Olämpligt innehåll"  /> Olämpligt innehåll<br />
+                                <input type="radio" name="@item.PostID" value="Inte relevant innehåll" /> Inte relevant innehåll<br />
+                                <input type="radio" name="@item.PostID" value="Upplevs diskriminerande" /> Upplevs diskriminerande<br />
+                                <input type="radio" name="@item.PostID" value="Bilden upplevs stötande" /> Bilden upplevs stötande<br />
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" onclick="getReason(@item.PostID)" data-dismiss="modal">Anmäl</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
             <div>
-                @if (item.PostSender == User.Identity.GetUserId() || Utility.isAdmin(User.Identity.GetUserId()) )
+                @if (item.PostSender == User.Identity.GetUserId() || Utility.isAdmin(User.Identity.GetUserId()))
                 {
-                    <button class="btn btn-default" onclick="location.href ='@Url.Action("RemoveMyPost", "Post", new { postID = item.PostID })'">Ta bort inlägg</button>
+                    <button class="btn btn-default" onclick="location.href ='@Url.Action("RemoveMyPost", "Post", new { postID = item.PostID, isFormal = false})'">Ta bort inlägg</button>
                 }
             </div>
         </div>
     }
 }
-
 
 
 @section scripts {
@@ -102,5 +126,12 @@
             document.location.href = '/Post/FilterPosts?filterID=' + this.options[this.selectedIndex].value + '&isFormal=' + false;
         });
 
+        function getReason(post) {
+            var reason = $("input[name='"+post+"']:checked").val();
+            var postID = post;
+
+            $.post('/ReportPost/ReportPost?postID=' + postID + '&reason=' + reason);
+        };
+
     </script>
-    }
+}
