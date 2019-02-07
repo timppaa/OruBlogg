@@ -85,6 +85,8 @@ namespace OruBloggen.Controllers
             });
             ctx.SaveChanges();
 
+            var appCtx = new ApplicationDbContext();
+            var emails = new List<string>();
             foreach (var item in model.SelectedUserIds)
             {
                 ctx.UserMeetings.Add(new UserMeetingModel
@@ -92,8 +94,16 @@ namespace OruBloggen.Controllers
                     MeetingID = ctx.Meetings.OrderByDescending(m => m.MeetingID).First().MeetingID,
                     UserID = item
                 });
-            };
+                emails.Add(appCtx.Users.FirstOrDefault(u => u.Id.Equals(item)).Email);
+            }
             ctx.SaveChanges();
+
+            var notificationController = new NotificationController();
+            var body = "Du har blivit inbjuden till " + model.Meeting.MeetingTitle + Environment.NewLine +
+                       "Startdatum: " + model.Meeting.MeetingStartDate + Environment.NewLine +
+                       "Slutdatum: " + model.Meeting.MeetingEndDate + Environment.NewLine + 
+                       "Beskrivning: " + model.Meeting.MeetingDesc;
+            notificationController.SendEmail(emails, "Inbjudan till möte", body);
 
             //return RedirectToAction("MeetingDetails", new { id = meeting.MeetingID});
             return RedirectToAction("Index", "MeetingCalendar");
