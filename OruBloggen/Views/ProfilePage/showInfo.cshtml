@@ -1,0 +1,69 @@
+﻿@model OruBloggen.Models.ProfilePageViewModel
+@{
+    ViewBag.Title = "ProfilePage";
+}
+
+<h2>Välkommen @Model.Firstname</h2>
+@using (Html.BeginForm("ShowInfo", "ProfilePage", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+<div>
+
+        <img src="@Model.ImagePath" class="images floatleft" />
+
+        <br/>
+        <div class="floatleft">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Firstname)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Firstname)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Lastname)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Lastname)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Position)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Position)
+                </dd>
+
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Email)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Email)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.PhoneNumber)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.PhoneNumber)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Team)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Team)
+                </dd>
+
+            </dl>
+        </div>
+</div>
+}
+

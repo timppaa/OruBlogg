@@ -14,6 +14,7 @@
 */
 .dl-horizontal dt {
     white-space: normal;
+
 }
 
 /* Set width on the form input elements since they're 100% wide by default */
@@ -42,3 +43,34 @@ textarea {
 .two-col label {
         display: block;
     }
+
+.floatleft {
+    float: left;
+    width: 55%;
+}
+
+.images {
+    width: 160px;
+    height: 160px;
+    background: #FFFFFF;
+    margin: auto;
+    -moz-border-radius: 60px;
+    border-radius: 100px;
+    padding: 6px;
+    box-shadow: 0px 0px 20px #888;
+}
+.hover tr:hover
+{
+    background-color: black;
+    Color: white;
+}
+.textSize
+{
+    font-size: 20px;
+}
+
+
+
+
+
+
