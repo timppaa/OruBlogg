@@ -6,53 +6,40 @@
     {
         @Html.AntiForgeryToken()
 
-<ul class="nav navbar-nav navbar-right">
-    <li>
-        @Html.ActionLink("Välkommen " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
-    </li>
-    <li>
-        @Html.ActionLink("Formella inlägg", "FormalPost", "Post")
-    </li>
-    <li>
-        @Html.ActionLink("Informella inlägg", "InformalPost", "Post")
-    </li>
-    <li>
-        @Html.ActionLink("Möte", "Meeting", "Meeting")
-    </li>
-    <li>
-        @Html.ActionLink("Kalender", "Index", "MeetingCalendar")
-    </li>
-    <li>
-        @Html.ActionLink("Mina Möten", "YourMeetings", "Meeting")
-    </li>
-    @if (Request.IsAuthenticated)
-    {
-        if (Utility.isAdmin(User.Identity.GetUserId()))
+    <ul class="nav navbar-nav navbar-right">
+        <li>
+            @Html.ActionLink("Välkommen " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+        </li>
+        <li>
+            @Html.ActionLink("Formella inlägg", "FormalPost", "Post")
+        </li>
+        <li>
+            @Html.ActionLink("Informella inlägg", "InformalPost", "Post")
+        </li>
+        <li>
+            @Html.ActionLink("Möte", "Meeting", "Meeting")
+        </li>
+        <li>
+            @Html.ActionLink("Kalender", "Index", "MeetingCalendar")
+        </li>
+        <li>
+            @Html.ActionLink("Mina Möten", "YourMeetings", "Meeting")
+        </li>
+    
+        @if (Request.IsAuthenticated)
         {
-            <li>@Html.ActionLink("Admin", "Index", "Admin")</li>
-        }
-        <ul class="nav navbar-nav navbar-right">
-            <li>
-                @Html.ActionLink("Välkommen " + User.Identity.GetUserName() + "!", "ShowInfo", "ProfilePage", routeValues: null, htmlAttributes: new { title = "Manage" })
-            </li>
-            <li>
-                @Html.ActionLink("Inlägg", "Post", "Post")
-            </li>
-            <li>
-                @Html.ActionLink("Möte", "Meeting", "Meeting")
-            </li>
-            @if (Request.IsAuthenticated)
+            if (Utility.isAdmin(User.Identity.GetUserId()))
             {
-                if (Utility.isAdmin(User.Identity.GetUserId()))
-                {
-                    <li>@Html.ActionLink("Admin", "Index", "Admin")</li>
-                }
+                <li>@Html.ActionLink("Admin", "Index", "Admin")</li>
+            }
 
+
+         }   
+            <li><a href="javascript:document.getElementById('logoutForm').submit()">Logga ut</a></li>
+            </ul>
+         }
     }
-    <li><a href="javascript:document.getElementById('logoutForm').submit()">Logga ut</a></li>
-</ul>
-    }
-}
+
 else
 {
     <ul class="nav navbar-nav navbar-right">
