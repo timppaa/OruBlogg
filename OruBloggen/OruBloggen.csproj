@@ -189,11 +189,11 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
-    <Compile Include="Controllers\CalendarController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MeetingController.cs" />
     <Compile Include="Controllers\PostController.cs" />
+    <Compile Include="Controllers\ReportPostController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -214,7 +214,6 @@
     <Compile Include="Models\MessageModels.cs" />
     <Compile Include="Models\PostModels.cs" />
     <Compile Include="Models\ProjectModels.cs" />
-    <Compile Include="Models\ReportModels.cs" />
     <Compile Include="Models\TeamModels.cs" />
     <Compile Include="Models\UserModels.cs" />
     <Compile Include="Models\Utility.cs" />
@@ -281,15 +280,15 @@
     <Content Include="Views\Admin\DeletePost.cshtml" />
     <Content Include="Views\Admin\AllUsers.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
-    <Content Include="Views\Post\Post.cshtml" />
-    <Content Include="Views\Meeting\MeetingDetails.cshtml" />
-    <Content Include="Views\Calendar\Index.cshtml" />
+    <Content Include="Views\Post\FormalPost.cshtml" />
+    <Content Include="Views\Post\InformalPost.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Images\" />
     <Folder Include="PostFiles\" />
     <Folder Include="Views\Image\" />
+    <Folder Include="Views\ReportPost\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
