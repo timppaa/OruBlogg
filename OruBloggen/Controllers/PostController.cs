@@ -162,9 +162,6 @@ namespace OruBloggen.Controllers
             else return RedirectToAction("InformalPost");
         }
 
-
-
-
         private void FillPostList(bool isFormal)
         {
             var ctx = new OruBloggenDbContext();
