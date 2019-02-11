@@ -129,8 +129,6 @@
         function getReason(post) {
             var reason = $("input[name='"+post+"']:checked").val();
             var postID = post;
-
-            $.post('/ReportPost/ReportPost?postID=' + postID + '&reason=' + reason);
         };
 
     </script>
