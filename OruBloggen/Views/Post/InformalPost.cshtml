@@ -82,7 +82,16 @@
                 }
 
                 <p class="datetime" style="font-size: xx-small;"> @item.PostDate</p>
-                <a id="reportPost" style="float:right; font-size: xx-small; cursor:pointer;" data-toggle="modal" data-target="#@item.PostID">Anmäl inlägg</a>
+
+                
+                @if ( Html.Action("ChangeButton", "Post", new { postID = item.PostID }) + "" == "reported" )
+                {
+                    <p style="float:right; font-size: xx-small; cursor:default">Inlägget anmält</p>
+                }
+                else
+                {
+                    <a id="reportPost" style="float:right; font-size: xx-small; cursor:pointer;" data-toggle="modal" data-target="#@item.PostID">Anmäl inlägg</a>
+                }
             </div>
 
 
@@ -100,7 +109,7 @@
                                 <input type="radio" name="@item.PostID" value="Bilden upplevs stötande" /> Bilden upplevs stötande<br />
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" onclick="getReason(@item.PostID)" data-dismiss="modal">Anmäl</button>
+                                <button id="sumbitReport" type="button" class="btn btn-default" onclick="getReason(@item.PostID)" data-dismiss="modal">Anmäl</button>
                         </div>
                     </div>
                 </div>
@@ -129,7 +138,10 @@
         function getReason(post) {
             var reason = $("input[name='"+post+"']:checked").val();
             var postID = post;
-        };
 
+            $.post('/ReportPost/ReportPost?postID=' + postID + '&reason=' + reason);
+            location.reload();
+        };
+        
     </script>
 }
