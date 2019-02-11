@@ -302,6 +302,7 @@
     <Content Include="Views\Post\InformalPost.cshtml" />
     <Content Include="Views\MeetingCalendar\Index.cshtml" />
     <Content Include="Views\Meeting\MeetingDetails.cshtml" />
+    <Content Include="Views\Admin\ReportDetails.cshtml" />
     <Content Include="Views\Message\Index.cshtml" />
     <Content Include="Views\Message\ShowMessages.cshtml" />
     <Content Include="Views\Message\RespondToMessage.cshtml" />

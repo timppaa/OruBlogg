@@ -9,5 +9,6 @@ namespace OruBloggen.Models
     {
         public AddPostViewModel AddPostViewModel { get; set; }
         public List<PostViewModel> PostViewModel { get; set; }
+        public List<PostReportModel> PostReportModels { get; set; }
     }
 }

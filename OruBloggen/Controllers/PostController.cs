@@ -15,7 +15,6 @@ namespace OruBloggen.Controllers
 
         HomePostViewModel HomePostList = new HomePostViewModel();
 
-
         // GET: Post
         public ActionResult FormalPost()
         {
@@ -23,7 +22,7 @@ namespace OruBloggen.Controllers
             FillPostList(true);
             try
             {
-                HomePostList.PostViewModel.Reverse(); //Kika på en annan lösning?
+                FillReportList();
             }
             catch { }
             
@@ -37,7 +36,7 @@ namespace OruBloggen.Controllers
             FillPostList(false);
             try
             {
-                HomePostList.PostViewModel.Reverse(); //Kika på en annan lösning?
+                FillReportList();
             }
             catch { }
 
@@ -143,8 +142,16 @@ namespace OruBloggen.Controllers
         public ActionResult RemoveMyPost(int postID, bool isFormal)
         {
             var ctx = new OruBloggenDbContext();
+            var reportedPost = ctx.PostReports.FirstOrDefault(p => p.PostID == postID);
+
+            if (reportedPost != null)
+            {
+                ctx.PostReports.Remove(reportedPost);
+            }
+
             var post = ctx.Posts.FirstOrDefault(p => p.PostID == postID);
             ctx.Posts.Remove(post);
+
             ctx.SaveChanges();
 
             if (isFormal)
@@ -185,6 +192,9 @@ namespace OruBloggen.Controllers
                     }
                 }
             }
+
+            HomePostList.PostViewModel = list.OrderByDescending(p => p.PostDate).ToList();
+
         }
 
         private void AddToHomePostList(PostModel post, List<PostViewModel> list)
@@ -210,8 +220,6 @@ namespace OruBloggen.Controllers
                 PostSender = post.PostUserID
 
             });
-
-            HomePostList.PostViewModel = list;
         }
 
 
@@ -253,6 +261,7 @@ namespace OruBloggen.Controllers
                 }
             }
 
+            HomePostList.PostViewModel = list.OrderByDescending(p => p.PostDate).ToList();
 
             ListInformelItems(filterID);
             ListFormelItems(filterID);
@@ -295,6 +304,50 @@ namespace OruBloggen.Controllers
             }
 
             ViewData["CategoriesFormal"] = list;
+        }
+
+        public void FillReportList()
+        {
+            var ctx = new OruBloggenDbContext();
+            foreach (var item in ctx.PostReports.ToList())
+            {
+                HomePostList.PostReportModels.Add(item);
+            }
+        }
+
+        public string ChangeButton(string postID)
+        {
+            var ctx = new OruBloggenDbContext();
+            string isReported = "notReported";
+
+            foreach (var item in ctx.PostReports)
+            {
+                if (item.PostID.ToString() == postID)
+                {
+                    isReported = "reported";
+                }
+            }
+
+            return isReported;
+
+        }
+
+        public ActionResult AddCategory(string category, bool isFormal)
+        {
+            var ctx = new OruBloggenDbContext();
+
+            ctx.Categories.Add(new CategoryModel
+            {
+                CategoryName = category,
+                IsFormel = isFormal
+            });
+            ctx.SaveChanges();
+
+            if (isFormal)
+            {
+                return RedirectToAction("FormalPost");
+            }
+            else return RedirectToAction("InformalPost");
         }
     }
 }
