@@ -197,6 +197,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MeetingCalendarController.cs" />
     <Compile Include="Controllers\MeetingController.cs" />
+    <Compile Include="Controllers\MessageController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\PostController.cs" />
     <Compile Include="Controllers\ProfilePageController.cs" />
@@ -218,6 +219,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MeetingViewModels.cs" />
+    <Compile Include="Models\MessageViewModel.cs" />
     <Compile Include="Models\OruBloggenDbContext.cs" />
     <Compile Include="Models\PostReportModels.cs" />
     <Compile Include="Models\PostViewModels.cs" />
@@ -293,7 +295,6 @@
     <Content Include="Views\Admin\DeletePost.cshtml" />
     <Content Include="Views\Admin\AllUsers.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
-    <Content Include="Views\Post\Post.cshtml" />
     <Content Include="Views\ProfilePage\ShowInfo.cshtml" />
     <Content Include="Views\AllUsers\ShowAllUsers.cshtml" />
     <Content Include="Views\Meeting\YourMeetings.cshtml" />
@@ -301,14 +302,17 @@
     <Content Include="Views\Post\InformalPost.cshtml" />
     <Content Include="Views\MeetingCalendar\Index.cshtml" />
     <Content Include="Views\Meeting\MeetingDetails.cshtml" />
+    <Content Include="Views\Message\Index.cshtml" />
+    <Content Include="Views\Message\ShowMessages.cshtml" />
+    <Content Include="Views\Message\RespondToMessage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Images\" />
     <Folder Include="PostFiles\" />
     <Folder Include="Views\Image\" />
-    <Folder Include="Views\ReportPost\" />
     <Folder Include="Views\Notification\" />
+    <Folder Include="Views\ReportPost\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
