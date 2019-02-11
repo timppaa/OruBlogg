@@ -15,10 +15,10 @@
     <div class="userpost">
         <div class="list-group">
             <form id="add-post-form">
-                @Html.EditorFor(model => model.AddPostViewModel.PostTitle, new { htmlAttributes = new { placeholder = "Inläggets titel" } })
+                @Html.EditorFor(model => model.AddPostViewModel.PostTitle, new { htmlAttributes = new { placeholder = "Inläggets titel...", style = "margin-bottom: 5px; border: solid, 2px; padding: 3px;" } })
                 <div class="form-group">
                     <div style="width: 100%;" class="input-group">
-                        @Html.TextAreaFor(model => model.AddPostViewModel.PostText, new { placeholder = "Skriv ditt inlägg här.", style = "min-width: 100%; width:100%", rows = "5" })
+                        @Html.TextAreaFor(model => model.AddPostViewModel.PostText, new { placeholder = "Skriv ditt inlägg...", style = "min-width: 100%; width:100%; border-radius:5px; border: solid, 1px;", rows = "5" })
                     </div>
                     <div id="informal" class="form-inline">
                         <div style="float:left; width:20%">
@@ -44,10 +44,9 @@
     &nbsp;
     <button class="btn btn-default" id="listPosts" onclick="document.location.href='/Post/InformalPost'">Lista alla inlägg</button>
     &nbsp;
-    <button class="btn btn-default" style="float:right; margin-left:15px" id="createCategory onclick="document.location.href=''">Skapa ny kategori</button>
+    <button class="btn btn-default" style="float:right; margin-left:15px" id="createCategory">Skapa ny kategori</button>
     &nbsp;
-    @Html.EditorFor(model => model.AddPostViewModel.PostTitle new { htmlAttributes = new { placeholder = "Kategorins Titel", style = "margin-top:4px; float:right;" } })
-
+    <input type="text" id="newCategory" placeholder="Kategorins titel" style="margin-top:4px; float:right;"/>
 </div>
 <hr />
 
@@ -59,6 +58,12 @@
         
         <div data-item-id="@item.PostID" class="todo-item list-group-item">
             <div style="width:100%; display:inline-block; padding-bottom:10px;">
+
+                @if (item.PostSender == User.Identity.GetUserId() || Utility.isAdmin(User.Identity.GetUserId()))
+                {
+                    <button type="button" class="close" onclick="location.href ='@Url.Action("RemoveMyPost", "Post", new { postID = item.PostID, isFormal = false})'">&times;</button>
+                }
+
                 <img id="profileImg" style="width:100px; height: 100px; float:left; margin-right:30px; border-radius: 50%;" src="/Images/@item.SenderProfilePath" /> &nbsp;
                 <a id="postlink" href="~/Manage/">
                     <h4>@item.PostSenderName</h4>
@@ -74,7 +79,8 @@
                 {
                     if (item.PostFilePath.Contains("png") || item.PostFilePath.Contains("jpg") || item.PostFilePath.Contains("jpeg") || item.PostFilePath.Contains("gif"))
                     {
-                        <img src="/PostFiles/@item.PostFilePath" class="center-block" style="width:350px; height:auto;" />
+
+                        <img id="myImg" src="/PostFiles/@item.PostFilePath" class="center-block" style="width:350px; height:auto;" />
 
                     }
 
@@ -84,18 +90,17 @@
 
                     }
                 }
-
-                <p class="datetime" style="font-size: xx-small;"> @item.PostDate</p>
-
-                
-                @if ( Html.Action("ChangeButton", "Post", new { postID = item.PostID }) + "" == "reported" )
-                {
-                    <p style="float:right; font-size: xx-small; cursor:default">Inlägget anmält</p>
-                }
-                else
-                {
-                    <a id="reportPost" style="float:right; font-size: xx-small; cursor:pointer;" data-toggle="modal" data-target="#@item.PostID">Anmäl inlägg</a>
-                }
+                <div>
+                    <p class="datetime" style="font-size: xx-small; float:left;"> @item.PostDate</p> &nbsp;
+                    @if (Html.Action("ChangeButton", "Post", new { postID = item.PostID }) + "" == "reported")
+                    {
+                        <p style="float:right; font-size: xx-small; cursor:default">Inlägget anmält</p>
+                    }
+                    else
+                    {
+                        <a id="reportPost" style="float:right; font-size: xx-small; cursor:pointer;" data-toggle="modal" data-target="#@item.PostID">Anmäl inlägg</a>
+                    }
+                </div>
             </div>
 
 
@@ -118,15 +123,6 @@
                     </div>
                 </div>
             </div>
-
-
-
-            <div>
-                @if (item.PostSender == User.Identity.GetUserId() || Utility.isAdmin(User.Identity.GetUserId()))
-                {
-                    <button class="btn btn-default" onclick="location.href ='@Url.Action("RemoveMyPost", "Post", new { postID = item.PostID, isFormal = false})'">Ta bort inlägg</button>
-                }
-            </div>
         </div>
     }
 }
@@ -143,9 +139,24 @@
             var reason = $("input[name='"+post+"']:checked").val();
             var postID = post;
 
-            $.post('/ReportPost/ReportPost?postID=' + postID + '&reason=' + reason);
-            location.reload();
+            if (reason != undefined) {
+                $.post('/ReportPost/ReportPost?postID=' + postID + '&reason=' + reason);
+                document.location.reload();
+            }
+            else {
+                alert("Anmälningen genomfördes ej korrekt.");
+            }
         };
+
+        $("#createCategory").click(function () {
+            var category = $("#newCategory").val();
+            if (category != "") {
+                document.location.href = '/Post/AddCategory?category=' + category + '&isFormal=' + false;
+            }
+            else {
+                alert("Fyll i en kategori för att skapa en ny kategori.");
+            }
+        });
         
     </script>
 }
