@@ -128,12 +128,11 @@ namespace OruBloggen.Controllers
         //GET
         public ActionResult ListCreatedMeetings()
         {
-            var userId = User.Identity.GetUserId();
             var ctx = new OruBloggenDbContext();
-
-            var model = ctx.Meetings.Where(m => m.MeetingUserID.Equals(userId)).ToList();
-
-            foreach (var meeting in model)
+            var userId = User.Identity.GetUserId();
+            
+            var meetings = ctx.Meetings.Where(m => m.MeetingUserID.Equals(userId)).ToList();
+            foreach (var meeting in meetings)
             {
                 if (meeting.MeetingActive)
                 {
@@ -145,31 +144,30 @@ namespace OruBloggen.Controllers
             }
             ctx.SaveChanges();
 
-            return View(model);
+            return View(meetings);
         }
 
         public ActionResult CancelMeeting(int meetingId, string title, DateTime startDate)
         {
             var ctx = new OruBloggenDbContext();
+            var meetingActive = ctx.Meetings.FirstOrDefault(m => m.MeetingID == meetingId).MeetingActive;
 
-            if (ctx.Meetings.FirstOrDefault(m => m.MeetingID == meetingId).MeetingActive)
+            if (meetingActive)
             {
-                ctx.Meetings.FirstOrDefault(m => m.MeetingID == meetingId).MeetingActive = false;
-
-                var userMeetingList = ctx.UserMeetings.Where(m => m.MeetingID == meetingId);
+                meetingActive = false;
 
                 var appCtx = new ApplicationDbContext();
 
+                var userMeetings = ctx.UserMeetings.Where(m => m.MeetingID == meetingId);
                 var emails = new List<string>();
-                foreach (var user in userMeetingList)
+                foreach (var user in userMeetings)
                 {
                     emails.Add(appCtx.Users.FirstOrDefault(u => u.Id.Equals(user.UserID)).Email);
                 }
+                ctx.SaveChanges();
 
                 var notificationController = new NotificationController();
-                notificationController.SendEmail(emails, "Mötet är inställt", title + " " + startDate.ToShortDateString() + " är inställt.");
-
-                ctx.SaveChanges();
+                notificationController.SendEmail(emails, "Mötet är inställt", title + " " + startDate.ToShortDateString() + " är inställt.");              
             }
             return RedirectToAction("ListCreatedMeetings");
         }
