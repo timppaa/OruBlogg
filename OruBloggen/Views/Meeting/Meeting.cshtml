@@ -79,7 +79,8 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Skapa" class="btn btn-default" />
+                
+                <input id="createMeeting" type="submit" value="Skapa" class="btn btn-default"/>
             </div>
         </div>
     </div>
@@ -87,15 +88,26 @@
 
 @section Scripts {
     <script>
+        function disableButton()
+        {
+            var listBox = $("#selectedUsersLb").val().length;
+            if (listBox < 1) {
+                $("#createMeeting").prop("disabled", true);
+            } else {
+                $("#createMeeting").prop("disabled", false);
+            }
+        }
         $(function () {
             $(document)
                 .on("click", "#add", function () {
                     $("#usersLb :selected").remove().appendTo("#selectedUsersLb");
                     $("#searchString").val("");
                     populateListBox();
+                    disableButton();
                 })
                 .on("click", "#remove", function () {
                     $("#selectedUsersLb :selected").remove().appendTo("#usersLb");
+                    disableButton();
                 })
 
                 .on("input", "#searchString", function () {
@@ -103,6 +115,7 @@
                     populateListBox();
 
                 });
+            disableButton();
 
             function populateListBox() {
                 $.ajax({
