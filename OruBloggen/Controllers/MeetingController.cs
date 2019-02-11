@@ -87,14 +87,17 @@ namespace OruBloggen.Controllers
 
                 var appCtx = new ApplicationDbContext();
                 var emails = new List<string>();
-                foreach (var item in model.SelectedUserIds)
+                if (model.SelectedUserIds != null)
                 {
-                    ctx.UserMeetings.Add(new UserMeetingModel
+                    foreach (var item in model.SelectedUserIds)
                     {
-                        MeetingID = ctx.Meetings.OrderByDescending(m => m.MeetingID).First().MeetingID,
-                        UserID = item
-                    });
-                    emails.Add(appCtx.Users.FirstOrDefault(u => u.Id.Equals(item)).Email);
+                        ctx.UserMeetings.Add(new UserMeetingModel
+                        {
+                            MeetingID = ctx.Meetings.OrderByDescending(m => m.MeetingID).First().MeetingID,
+                            UserID = item
+                        });
+                        emails.Add(appCtx.Users.FirstOrDefault(u => u.Id.Equals(item)).Email);
+                    }
                 }
 
                 ctx.SaveChanges();

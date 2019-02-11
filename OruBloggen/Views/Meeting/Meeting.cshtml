@@ -95,15 +95,15 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
     <script>
-        function disableButton()
-        {
-            var listBox = $("#selectedUsersLb").val().length;
-            if (listBox < 1) {
-                $("#createMeeting").prop("disabled", true);
-            } else {
-                $("#createMeeting").prop("disabled", false);
-            }
-        }
+        //function disableButton()
+        //{
+        //    var listBox = $("#selectedUsersLb").val().length;
+        //    if (listBox < 1) {
+        //        $("#createMeeting").prop("disabled", true);
+        //    } else {
+        //        $("#createMeeting").prop("disabled", false);
+        //    }
+        //}
         $(function () {
             $(document)
 
@@ -111,11 +111,11 @@
                     $("#usersLb :selected").remove().appendTo("#selectedUsersLb");
                     $("#searchString").val("");
                     populateListBox();
-                    disableButton();
+                    //disableButton();
                 })
                 .on("click", "#remove", function () {
                     $("#selectedUsersLb :selected").remove().appendTo("#usersLb");
-                    disableButton();
+                    //disableButton();
                 })
 
                 .on("input", "#searchString", function () {
@@ -131,7 +131,7 @@
             $('#datetimepicker1').datetimepicker({ format: "YYYY-MM-DD HH:mm" });
             $('#datetimepicker2').datetimepicker({ format: "YYYY-MM-DD HH:mm" });
 
-            disableButton();
+            //disableButton();
 
             function populateListBox() {
                 $.ajax({
