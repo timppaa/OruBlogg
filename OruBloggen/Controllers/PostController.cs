@@ -14,31 +14,6 @@ namespace OruBloggen.Controllers
     {
 
         HomePostViewModel HomePostList = new HomePostViewModel();
-        
-        public void FillReportList()
-        {
-            var ctx = new OruBloggenDbContext(); 
-            foreach(var item in ctx.PostReports.ToList() )
-            {
-                HomePostList.PostReportModels.Add(item);
-            }
-        }
-
-        public string ChangeButton(string postID)
-        {
-            var ctx = new OruBloggenDbContext();
-            string isReported = "notReported";
-
-            foreach (var item in ctx.PostReports )
-            {
-                   if (item.PostID.ToString() == postID) {
-                    isReported = "reported";
-                   }
-            }
-
-            return isReported;
-            
-        }
 
         // GET: Post
         public ActionResult FormalPost()
