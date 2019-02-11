@@ -73,30 +73,46 @@ namespace OruBloggen.Controllers
         [HttpPost]
         public ActionResult CreateMeeting(MeetingViewModel model)
         {
-            var ctx = new OruBloggenDbContext();
+                var ctx = new OruBloggenDbContext();
 
-            var meeting = ctx.Meetings.Add(new MeetingModel
-            {
-                MeetingTitle = model.Meeting.MeetingTitle,
-                MeetingDesc = model.Meeting.MeetingDesc,
-                MeetingStartDate = model.Meeting.MeetingStartDate,
-                MeetingEndDate = model.Meeting.MeetingEndDate,
-                MeetingUserID = User.Identity.GetUserId()
-            });
-            ctx.SaveChanges();
-
-            foreach (var item in model.SelectedUserIds)
-            {
-                ctx.UserMeetings.Add(new UserMeetingModel
+                var meeting = ctx.Meetings.Add(new MeetingModel
                 {
-                    MeetingID = ctx.Meetings.OrderByDescending(m => m.MeetingID).First().MeetingID,
-                    UserID = item
+                    MeetingTitle = model.Meeting.MeetingTitle,
+                    MeetingDesc = model.Meeting.MeetingDesc,
+                    MeetingStartDate = model.Meeting.MeetingStartDate,
+                    MeetingEndDate = model.Meeting.MeetingEndDate,
+                    MeetingUserID = User.Identity.GetUserId()
                 });
-            };
-            ctx.SaveChanges();
+                ctx.SaveChanges();
 
-            //return RedirectToAction("MeetingDetails", new { id = meeting.MeetingID});
-            return RedirectToAction("Index", "MeetingCalendar");
+                var appCtx = new ApplicationDbContext();
+                var emails = new List<string>();
+                foreach (var item in model.SelectedUserIds)
+                {
+                    ctx.UserMeetings.Add(new UserMeetingModel
+                    {
+                        MeetingID = ctx.Meetings.OrderByDescending(m => m.MeetingID).First().MeetingID,
+                        UserID = item
+                    });
+                    emails.Add(appCtx.Users.FirstOrDefault(u => u.Id.Equals(item)).Email);
+                }
+
+                ctx.SaveChanges();
+
+                var notificationController = new NotificationController();
+                var body = "Du har blivit inbjuden till " + model.Meeting.MeetingTitle + Environment.NewLine +
+                           "Startdatum: " + model.Meeting.MeetingStartDate.ToShortDateString() + " "
+                           + model.Meeting.MeetingStartDate.ToShortTimeString() + Environment.NewLine +
+
+                           "Slutdatum: " + model.Meeting.MeetingEndDate.ToShortDateString() + " "
+                           + model.Meeting.MeetingEndDate.ToShortTimeString() + Environment.NewLine +
+
+                           "Beskrivning: " + model.Meeting.MeetingDesc;
+                notificationController.SendEmail(emails, "Inbjudan till möte", body);
+
+                //return RedirectToAction("MeetingDetails", new { id = meeting.MeetingID});
+                return RedirectToAction("Index", "MeetingCalendar");
+           
         }
 
         public ActionResult MeetingDetails(int? id)
