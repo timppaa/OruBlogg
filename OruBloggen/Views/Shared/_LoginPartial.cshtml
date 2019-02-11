@@ -26,7 +26,7 @@
             @Html.ActionLink("Mina Möten", "YourMeetings", "Meeting")
         </li>
     
-        @if (Request.IsAuthenticated)
+        @*@if (Request.IsAuthenticated)
         {
             if (Utility.isAdmin(User.Identity.GetUserId()))
             {
@@ -34,7 +34,7 @@
             }
 
 
-         }   
+         }*@   
             <li><a href="javascript:document.getElementById('logoutForm').submit()">Logga ut</a></li>
             </ul>
          }

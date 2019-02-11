@@ -85,16 +85,19 @@ namespace OruBloggen.Controllers
             });
             ctx.SaveChanges();
 
-            foreach (var item in model.SelectedUserIds)
+            if (model.SelectedUserIds != null)
             {
-                ctx.UserMeetings.Add(new UserMeetingModel
-                {
-                    MeetingID = ctx.Meetings.OrderByDescending(m => m.MeetingID).First().MeetingID,
-                    UserID = item
-                });
-            };
-            ctx.SaveChanges();
 
+                foreach (var item in model.SelectedUserIds)
+                {
+                    ctx.UserMeetings.Add(new UserMeetingModel
+                    {
+                        MeetingID = ctx.Meetings.OrderByDescending(m => m.MeetingID).First().MeetingID,
+                        UserID = item
+                    });
+                };
+                ctx.SaveChanges();
+            }
             //return RedirectToAction("MeetingDetails", new { id = meeting.MeetingID});
             return RedirectToAction("Index", "MeetingCalendar");
         }

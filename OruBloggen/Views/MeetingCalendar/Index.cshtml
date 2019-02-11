@@ -52,7 +52,8 @@
                             start: moment(v.MeetingStartDate),
                             end: v.MeetingEndDate != null ? moment(v.MeetingEndDate) : null,
                             meetingID: v.MeetingID,
-                            meetingCreator: v.MeetingCreator
+                            meetingCreator: v.MeetingCreator,
+                            meetingActive: v.MeetingActive
                     });
                   })
                     GenerateCalender(events);
@@ -74,7 +75,21 @@
                         center: 'title',
                         right: 'month,basicWeek,basicDay,agenda'
                     },
-                    eventColor: '#378006',
+
+                    
+                    eventRender: function (event, element) {
+                        if (event.meetingActive) {
+                            element.css('background-color', '#008000');
+                            
+                        }
+                        else {
+                            element.css('background-color', '#808080');
+                            element.css('border-color', '#808080');
+                            element.css('opacity', '0.7');
+
+                        }
+                    },
+ 
                     events: events,
                     eventClick: function (calEvent, jsEvent, view) {
 
