@@ -126,7 +126,7 @@ namespace OruBloggen.Controllers
         }
 
         //GET
-        public ActionResult YourMeetings()
+        public ActionResult ListCreatedMeetings()
         {
             var userId = User.Identity.GetUserId();
             var ctx = new OruBloggenDbContext();
@@ -171,7 +171,7 @@ namespace OruBloggen.Controllers
 
                 ctx.SaveChanges();
             }
-            return RedirectToAction("YourMeetings");
+            return RedirectToAction("ListCreatedMeetings");
         }
     }
 }

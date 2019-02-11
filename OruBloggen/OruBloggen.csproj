@@ -296,7 +296,7 @@
     <Content Include="Views\Post\Post.cshtml" />
     <Content Include="Views\ProfilePage\ShowInfo.cshtml" />
     <Content Include="Views\AllUsers\ShowAllUsers.cshtml" />
-    <Content Include="Views\Meeting\YourMeetings.cshtml" />
+    <Content Include="Views\Meeting\ListCreatedMeetings.cshtml" />
     <Content Include="Views\Post\FormalPost.cshtml" />
     <Content Include="Views\Post\InformalPost.cshtml" />
     <Content Include="Views\MeetingCalendar\Index.cshtml" />
@@ -307,8 +307,8 @@
     <Folder Include="Images\" />
     <Folder Include="PostFiles\" />
     <Folder Include="Views\Image\" />
-    <Folder Include="Views\ReportPost\" />
     <Folder Include="Views\Notification\" />
+    <Folder Include="Views\ReportPost\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
