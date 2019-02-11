@@ -33,7 +33,8 @@ namespace OruBloggen.Controllers
                             MeetingEndDate = item.MeetingEndDate,
                             MeetingStartDate = item.MeetingStartDate,
                             MeetingID = item.MeetingID,
-                            MeetingCreator = user.UserFirstname + " " + user.UserLastname
+                            MeetingCreator = user.UserFirstname + " " + user.UserLastname,
+                            MeetingActive = item.MeetingActive
                         });
                     }
                 }

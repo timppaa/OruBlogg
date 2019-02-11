@@ -33,9 +33,11 @@
         </div>
 
         <div class="form-group">
+
             @Html.LabelFor(model => model.Meeting.MeetingStartDate, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Meeting.MeetingStartDate, "{0:yyyy-MM-ddThh:mm:ss}", new { htmlAttributes = new { @class = "form-control", type = "datetime-local" } })
+                @Html.EditorFor(model => model.Meeting.MeetingStartDate, new { htmlAttributes = new {
+                @class = "form-control", id = "datetimepicker1", type = "YYYY-MM-DD HH:mm", placeholder = "yyyy-mm-dd 00:00" } })
                 @Html.ValidationMessageFor(model => model.Meeting.MeetingStartDate, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -44,7 +46,8 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Meeting.MeetingEndDate, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Meeting.MeetingEndDate, "{0:yyyy-MM-ddThh:mm:ss}", new { htmlAttributes = new { @class = "form-control", type = "datetime-local" } })
+                @Html.EditorFor(model => model.Meeting.MeetingEndDate, new { htmlAttributes = new {
+                @class = "form-control", id = "datetimepicker2", type = "YYYY-MM-DD HH:mm", placeholder = "yyyy-mm-dd 00:00" } })
                 @Html.ValidationMessageFor(model => model.Meeting.MeetingEndDate, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -58,35 +61,39 @@
         </div>
 
 
+            <div class="form-group">
+                @Html.Label("Användare", htmlAttributes: new { @class = "col-md-2 control-label" })
+                @*@Html.LabelFor(model => model.Users, new { @class = "col-md-2 control-label" })*@
+                <div class="col-md-10">
+                    @Html.ListBoxFor(model => model.UserIds, Model.Users, new { @class = "form-control", id = "usersLb" })
+                    <input class="button1" type="button" name="+" id="add" value=">" />
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Label("Valda användare", htmlAttributes: new { @class = "col-md-2 control-label" })
+                @*@Html.LabelFor(model => model.SelectedUsers, new { @class = "col-md-2 control-label" })*@
+                <div class="col-md-10">
+                    <input class="button1" type="button" name="-" id="remove" value="<" />
+                    @Html.ListBoxFor(model => model.SelectedUserIds, Model.SelectedUsers, new { @class = "form-control", id = "selectedUsersLb" })
 
-        <div class="form-group">
-            @Html.Label("Användare", htmlAttributes: new { @class = "col-md-2 control-label" })
-            @*@Html.LabelFor(model => model.Users, new { @class = "col-md-2 control-label" })*@
-            <div class="col-md-10">
-                @Html.ListBoxFor(model => model.UserIds, Model.Users, new { @class = "form-control", id = "usersLb" })
-                <input class="btn btn-default" type="button" name="+" id="add" value="+" />
-                <input class="btn btn-default" type="button" name="-" id="remove" value="-" />
+                    <input type="submit" value="Skapa" id="submit" style="margin-left:auto;" class="btn btn-default" />
+                </div>
             </div>
         </div>
+       
 
-        <div class="form-group">
-            @Html.Label("Valda användare", htmlAttributes: new { @class = "col-md-2 control-label" })
-            @*@Html.LabelFor(model => model.SelectedUsers, new { @class = "col-md-2 control-label" })*@
-            <div class="col-md-10">
-                @Html.ListBoxFor(model => model.SelectedUserIds, Model.SelectedUsers, new { @class = "form-control", id = "selectedUsersLb" })
-            </div>
-        </div>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                
-                <input id="createMeeting" type="submit" value="Skapa" class="btn btn-default"/>
-            </div>
-        </div>
-    </div>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
 }
 
 @section Scripts {
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
     <script>
         function disableButton()
         {
@@ -99,6 +106,7 @@
         }
         $(function () {
             $(document)
+
                 .on("click", "#add", function () {
                     $("#usersLb :selected").remove().appendTo("#selectedUsersLb");
                     $("#searchString").val("");
@@ -114,7 +122,15 @@
 
                     populateListBox();
 
+                })
+
+                .on("click", "#submit", function () {
+                    $("#selectedUsersLb option").prop("selected", "selected");
                 });
+           
+            $('#datetimepicker1').datetimepicker({ format: "YYYY-MM-DD HH:mm" });
+            $('#datetimepicker2').datetimepicker({ format: "YYYY-MM-DD HH:mm" });
+
             disableButton();
 
             function populateListBox() {
@@ -136,9 +152,17 @@
                     var list = this;
                     $.each(data, function (index, itemData) {
                         var option = new Option(itemData.Text, itemData.Value);
+
                         list.add(option);
                         var userlist = list;
+
                         $('#usersLb').appendTo(userlist);
+
+                        var cacheEle = $('#selectedUsersLb');
+                        $('#usersLb option').filter(function (index, element) {
+                            return cacheEle.find('option[value="' + element.value + '"]').length == 1;
+                        }).remove();
+
                     });
                 });
 
@@ -146,7 +170,11 @@
 
         });
 
+
+
     </script>
+
+
 
 
     @Scripts.Render("~/bundles/jqueryval")

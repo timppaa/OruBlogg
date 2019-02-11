@@ -3,43 +3,27 @@
     ViewBag.Title = "ShowAllUsers";
 }
 
-<h2>ShowAllUsers</h2>
+<h2>Alla användare</h2>
 @using (Html.BeginForm("ShowAllUsers", "AllUsers", FormMethod.Post))
 {
-    <link rel="stylesheet" type="text/css" href="~/Content/Site.css"/>
-    <table class="table textSize" >
-        <thead>
-            <tr>
-                <th>
-                    Foto
-                </th>
-                <th>
-                    Förnamn
-                </th>
-                <th>
-                    Efteranmn
-                </th>
+    <link rel="stylesheet" type="text/css" href="~/Content/Site.css" />
+    <table class="table textSize">
 
-            </tr>
-        </thead>
         <tbody class="hover">
 
 
             @foreach (var item in Model.AllUsers)
             {
-                <tr onclick="location.href = '@(Url.Action("ShowOtherUser" , "ProfilePage", new { id = item.UserID}))'">
+                <tr id="trhover" onclick="location.href = '@(Url.Action("ShowOtherUser" , "ProfilePage", new { id = item.UserID}))'">
                     <td>
-                        <img src="/Images/@item.UserImagePath" class="images"/>
-                            
+                        <img src="/Images/@item.UserImagePath" class="images" />
+
                     </td>
                     <td>
-                        @item.UserFirstname
-                    </td>
-                    <td>
-                        @item.UserLastname
+                        @item.UserFirstname @item.UserLastname
                     </td>
                 </tr>
             }
         </tbody>
-</table>
+    </table>
 }
