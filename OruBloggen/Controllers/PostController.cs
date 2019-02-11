@@ -15,6 +15,7 @@ namespace OruBloggen.Controllers
 
         HomePostViewModel HomePostList = new HomePostViewModel();
         
+
         public void FillReportList()
         {
             var ctx = new OruBloggenDbContext(); 
@@ -179,9 +180,6 @@ namespace OruBloggen.Controllers
 
             else return RedirectToAction("InformalPost");
         }
-
-
-
 
         private void FillPostList(bool isFormal)
         {

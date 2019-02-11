@@ -43,6 +43,10 @@
     Filtrera inlägg: @Html.DropDownList("AddPostViewModel.PostCategory", ViewData["CategoriesInformal"] as List<SelectListItem>, new { @class = "form-control", @id = "filterBox" })
     &nbsp;
     <button class="btn btn-default" id="listPosts" onclick="document.location.href='/Post/InformalPost'">Lista alla inlägg</button>
+    &nbsp;
+    <button class="btn btn-default" style="float:right; margin-left:15px" id="createCategory onclick="document.location.href=''">Skapa ny kategori</button>
+    &nbsp;
+    @Html.EditorFor(model => model.AddPostViewModel.PostTitle new { htmlAttributes = new { placeholder = "Kategorins Titel", style = "margin-top:4px; float:right;" } })
 
 </div>
 <hr />
