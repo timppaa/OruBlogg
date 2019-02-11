@@ -12,29 +12,19 @@ namespace OruBloggen.Controllers
     public class MeetingController : Controller
     {
         // GET: Meeting
-        public ActionResult Meeting(string searchString)
+        public ActionResult Meeting()
         {
 
-            var meetingView = ListUsersBeginning(searchString);
+            var meetingView = ListUsersBeginning();
 
             return View(meetingView);
         }
 
-        public List<UserModel> SearchUser(string searchString)
+        public MeetingViewModel ListUsersBeginning()
         {
             var ctx = new OruBloggenDbContext();
+            var userList = ctx.Users;
 
-
-            var userList = ctx.Users.Where(u => String.Concat(u.UserFirstname, " ", u.UserLastname)
-                                    .Contains(searchString) ||
-                                    searchString == null).ToList();
-
-            return userList;
-        }
-
-        public MeetingViewModel ListUsersBeginning(string searchString)
-        {
-            var userList = SearchUser(searchString);
             var users = new List<SelectListItem>();
             foreach (var item in userList)
             {
@@ -56,7 +46,13 @@ namespace OruBloggen.Controllers
 
         public JsonResult ListSearchedUsers(string searchString)
         {
-            var userList = SearchUser(searchString);
+            var ctx = new OruBloggenDbContext();
+
+            var userList = ctx.Users.Where(u => String.Concat(u.UserFirstname, " ", u.UserLastname)
+                                    .Contains(searchString) ||
+                                    searchString == null).ToList();
+
+            
             var users = new List<SelectListItem>();
             foreach (var item in userList)
             {
@@ -159,11 +155,11 @@ namespace OruBloggen.Controllers
         public ActionResult CancelMeeting(int meetingId, string title, DateTime startDate)
         {
             var ctx = new OruBloggenDbContext();
-            var meetingActive = ctx.Meetings.FirstOrDefault(m => m.MeetingID == meetingId).MeetingActive;
+            //var meetingActive = ctx.Meetings.FirstOrDefault(m => m.MeetingID == meetingId).MeetingActive;
 
-            if (meetingActive)
+            if (ctx.Meetings.FirstOrDefault(m => m.MeetingID == meetingId).MeetingActive)
             {
-                meetingActive = false;
+                ctx.Meetings.FirstOrDefault(m => m.MeetingID == meetingId).MeetingActive = false;
 
                 var appCtx = new ApplicationDbContext();
 
