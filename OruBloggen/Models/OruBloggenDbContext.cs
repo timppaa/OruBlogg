@@ -9,6 +9,7 @@ namespace OruBloggen.Models
     public class OruBloggenDbContext : DbContext
     {
         public DbSet<CategoryModel> Categories { get; set; }
+        public DbSet<NotificationModel> Notifications { get; set; }
         public DbSet<MeetingModel> Meetings { get; set; }
         public DbSet<MessageModel> Messages { get; set; }
         public DbSet<PostModel> Posts { get; set; }
