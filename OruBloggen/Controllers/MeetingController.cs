@@ -109,12 +109,12 @@ namespace OruBloggen.Controllers
                            + model.Meeting.MeetingEndDate.ToShortTimeString() + Environment.NewLine +
 
                            "Beskrivning: " + model.Meeting.MeetingDesc;
-                notificationController.SendEmail(emails, "Inbjudan till möte", body);
+                //notificationController.SendEmail(emails, "Inbjudan till möte", body);
 
-                foreach (var number in phoneNumbers)
-                {
-                    notificationController.SendSms(number, body);
-                }
+                //foreach (var number in phoneNumbers)
+                //{
+                //    notificationController.SendSms(number, body);
+                //}
 
             //return RedirectToAction("MeetingDetails", new { id = meeting.MeetingID});
             return RedirectToAction("Index", "MeetingCalendar");
