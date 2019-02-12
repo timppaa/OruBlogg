@@ -24,14 +24,34 @@ textarea {
     max-width: 280px;
 }
 
+.two-col {
+    overflow: hidden; /* Makes this div contain its floats */
+}
+.two-col .col1,
+.two-col .col2 {
+    width: 49%;
+    }
+
+.two-col .col1 {
+    float: left;
+    }
+
+.two-col .col2 {
+        float: right;
+    }
+
+.two-col label {
+        display: block;
+    }
+
 .floatleft {
     float: left;
     width: 55%;
 }
 
 .images {
-    width: 160px;
-    height: 160px;
+    width: 100px;
+    height: 100px;
     background: #FFFFFF;
     margin: auto;
     -moz-border-radius: 60px;
@@ -41,7 +61,7 @@ textarea {
 }
 .hover tr:hover
 {
-    background-color: black;
+    background-color: #888;
     Color: white;
 }
 .textSize
@@ -49,8 +69,52 @@ textarea {
     font-size: 20px;
 }
 
+body > div.container.body-content > form > table > tbody > tr:nth-child(1) > td:nth-child(1) {
+    width: 1px;
+}
+#meeting-anvandare {
+    display:-webkit-box;
+}
+.valja-anvandare {
+    width:48%;
+    float:left;
+}
+#remove, #add {
+    margin-left: auto;
+    font-weight:700;
+}
 
+.link::after, .link:active, .link:link, .link:visited, .link:hover, .link:active, .link:focus {
+    
+    border-color: #FFFFFF;
+    background-color: #ff0000
+}
 
+#usersLb, #selectedUsersLb {
+min-height: 82px;
+}
+
+body > div.container.body-content > form > div > div:nth-child(9) > label {
+    margin-top: 23px;
+}
+body > div.container.body-content > form > div > div:nth-child(8) {
+    margin-bottom: 0px;
+}
+.Mydiv {
+    width: 1000px;
+    border: 1px solid #ccc;
+    padding: 14px;
+    background: #ececec;
+}	
+
+.button1, button:focus {
+    outline: 0;
+    font-size: 14px;
+    color: #000000;
+    background-color: #FFFFFF;
+    border: none;
+    
+}
 
 
 

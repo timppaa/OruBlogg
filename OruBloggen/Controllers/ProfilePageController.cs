@@ -16,6 +16,11 @@ namespace OruBloggen.Controllers
             return View();
         }
 
+        public ActionResult ProfileRedirect()
+        {
+            return RedirectToAction("ShowOtherUser", new { id = User.Identity.GetUserId() });
+        }
+
         public ActionResult ShowInfo()
         {
             var ctx = new OruBloggenDbContext();
