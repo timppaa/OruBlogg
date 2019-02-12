@@ -188,7 +188,8 @@ namespace OruBloggen.Controllers
                         UserBirthDate = model.Birthdate,
                         UserPhoneNumber = model.Phonenumber,
                         UserTeamID = int.Parse(model.Team),
-                        UserImagePath = model.ImagePath
+                        UserImagePath = model.ImagePath,
+                        UserPosition = model.Position
                     });
 
                     

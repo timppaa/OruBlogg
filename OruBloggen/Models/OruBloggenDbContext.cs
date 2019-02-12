@@ -9,12 +9,12 @@ namespace OruBloggen.Models
     public class OruBloggenDbContext : DbContext
     {
         public DbSet<CategoryModel> Categories { get; set; }
+        public DbSet<NotificationModel> Notifications { get; set; }
         public DbSet<MeetingModel> Meetings { get; set; }
         public DbSet<MessageModel> Messages { get; set; }
         public DbSet<PostModel> Posts { get; set; }
         public DbSet<PostReportModel> PostReports { get; set; }
         public DbSet<ProjectModel> Projects { get; set; }
-        public DbSet<ReportModel> Reports { get; set; }
         public DbSet<TeamModel> Teams { get; set; }
         public DbSet<UserMeetingModel> UserMeetings { get; set; }
         public DbSet<UserModel> Users { get; set; }

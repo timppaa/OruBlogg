@@ -23,7 +23,9 @@ namespace OruBloggen.Models
         public string MeetingCreator { get; set; }
         public DateTime MeetingStartDate { get; set; }
         public DateTime MeetingEndDate { get; set; }
-        
+        public bool MeetingActive { get; set; }
+
+
     }
 
     public class UserMeetingViewModel
@@ -31,4 +33,5 @@ namespace OruBloggen.Models
         public virtual UserModel UserModel { get; set; }
         public string UserID { get; set; }
     }
+
 }
