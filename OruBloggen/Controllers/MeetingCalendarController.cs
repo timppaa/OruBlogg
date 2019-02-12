@@ -1,9 +1,13 @@
-﻿using OruBloggen.Models;
+﻿using Ical.Net.Interfaces.Serialization;
+using OruBloggen.Models;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
+
 
 namespace OruBloggen.Controllers
 {
@@ -12,6 +16,7 @@ namespace OruBloggen.Controllers
         // GET: Calendar
         public ActionResult Index()
         {
+            
             return View();
         }
 
@@ -58,5 +63,36 @@ namespace OruBloggen.Controllers
             }
             return new JsonResult { Data = viewList, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
+      
+        public ActionResult ExportToIcal()
+        {
+            var ctx = new OruBloggenDbContext();
+            var meetings = ctx.Meetings.ToList();
+
+            var sb = new StringBuilder();
+
+            sb.AppendLine("BEGIN:VCALENDAR");
+            sb.AppendLine("PRODID:OruCalendar");
+            sb.AppendLine("VERSION:2.0");
+
+            foreach (var meeting in meetings)
+            {
+                sb.AppendLine("BEGIN:VEVENT");
+                sb.AppendLine("UID:" + meeting.MeetingID);
+                sb.AppendLine("ORGANIZER:" + meeting.MeetingUserID);
+                sb.AppendLine("SUMMARY;LANGUAGE=en-us:" + meeting.MeetingTitle);
+                sb.AppendLine("DESCRIPTION:" + meeting.MeetingDesc);
+                sb.AppendLine("CLASS:PUBLIC");             
+                sb.AppendLine(string.Format("DTSTART:{0:yyyyMMddTHHmmssZ}", meeting.MeetingStartDate));
+                sb.AppendLine(string.Format("DTEND:{0:yyyyMMddTHHmmssZ}", meeting.MeetingEndDate));
+                sb.AppendLine("SEQUENCE:0");                
+                sb.AppendLine("END:VEVENT");             
+            }
+            sb.AppendLine("END:VCALENDAR");
+
+            var bytes = Encoding.UTF8.GetBytes(sb.ToString());
+
+            return File(bytes, "text/calendar", "calendar.ics");
+            }
+        }
     }
-}
