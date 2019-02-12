@@ -60,7 +60,7 @@ namespace OruBloggen.Controllers
                 ViewBag.Error = "Something went wrong with sending email notification!";
             }
         }
-        public ActionResult sendSms(string number, string body)
+        public ActionResult SendSms(string number, string body)
         {
             var accountSid = "AC7e22c16e4946115eb10eadea990ff8ec";
             var authToken = "649f135d51c828c66b12e2fd83b24408";
