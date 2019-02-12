@@ -42,7 +42,7 @@ namespace OruBloggen.Controllers
             /*model.*/Email = identityUser.Email,
             /*model*/PhoneNumber = Users.UserPhoneNumber,
             /*model.*/Team = team,
-            /*model.*/Position = Users.UserPosition
+            /*model.*/Position = Users.UserPosition,
             };
 
             return View(model);
@@ -76,7 +76,10 @@ namespace OruBloggen.Controllers
                 /*model.*/
                 Team = team,
                 /*model.*/
-                Position = Users.UserPosition
+                Position = Users.UserPosition,
+                UserEmailNotification = Users.UserEmailNotification,
+                UserPmNotification = Users.UserPmNotification,
+                UserSmsNotification = Users.UserSmsNotification
             };
 
             return View("ShowInfo", model);
