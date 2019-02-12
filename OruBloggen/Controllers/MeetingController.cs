@@ -83,6 +83,7 @@ namespace OruBloggen.Controllers
 
                 var appCtx = new ApplicationDbContext();
                 var emails = new List<string>();
+                var phoneNumbers = new List<string>();
                 if (model.SelectedUserIds != null)
                 {
                     foreach (var item in model.SelectedUserIds)
@@ -93,7 +94,8 @@ namespace OruBloggen.Controllers
                             UserID = item
                         });
                         emails.Add(appCtx.Users.FirstOrDefault(u => u.Id.Equals(item)).Email);
-                    }
+                        phoneNumbers.Add(ctx.Users.FirstOrDefault(u => u.UserID.Equals(item)).UserPhoneNumber.ToString());
+                }
                 }
 
                 ctx.SaveChanges();
@@ -109,8 +111,13 @@ namespace OruBloggen.Controllers
                            "Beskrivning: " + model.Meeting.MeetingDesc;
                 notificationController.SendEmail(emails, "Inbjudan till möte", body);
 
-                //return RedirectToAction("MeetingDetails", new { id = meeting.MeetingID});
-                return RedirectToAction("Index", "MeetingCalendar");
+                foreach (var number in phoneNumbers)
+                {
+                    notificationController.sendSms(number, body);
+                }
+
+            //return RedirectToAction("MeetingDetails", new { id = meeting.MeetingID});
+            return RedirectToAction("Index", "MeetingCalendar");
            
         }
 

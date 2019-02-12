@@ -6,6 +6,13 @@ using System.Net.Mail;
 using System.Web;
 using System.Web.Mvc;
 
+using Twilio;
+using Twilio.Rest.Api.V2010.Account;
+using Twilio.Types;
+
+using Twilio.TwiML;
+using Twilio.AspNet.Mvc;
+
 namespace OruBloggen.Controllers
 {
     public class NotificationController : Controller
@@ -53,5 +60,35 @@ namespace OruBloggen.Controllers
                 ViewBag.Error = "Something went wrong with sending email notification!";
             }
         }
+        public ActionResult sendSms(string number, string body)
+        {
+            var accountSid = "AC7e22c16e4946115eb10eadea990ff8ec";
+            var authToken = "649f135d51c828c66b12e2fd83b24408";
+
+
+            try
+            {
+                TwilioClient.Init(accountSid, authToken);
+                var from = new PhoneNumber("+46765193038");
+                var to = new PhoneNumber("+46" + number);
+
+                var message = MessageResource.Create(
+                    from: from,
+                    to: to,
+                    body: body
+                );
+
+
+                return Content(message.Sid);
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+
     }
 }
