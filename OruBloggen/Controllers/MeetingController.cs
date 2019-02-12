@@ -113,7 +113,7 @@ namespace OruBloggen.Controllers
 
                 foreach (var number in phoneNumbers)
                 {
-                    notificationController.sendSms(number, body);
+                    notificationController.SendSms(number, body);
                 }
 
             //return RedirectToAction("MeetingDetails", new { id = meeting.MeetingID});
