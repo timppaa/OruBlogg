@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using OruBloggen.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -51,6 +53,22 @@ namespace OruBloggen.Controllers
             catch (Exception)
             {
                 ViewBag.Error = "Something went wrong with sending email notification!";
+            }
+        }
+
+        public void SendMeetingPm(string userId, List<UserModel> userModels, string title, string description, DateTime start, DateTime end)
+        {
+            MessageController messageController = new MessageController();
+
+            description +=  "Startdatum: " + start.ToShortDateString() + start.ToShortTimeString() + 
+                "Slutdatum: " + end.ToShortDateString() + end.ToShortTimeString();
+
+            foreach(var item in userModels)
+            {
+                if(item.UserPmNotification)
+                {
+                    messageController.SendPmNotification(userId, item.UserID, title, description);
+                }
             }
         }
     }

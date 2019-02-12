@@ -40,6 +40,24 @@ namespace OruBloggen.Controllers
             return RedirectToAction("index");
         }
 
+        public void SendPmNotification(string userId, string receiverId, string title, string desc)
+        {
+            //ListUsers();
+            var ctx = new OruBloggenDbContext();
+            //var userId = User.Identity.GetUserId();
+
+            ctx.Messages.Add(new MessageModel
+            {
+                MessageReceiverID = receiverId,
+                MessageSenderID = userId,
+                MessageTitle = title,
+                MessageText = desc,
+            });
+
+            ctx.SaveChanges();
+
+        }
+
         public ActionResult ReturnResponsePage(string userId)
         {
             var ctx = new OruBloggenDbContext();
