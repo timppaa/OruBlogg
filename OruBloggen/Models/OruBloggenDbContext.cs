@@ -18,6 +18,7 @@ namespace OruBloggen.Models
         public DbSet<TeamModel> Teams { get; set; }
         public DbSet<UserMeetingModel> UserMeetings { get; set; }
         public DbSet<UserModel> Users { get; set; }
+        public DbSet<NewsModel> News { get; set; }
 
         public OruBloggenDbContext() : base("OruBloggen") {}
     }

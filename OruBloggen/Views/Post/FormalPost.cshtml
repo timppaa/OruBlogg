@@ -25,7 +25,7 @@
                             Välj en kategori: @Html.DropDownList("AddPostViewModel.PostCategory", ViewData["CategoriesFormal"] as List<SelectListItem>, new { @class = "form-control" })
                         </div>
                         <div style="float:left; width:20%; padding-top:0.5%">
-                            <input type="file" name="file" value="Ladda upp en fil" />
+                            <input id="uploadFile" type="file" name="file" accept=".pdf, .doc, .docx, .xlxs, .xls, .ppt, .pptx" onchange="validateFile()" value="Ladda upp en fil" />
                         </div>
                         <div style="float:right; width:40%">
                             <button type="submit" class="btn btn-success" style="float:right;">Skicka inlägg</button>
@@ -77,18 +77,7 @@
 
                 @if (item.PostFilePath != null)
                 {
-                    if (item.PostFilePath.Contains("png") || item.PostFilePath.Contains("jpg") || item.PostFilePath.Contains("jpeg") || item.PostFilePath.Contains("gif"))
-                    {
-
-                        <img id="myImg" src="/PostFiles/@item.PostFilePath" class="center-block" style="width:350px; height:auto;" />
-
-                    }
-
-                    else
-                    {
-                        <a href="/PostFiles/@item.PostFilePath" download>Ladda ner dokument (@item.PostFilePath)</a>
-
-                    }
+                   <a href="/PostFiles/@item.PostFilePath" download>Ladda ner dokument (@item.PostFilePath)</a>
                 }
                 <div>
                     <p class="datetime" style="font-size: xx-small; float:left;"> @item.PostDate</p> &nbsp;
@@ -157,6 +146,17 @@
                 alert("Fyll i en kategori för att skapa en ny kategori.");
             }
         });
+
+        function validateFile() {
+            var fileName = document.getElementById("uploadFile").value;
+            var idxDot = fileName.lastIndexOf(".") + 1;
+            var extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
+            if (extFile == "pdf" || extFile == "docx" || extFile == "doc" || extFile == "xls" || extFile == "xlxs" || extFile == "ppt" || extFile == "pptx") {
+            } else {
+                alert("Endast filer är godkänt. Filformat som stöds är: .pdf, .docx, .doc, .xls, .xlxs, .ppt, .pptx ");
+                $("#uploadFile").val('');
+            }
+        }
 
     </script>
 }

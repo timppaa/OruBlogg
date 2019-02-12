@@ -25,7 +25,7 @@
                             Välj en kategori: @Html.DropDownList("AddPostViewModel.PostCategory", ViewData["CategoriesInformal"] as List<SelectListItem>, new { @class = "form-control" })
                         </div>
                         <div style="float:left; width:20%; padding-top:0.5%">
-                            <input type="file" name="file" value="Ladda upp en fil" />
+                            <input id="uploadImage" type="file" name="file" accept=".png, .jpeg, .jpg, .gif" onchange="validateImg()" value="Ladda upp en fil" multiple/>
                         </div>
                         <div style="float:right; width:40%">
                             <button type="submit" class="btn btn-success" style="float:right;">Skicka inlägg</button>
@@ -81,12 +81,6 @@
                     {
 
                         <img id="myImg" src="/PostFiles/@item.PostFilePath" class="center-block" style="width:350px; height:auto;" />
-
-                    }
-
-                    else
-                    {
-                        <a href="/PostFiles/@item.PostFilePath" download>Ladda ner dokument (@item.PostFilePath)</a>
 
                     }
                 }
@@ -157,6 +151,17 @@
                 alert("Fyll i en kategori för att skapa en ny kategori.");
             }
         });
+
+        function validateImg() {
+            var fileName = document.getElementById("uploadImage").value;
+            var idxDot = fileName.lastIndexOf(".") + 1;
+            var extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
+            if (extFile == "jpg" || extFile == "jpeg" || extFile == "png" || extFile == "gif") {
+            } else {
+                alert("Endast bilder är godkänt. Filformat som stöds är: .jpg/jpeg, .gif och .png");
+                $("#uploadImage").val('');
+            }
+        }
         
     </script>
 }
