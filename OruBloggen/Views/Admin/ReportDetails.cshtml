@@ -4,18 +4,23 @@
     ViewBag.Title = "ReportDetails";
 }
 
-<h2>ReportDetails</h2>
-
+<h2>Rapporterade inlägg</h2>
+<br />
+<table class="table">
+    <tr>
+        <th>Inläggstitel</th>
+        <th>Anmälningsorsak</th>
+        <th>Postad av</th>
+        <th></th>
+    </tr>
 @foreach (var item in Model.ReportList)
 {
-    <div data-item-id="@item.PostID" class="todo-item list-group-item">
-        <div style="width:100%; display:inline-block; padding-bottom:10px;">
-            <h5 style="float: left; padding-right:50px;">Titel: @item.PostTitle</h5> &nbsp;
-            <h5 style="float: left; padding-right:50px;">Anmälningsorsak: @item.ReportReason</h5> &nbsp;
-            <h5 style="float: left; padding-right:50px;">Postad av: @item.PostSenderName</h5>
-            <a id="reviewPost" style="float:right; cursor:pointer;" data-toggle="modal" data-target="#@item.ReportID">Granska inlägg</a>
-        </div>
-    </div>
+    <tr>
+        <td><h5 style="float: left; padding-right:50px;">@item.PostTitle</h5></td>
+        <td><h5 style="float: left; padding-right:50px;">@item.ReportReason</h5></td>
+        <td><h5 style="float: left; padding-right:50px;">@item.PostSenderName</h5></td>
+        <td><a id="reviewPost" style="float:right; cursor:pointer;" data-toggle="modal" data-target="#@item.ReportID">Granska inlägg</a></td>
+    </tr>
 
     <div id="@item.ReportID" class="modal fade" role="dialog">
         <div class="modal-dialog">
@@ -57,6 +62,7 @@
         </div>
     </div>
 }
+</table>
 
 @section scripts {
     <script type="text/javascript">

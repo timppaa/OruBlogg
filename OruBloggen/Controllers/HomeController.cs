@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OruBloggen.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -13,8 +14,18 @@ namespace OruBloggen.Controllers
     {
         public ActionResult Index()
         {
-           
-            return View();
+            var list = NewsList();
+
+            return View(list);
+        }
+
+        public List<NewsModel> NewsList()
+        {
+            var ctx = new OruBloggenDbContext();
+            var list = new List<NewsModel>();
+            list = ctx.News.OrderByDescending(n => n.NewsDate).Take(3).ToList();
+
+            return list;
         }
 
     }

@@ -218,6 +218,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MeetingViewModels.cs" />
+    <Compile Include="Models\NewsModels.cs" />
     <Compile Include="Models\OruBloggenDbContext.cs" />
     <Compile Include="Models\PostReportModels.cs" />
     <Compile Include="Models\PostViewModels.cs" />
@@ -242,6 +243,13 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Icons\category.png" />
+    <Content Include="Icons\news.png" />
+    <Content Include="Icons\oru.jpg" />
+    <Content Include="Icons\post.png" />
+    <Content Include="Icons\report.png" />
+    <Content Include="Icons\request.png" />
+    <Content Include="Icons\users.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
@@ -301,6 +309,8 @@
     <Content Include="Views\MeetingCalendar\Index.cshtml" />
     <Content Include="Views\Meeting\MeetingDetails.cshtml" />
     <Content Include="Views\Admin\ReportDetails.cshtml" />
+    <Content Include="Views\Admin\AdminCategories.cshtml" />
+    <Content Include="Views\Admin\AdminNews.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

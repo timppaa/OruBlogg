@@ -12,7 +12,27 @@ namespace OruBloggen.Models
 
         public PostReportModel postReportModel { get; set; }
 
-        public UserModel userModel { get; set; }
-        public List<UserModel> userModelList { get; set; }
+        public UserModel MyAccount { get; set; }
+        public List<UserAdminViewModel> Userlist { get; set; }
+    }
+
+    public class UserAdminViewModel
+    {
+        public string UserID { get; set; }
+        public string Firstname { get; set; }
+        public string Lastname { get; set; }
+        public DateTime Socialnumber { get; set; }
+        public int Phonenumber { get; set; }
+        public string ImagePath { get; set; }
+        public bool isAdmin { get; set; }
+        public int TeamID { get; set; }
+        public string Team { get; set; }
+        public string Position { get; set; }
+    }
+
+    public class NewsViewModel
+    {
+        public NewsModel News { get; set; }
+        public List<NewsModel> NewsList { get; set; }
     }
 }
