@@ -86,6 +86,7 @@ namespace OruBloggen.Controllers
                 var appCtx = new ApplicationDbContext();
                 var emails = new List<string>();
                 var phoneNumbers = new List<string>();
+                var pmReceivers = new List<UserModel>();
                 if (model.SelectedUserIds != null)
                 {
                     foreach (var item in model.SelectedUserIds)
@@ -97,6 +98,7 @@ namespace OruBloggen.Controllers
                         });
                         emails.Add(appCtx.Users.FirstOrDefault(u => u.Id.Equals(item)).Email);
                         phoneNumbers.Add(ctx.Users.FirstOrDefault(u => u.UserID.Equals(item)).UserPhoneNumber.ToString());
+                        pmReceivers.Add(ctx.Users.FirstOrDefault(u => u.UserID == item));   
                 }
                 }
 

@@ -97,8 +97,8 @@ namespace OruBloggen.Controllers
         {
             MessageController messageController = new MessageController();
 
-            description +=  "Startdatum: " + start.ToShortDateString() + start.ToShortTimeString() + 
-                "Slutdatum: " + end.ToShortDateString() + end.ToShortTimeString();
+            description +=  " Startdatum: " + start.ToShortDateString() + " " + start.ToShortTimeString() + 
+                " Slutdatum: " + end.ToShortDateString() + " " + end.ToShortTimeString();
 
             foreach(var item in userModels)
             {
