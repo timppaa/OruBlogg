@@ -193,6 +193,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AllUsersController.cs" />
+    <Compile Include="Controllers\FollowingController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MeetingCalendarController.cs" />
@@ -324,6 +325,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Images\" />
     <Folder Include="PostFiles\" />
+    <Folder Include="Views\Following\" />
     <Folder Include="Views\Image\" />
     <Folder Include="Views\Notification\" />
     <Folder Include="Views\ReportPost\" />

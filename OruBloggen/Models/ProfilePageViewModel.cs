@@ -14,5 +14,7 @@ namespace OruBloggen.Models
         public int PhoneNumber { get; set; }
         public string Position { get; set; }
         public string ImagePath { get; set; }
+        public string UserIsFollowed { get; set; }
+        public string FollowedID { get; set; }
     }
 }

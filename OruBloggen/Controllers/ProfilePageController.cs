@@ -60,23 +60,27 @@ namespace OruBloggen.Controllers
             var teamId = Users.UserTeamID;
             var team = ctx.Teams.FirstOrDefault(t => t.TeamID == teamId).TeamName;
             var path = "/Images/" + Users.UserImagePath;
-
+            var userID = User.Identity.GetUserId();
+            var notmodel = ctx.Notifications.Where(t => t.UserID == userID).ToList();
+            var isFollowed = "";
+            foreach(var item in notmodel)
+            {
+                if(item.FollowUserID == id)
+                {
+                    isFollowed = item.FollowUserID;
+                }
+            }
             var model = new ProfilePageViewModel
             {
-                /*model.*/
                 ImagePath = path,
-                /*model.*/
                 Firstname = Users.UserFirstname,
-                /*model.*/
                 Lastname = Users.UserLastname,
-                /*model.*/
                 Email = identityUser.Email,
-                /*model*/
                 PhoneNumber = Users.UserPhoneNumber,
-                /*model.*/
                 Team = team,
-                /*model.*/
-                Position = Users.UserPosition
+                Position = Users.UserPosition,
+                UserIsFollowed = isFollowed,
+                FollowedID = id
             };
 
             return View("ShowInfo", model);
