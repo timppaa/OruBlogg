@@ -19,6 +19,8 @@ namespace OruBloggen.Controllers
 {
     public class NotificationController : Controller
     {
+        MessageController messageController = new MessageController();
+
         // GET: Notification
         public ActionResult Index()
         {
@@ -95,17 +97,38 @@ namespace OruBloggen.Controllers
 
         public void SendMeetingPm(string userId, List<UserModel> userModels, string title, string description, DateTime start, DateTime end)
         {
-            MessageController messageController = new MessageController();
+            var messeage = "Du har blivit inbjuden till ett möte. " + "Innehåll: " + description + ". Startdatum: " + start.ToShortDateString() + ": " + start.ToShortTimeString() +
+                ". Slutdatum: " + end.ToShortDateString() + ": " + end.ToShortTimeString() + ".";
 
-            description +=  " Startdatum: " + start.ToShortDateString() + " " + start.ToShortTimeString() + 
-                " Slutdatum: " + end.ToShortDateString() + " " + end.ToShortTimeString();
-
+            
             foreach(var item in userModels)
             {
                 if(item.UserPmNotification)
                 {
-                    messageController.SendPmNotification(userId, item.UserID, title, description);
+                    messageController.SendPmNotification(userId, item.UserID, title, messeage);
                 }
+            }
+        }
+        public void SendPostPm(string userid, string title, string text, DateTime date, bool isFormal, int categoryId)
+        {
+            var ctx = new OruBloggenDbContext();
+            var userFollowers = ctx.Notifications.Where(u => u.FollowUserID == userid).ToList();
+            var user = ctx.Users.Find(userid);
+            var name = user.UserFirstname + " " + user.UserLastname;
+            var category = ctx.Categories.Find(categoryId).CategoryName;
+            var formal = "";
+            if(isFormal)
+            {
+                formal = "formellt";
+            }
+            else
+            {
+                formal = "informellt";
+            }
+            var message = name + " har gjort ett nytt " + formal + " inlägg. " + " Innehåll: " + text + " Datum: " + date.ToShortDateString() + ". I kategorin: " + category;
+             foreach(var item in userFollowers)
+            {
+                messageController.SendPmNotification(userid, item.UserID, title, message);
             }
         }
     }
