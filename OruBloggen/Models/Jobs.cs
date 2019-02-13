@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Timers;
 using Microsoft.AspNet.Identity;
 using OruBloggen.Controllers;
+using System.Threading.Tasks;
 
 namespace OruBloggen.Models
 {
@@ -20,7 +21,7 @@ namespace OruBloggen.Models
         {
             var meetingList = ctx.Meetings.ToList();
 
-            foreach(var meeting in meetingList)
+            foreach(var meeting in meetingList.Where(m => m.MeetingActive == true))
             {
                 
                 var compareTime = meeting.MeetingStartDate.AddMinutes(-30);
@@ -37,7 +38,7 @@ namespace OruBloggen.Models
                 if (-30 < total && total < 30)
                 {
                     var mailLista = new List<string>();
-                    foreach(var usermeeting in meeting.UserMeetingModel)
+                    foreach(var usermeeting in meeting.UserMeetingModel.Where(u => u.UserModel.UserEmailNotification == true))
                     {
                         mailLista.Add(atx.Users.FirstOrDefault(u => u.Id == usermeeting.UserID).Email);
                     }
@@ -54,11 +55,12 @@ namespace OruBloggen.Models
         public Scheduler() { }
 
         public void Scheduler_Start()
-        {
+        { 
             System.Timers.Timer aTimer = new System.Timers.Timer();
             aTimer.Elapsed += new ElapsedEventHandler(Jobs.MeetingNotification);
             aTimer.Interval = 60000;
             aTimer.Enabled = true;
         }
     }
+
 }
