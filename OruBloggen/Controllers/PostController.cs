@@ -78,11 +78,10 @@ namespace OruBloggen.Controllers
 
 
         [HttpPost]
-        public ActionResult AddPost(HomePostViewModel post, HttpPostedFileBase file)
+        public ActionResult AddPost(HomePostViewModel post, HttpPostedFileBase[] file)
         {
             var ctx = new OruBloggenDbContext();
             var userID = User.Identity.GetUserId();
-            var filePath = SaveFile(file);
 
             if (!string.IsNullOrEmpty(post.AddPostViewModel.PostTitle) && !string.IsNullOrEmpty(post.AddPostViewModel.PostText))
             {
@@ -91,13 +90,20 @@ namespace OruBloggen.Controllers
                     PostTitle = post.AddPostViewModel.PostTitle,
                     PostText = post.AddPostViewModel.PostText,
                     PostDate = DateTime.Now,
-                    PostFilePath = filePath,
                     PostFormal = post.AddPostViewModel.PostFormal,
                     PostUserID = userID,
                     PostCategoryID = int.Parse(post.AddPostViewModel.PostCategory)
                 });
 
                 ctx.SaveChanges();
+
+                if (file != null)
+                {
+                    foreach (var oneFile in file)
+                    {
+                        SaveFile(oneFile);
+                    }
+                }
             }
 
             if(post.AddPostViewModel.PostFormal)
@@ -109,34 +115,55 @@ namespace OruBloggen.Controllers
 
         }
 
-        private string SaveFile (HttpPostedFileBase file)
+        private void SaveFile (HttpPostedFileBase file)
         {
             var ctx = new OruBloggenDbContext();
-            string filePath = null;
-            var postID = 1;
-
-            try
-            {
-                postID = ctx.Posts.OrderByDescending(p => p.PostID).FirstOrDefault().PostID;
-                postID += 1;
-            }
-
-            catch
-            {
-
-            }
+            var post = ctx.Posts.OrderByDescending(p => p.PostID).FirstOrDefault();
 
             if (file != null)
             {
+
                 string fileType = Path.GetExtension(file.FileName).ToLower();
-                string fileName = Path.GetFileNameWithoutExtension(file.FileName) + " (" +postID+ ")";
-                filePath = fileName.ToString() + fileType;
+                string fileName = Path.GetFileNameWithoutExtension(file.FileName) + " (" + post.PostID + ")";
+                var filePath = fileName.ToString() + fileType;
                 string path = Path.Combine(Server.MapPath("~/PostFiles/" + filePath));
                 file.SaveAs(path);
 
+                ctx.PostFiles.Add(new PostFilesModel
+                {
+                    PostID = post.PostID,
+                    FilePath = filePath
+                });
+
+                ctx.SaveChanges();
+            }
+            
+
+        }
+
+        private void SaveFile(HttpPostedFileBase file, PostModel post)
+        {
+            var ctx = new OruBloggenDbContext();
+
+            if (file != null)
+            {
+
+                string fileType = Path.GetExtension(file.FileName).ToLower();
+                string fileName = Path.GetFileNameWithoutExtension(file.FileName) + " (" + post.PostID + ")";
+                var filePath = fileName.ToString() + fileType;
+                string path = Path.Combine(Server.MapPath("~/PostFiles/" + filePath));
+                file.SaveAs(path);
+
+                ctx.PostFiles.Add(new PostFilesModel
+                {
+                    PostID = post.PostID,
+                    FilePath = filePath
+                });
+
+                ctx.SaveChanges();
             }
 
-            return filePath;
+
         }
 
         public ActionResult RemoveMyPost(int postID, bool isFormal)
@@ -150,8 +177,14 @@ namespace OruBloggen.Controllers
             }
 
             var post = ctx.Posts.FirstOrDefault(p => p.PostID == postID);
-            ctx.Posts.Remove(post);
+            var fileList = ctx.PostFiles.Where(f => f.PostID == postID);
+            
+            foreach(var file in fileList)
+            {
+                ctx.PostFiles.Remove(file);
+            }
 
+            ctx.Posts.Remove(post);
             ctx.SaveChanges();
 
             if (isFormal)
@@ -161,6 +194,43 @@ namespace OruBloggen.Controllers
 
             else return RedirectToAction("InformalPost");
         }
+
+        [HttpPost]
+        public ActionResult ChangePost (PostViewModel item, HttpPostedFileBase[] file)
+        {
+            var ctx = new OruBloggenDbContext();
+            var post = ctx.Posts.FirstOrDefault(p => p.PostID == item.PostID);
+
+            post.PostTitle = item.PostTitle;
+            post.PostText = item.PostText;
+            ctx.SaveChanges();
+
+            if (file != null)
+            {
+                foreach (var oneFile in file)
+                {
+                    SaveFile(oneFile, post);
+                }
+            }
+
+
+            if (item.PostFormal)
+            {
+                return RedirectToAction("FormalPost");
+            }
+
+            else return RedirectToAction("InformalPost");
+        }
+
+        public void RemoveFile(int postFileID)
+        {
+            var ctx = new OruBloggenDbContext();
+            var file = ctx.PostFiles.FirstOrDefault(f => f.PostFileID == postFileID);
+            ctx.PostFiles.Remove(file);
+            ctx.SaveChanges();
+        }
+
+
 
         private void FillPostList(bool isFormal)
         {
@@ -203,6 +273,8 @@ namespace OruBloggen.Controllers
             var postSenderName = users.FirstOrDefault(u => u.UserID == post.PostUserID).UserFirstname + " " + users.FirstOrDefault(u => u.UserID == post.PostUserID).UserLastname;
             string senderImage = users.FirstOrDefault(u => u.UserID == post.PostUserID).UserImagePath;
 
+            var fileList = ctx.PostFiles.Where(f => f.PostID == post.PostID).ToList();
+
             list.Add(new PostViewModel
             {
                 PostID = post.PostID,
@@ -210,19 +282,14 @@ namespace OruBloggen.Controllers
                 PostText = post.PostText,
                 PostDate = post.PostDate,
                 PostCategory = categories.FirstOrDefault(c => c.CategoryID == post.PostCategoryID).CategoryName,
-                //PostFormal = post.PostFormal,
+                PostFormal = post.PostFormal,
                 PostSenderName = postSenderName,
-                PostFilePath = post.PostFilePath,
+                PostFilePath = fileList,
                 SenderProfilePath = senderImage,
                 PostSender = post.PostUserID
 
             });
         }
-
-
-
-
-
 
         public ActionResult FilterPosts (int filterID, bool isFormal)
         {

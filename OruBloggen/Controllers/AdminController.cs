@@ -50,16 +50,16 @@ namespace OruBloggen.Controllers
                         {
                             isFormal = "Informellt inlägg";
                         }
-                    
 
+                        var fileList = ctx.PostFiles.Where(f => f.PostID == post.PostID).ToList();
 
                         list.Add(new PostReportViewModel
                         {
                             PostID = post.PostID,
                             PostTitle = post.PostTitle,
                             PostText = post.PostText,
-                            PostSenderName = senderName, 
-                            PostFilePath = post.PostFilePath,
+                            PostSenderName = senderName,
+                            PostFilePath = fileList,
                             PostFormal = isFormal,
                             ReportID = report.PostReportID,
                             ReportReason = report.ReportReason
@@ -75,6 +75,14 @@ namespace OruBloggen.Controllers
         {
             var report = ctx.PostReports.FirstOrDefault(r => r.PostReportID == reportID);
             ctx.PostReports.Remove(report);
+            ctx.SaveChanges();
+
+            var fileList = ctx.PostFiles.Where(f => f.PostID == postID);
+
+            foreach (var file in fileList)
+            {
+                ctx.PostFiles.Remove(file);
+            }
             ctx.SaveChanges();
 
             var post = ctx.Posts.FirstOrDefault(p => p.PostID == postID);
@@ -162,7 +170,6 @@ namespace OruBloggen.Controllers
 
             return RedirectToAction("AdminCategories");
         }
-
    
         // Posts
         //public ActionResult Posts ()
@@ -302,7 +309,6 @@ namespace OruBloggen.Controllers
             return View(newsView);
         }
 
-
         public List<NewsModel> FillNewsList ()
         {
             var list = new List<NewsModel>();
@@ -320,7 +326,6 @@ namespace OruBloggen.Controllers
 
             return list;
         }
-
 
         [HttpPost]
         public ActionResult AddNews(NewsModel news)

@@ -247,6 +247,7 @@
     <Compile Include="Models\NotificationModels.cs" />
     <Compile Include="Models\NewsModels.cs" />
     <Compile Include="Models\OruBloggenDbContext.cs" />
+    <Compile Include="Models\PostFilesModels.cs" />
     <Compile Include="Models\PostReportModels.cs" />
     <Compile Include="Models\PostViewModels.cs" />
     <Compile Include="Models\ProfilePageViewModel.cs" />
