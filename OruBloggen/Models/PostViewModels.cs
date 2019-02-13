@@ -36,4 +36,5 @@ namespace OruBloggen.Models
         public string ReportReason { get; set; }
     }
 
+
 }

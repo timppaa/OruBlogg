@@ -69,6 +69,45 @@ textarea {
     font-size: 20px;
 }
 
+.adminView 
+{
+    text-align: center;
+}
+
+.adminviewItem 
+{
+    display: inline-block;
+    width: 25%;
+    margin: 15px;
+    padding: 0px 15px;
+    background-color: lightgrey;
+}
+
+.homeView {
+    text-align: center;
+}
+
+.homeViewItem {
+    display: inline-block;
+    width: 25%;
+    margin: 15px;
+    padding: 0px 15px;
+    background-color: white;
+
+}
+
+.startpage {
+    background-image: url('/Icons/oru.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+}
+
+
 body > div.container.body-content > form > table > tbody > tr:nth-child(1) > td:nth-child(1) {
     width: 1px;
 }

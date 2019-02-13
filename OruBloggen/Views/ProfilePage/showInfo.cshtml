@@ -79,3 +79,33 @@
     </div>
 }
 
+    <div>
+        @using (Html.BeginForm("ChosenNotifications", "ChooseNotification", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <h4>Notifikationer</h4>
+            <p>
+                Notifikationer via PM
+                @Html.CheckBoxFor(m => Model.UserPmNotification, "true")
+            </p>
+            <p>
+                Notifikationer via Email
+                @Html.CheckBoxFor(m => Model.UserEmailNotification, "true")
+            </p>
+            <p>
+                Notifikationer via SMS
+                @Html.CheckBoxFor(m => Model.UserSmsNotification, "true")
+            </p>
+            <input type="submit" id="submitBtn" class="btn btn-default" value="Ändra Notifikationer" />
+        }
+    </div>
+
+
+
+@section scripts{
+    <script>
+        $("#submitBtn").click(function () {
+            alert("Dina notifikationsval har ändrats.")
+        });
+
+    </script>
+}

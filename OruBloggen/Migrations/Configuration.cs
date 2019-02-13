@@ -23,6 +23,8 @@ namespace OruBloggen.Migrations
                 );
 
             context.Categories.AddOrUpdate(
+                new CategoryModel() { CategoryName = "Okategoriserade", IsFormel = false },
+                new CategoryModel() { CategoryName = "Okategoriserade", IsFormel = true },
                 new CategoryModel() { CategoryName = "Fest", IsFormel = false},
                 new CategoryModel() { CategoryName = "Semester", IsFormel = false },
                 new CategoryModel() { CategoryName = "After work", IsFormel = false },

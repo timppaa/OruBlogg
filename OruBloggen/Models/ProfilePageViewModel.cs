@@ -16,5 +16,9 @@ namespace OruBloggen.Models
         public string ImagePath { get; set; }
         public string UserIsFollowed { get; set; }
         public string FollowedID { get; set; }
+
+        public bool UserSmsNotification { get; set; }
+        public bool UserPmNotification { get; set; }
+        public bool UserEmailNotification { get; set; }
     }
 }

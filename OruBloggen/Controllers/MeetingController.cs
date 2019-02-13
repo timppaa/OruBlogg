@@ -83,22 +83,22 @@ namespace OruBloggen.Controllers
             });
             ctx.SaveChanges();
 
-            var appCtx = new ApplicationDbContext();
-            var emails = new List<string>();
-            var pmReceivers = new List<UserModel>();
-            if (model.SelectedUserIds != null)
-            {
-                foreach (var item in model.SelectedUserIds)
+                var appCtx = new ApplicationDbContext();
+                var emails = new List<string>();
+                var phoneNumbers = new List<string>();
+                if (model.SelectedUserIds != null)
                 {
-                    ctx.UserMeetings.Add(new UserMeetingModel
+                    foreach (var item in model.SelectedUserIds)
                     {
-                        MeetingID = ctx.Meetings.OrderByDescending(m => m.MeetingID).First().MeetingID,
-                        UserID = item
-                    });
-                    emails.Add(appCtx.Users.FirstOrDefault(u => u.Id.Equals(item)).Email);
-                    pmReceivers.Add(ctx.Users.FirstOrDefault(u => u.UserID == item));
+                        ctx.UserMeetings.Add(new UserMeetingModel
+                        {
+                            MeetingID = ctx.Meetings.OrderByDescending(m => m.MeetingID).First().MeetingID,
+                            UserID = item
+                        });
+                        emails.Add(appCtx.Users.FirstOrDefault(u => u.Id.Equals(item)).Email);
+                        phoneNumbers.Add(ctx.Users.FirstOrDefault(u => u.UserID.Equals(item)).UserPhoneNumber.ToString());
                 }
-            }
+                }
 
             ctx.SaveChanges();
 

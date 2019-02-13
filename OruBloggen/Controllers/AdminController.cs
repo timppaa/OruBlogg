@@ -13,13 +13,15 @@ namespace OruBloggen.Controllers
     public class AdminController : Controller
     {
         public OruBloggenDbContext ctx = new OruBloggenDbContext();
-        public AdminViewModel AVM = new AdminViewModel();
 
+        //AdminView
         public ActionResult Index()
         {
             return View();
         }
 
+
+        //Reports
         public ActionResult ReportDetails ()
         {
             var pageViewList = new PostReportPageViewModel();
@@ -91,61 +93,115 @@ namespace OruBloggen.Controllers
             return RedirectToAction("ReportDetails");
         }
 
+        public int CountReports ()
+        {
+            int count = 0;
+            count = ctx.PostReports.Count();
+            
+            return count;
+        }
+
+        //Categories
+        public ActionResult AdminCategories()
+        {
+            var categoriesList = ctx.Categories.OrderByDescending(c => c.IsFormel).ToList();
+
+            return View(categoriesList);
+        }
+
+        public int CountPostAtCategories (int categoryID)
+        {
+            int count = 0;
+            var posts = ctx.Posts.Where(p => p.PostCategoryID == categoryID).ToList();
+            count = posts.Count();
+
+            return count;
+        }
+
+        public ActionResult ChangeCategory (CategoryModel category)
+        {
+            var cat = ctx.Categories.FirstOrDefault(c => c.CategoryID == category.CategoryID);
+
+            if (!String.IsNullOrEmpty(cat.CategoryName))
+            {
+                cat.CategoryName = category.CategoryName;
+            }
+
+            ctx.SaveChanges();
+
+            return RedirectToAction("AdminCategories");
+        }
+
+        public ActionResult RemoveCategory (int id)
+        {
+            var category = ctx.Categories.FirstOrDefault(c => c.CategoryID == id);
+            
+            if(category.IsFormel)
+            {
+                var postList = ctx.Posts.Where(p => p.PostCategoryID == id).ToList();
+                foreach(var post in postList)
+                {
+                    post.PostCategoryID = 2;
+                    ctx.SaveChanges();
+                }
+            }
+
+            else
+            {
+                var postList = ctx.Posts.Where(p => p.PostCategoryID == id).ToList();
+                foreach (var post in postList)
+                {
+                    post.PostCategoryID = 1;
+                    ctx.SaveChanges();
+                }
+            }
+
+            ctx.Categories.Remove(category);
+            ctx.SaveChanges();
 
 
+            return RedirectToAction("AdminCategories");
+        }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+   
         // Posts
-        public ActionResult Posts ()
-        {
-            AVM.postModelList = ctx.Posts.ToList();
-            AVM.userModelList = ctx.Users.ToList();
-            return View(AVM);
-        }
+        //public ActionResult Posts ()
+        //{
+        //    AVM.postModelList = ctx.Posts.ToList();
+        //    return View(AVM);
+        //}
 
-        public ActionResult PostDetails (int? id)
-        {
+        //public ActionResult PostDetails (int? id)
+        //{
 
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            AVM.postModel = ctx.Posts.Find(id);
-            AVM.userModel = ctx.Users.FirstOrDefault(u => u.UserID == AVM.postModel.PostUserID);
-            if (AVM.postModel == null)
-            {
-                Console.WriteLine("Test");
-                return HttpNotFound();
-            }
-            return View(AVM);
-        }
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    AVM.postModel = ctx.Posts.Find(id);
+        //    AVM.userModel = ctx.Users.FirstOrDefault(u => u.UserID == AVM.postModel.PostUserID);
+        //    if (AVM.postModel == null)
+        //    {
+        //        Console.WriteLine("Test");
+        //        return HttpNotFound();
+        //    }
+        //    return View(AVM);
+        //}
 
-        public ActionResult DeletePost(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            AVM.postModel = ctx.Posts.Find(id);
-            AVM.userModelList = ctx.Users.ToList();
-            if (AVM.postModel == null)
-            {
-                return HttpNotFound();
-            }
-            return View(AVM);
-        }
+        //public ActionResult DeletePost(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    AVM.postModel = ctx.Posts.Find(id);
+        //    AVM.userModelList = ctx.Users.ToList();
+        //    if (AVM.postModel == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(AVM);
+        //}
 
         // POST: PostModels/Delete/5
         [HttpPost, ActionName("DeletePost")]
@@ -161,14 +217,50 @@ namespace OruBloggen.Controllers
         }
 
 
+
+        //Users
         public ActionResult AllUsers()
         {
+            var adminView = new AdminViewModel();
+            var adminViewList = new List<UserAdminViewModel>();
+            var teams = ctx.Teams.ToList();
             var currentUser = User.Identity.GetUserId();
-            AVM.userModel = ctx.Users.FirstOrDefault(u => u.UserID == currentUser);
-            AVM.userModelList = ctx.Users.ToList();
-            return View(AVM);
+            adminView.MyAccount = ctx.Users.FirstOrDefault(u => u.UserID == currentUser);
+
+            foreach(var user in ctx.Users)
+            {
+                adminViewList.Add( new UserAdminViewModel
+                {
+                    UserID = user.UserID,
+                    Firstname = user.UserFirstname,
+                    Lastname = user.UserLastname,
+                    Socialnumber = user.UserBirthDate,
+                    Phonenumber = user.UserPhoneNumber,
+                    Position = user.UserPosition,
+                    isAdmin = user.UserIsAdmin,
+                    TeamID = user.UserTeamID,
+                    Team = teams.FirstOrDefault(t => t.TeamID == user.UserTeamID).TeamName,
+                    ImagePath = user.UserImagePath
+                });
+            }
+
+            adminView.Userlist = adminViewList;
+            ListTeams();
+
+            return View(adminView);
         }
-    
+
+        public void ListTeams()
+        {
+            var ctx = new OruBloggenDbContext();
+            List<SelectListItem> List = new List<SelectListItem>();
+            foreach (var item in ctx.Teams)
+            {
+                List.Add(new SelectListItem() { Text = item.TeamName, Value = item.TeamID.ToString() });
+            }
+            ViewData["Teams"] = List;
+
+        }
 
         public ActionResult AssignRoles(string id)
         {
@@ -185,6 +277,72 @@ namespace OruBloggen.Controllers
             ctx.SaveChanges();
             return RedirectToAction("AllUsers");
 
+        }
+
+        public ActionResult UpdateUser (UserAdminViewModel item)
+        {
+            var account = ctx.Users.FirstOrDefault(c => c.UserID == item.UserID);
+
+            account.UserFirstname = item.Firstname;
+            account.UserLastname = item.Lastname;
+            account.UserPosition = item.Position;
+            account.UserPhoneNumber = item.Phonenumber;
+            account.UserIsAdmin = item.isAdmin;
+            account.UserTeamID = item.TeamID;
+            ctx.SaveChanges();
+
+            return RedirectToAction("AllUsers");
+        }
+
+        //News
+        public ActionResult AdminNews ()
+        {
+            var newsView = new NewsViewModel();
+            newsView.NewsList = FillNewsList();
+            return View(newsView);
+        }
+
+
+        public List<NewsModel> FillNewsList ()
+        {
+            var list = new List<NewsModel>();
+
+            foreach(var news in ctx.News)
+            {
+                list.Add(new NewsModel
+                {
+                    NewsID = news.NewsID,
+                    NewsTitle = news.NewsTitle,
+                    NewsText = news.NewsText,
+                    NewsDate = news.NewsDate
+                });
+            }
+
+            return list;
+        }
+
+
+        [HttpPost]
+        public ActionResult AddNews(NewsModel news)
+        {
+            ctx.News.Add(new NewsModel {
+                NewsTitle = news.NewsTitle,
+                NewsText = news.NewsText,
+                NewsDate = DateTime.Now
+            });
+
+            ctx.SaveChanges();
+
+            return RedirectToAction("AdminNews");
+        }
+
+        public ActionResult DeclineNews(int newsID)
+        {
+            var news = ctx.News.FirstOrDefault(n => n.NewsID == newsID);
+            ctx.News.Remove(news);
+            ctx.SaveChanges();
+
+            return RedirectToAction("AdminNews");
         }
     }
 }
