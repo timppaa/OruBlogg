@@ -16,7 +16,7 @@ namespace OruBloggen.Controllers
             return View();
         }
         
-        public void FollowUser(string followID)
+        public ActionResult FollowUser(string followID)
         {
             var ctx = new OruBloggenDbContext();
             ctx.Notifications.Add(new NotificationModel
@@ -26,10 +26,10 @@ namespace OruBloggen.Controllers
             });
             ctx.SaveChanges();
 
-            RedirectToAction("ShowInfo", "ProfilePage", followID);
+            return RedirectToAction("ShowOtherUser", "ProfilePage", new { @id = followID });
         }
 
-        public void UnfollowUser (string unfollowID)
+        public ActionResult UnfollowUser (string unfollowID)
         {
             var ctx = new OruBloggenDbContext();
             var user = User.Identity.GetUserId();
@@ -39,7 +39,7 @@ namespace OruBloggen.Controllers
             ctx.Notifications.Remove(unfollow);
             ctx.SaveChanges();
 
-            RedirectToAction("ShowInfo", "ProfilePage");
+            return RedirectToAction("ShowOtherUser", "ProfilePage", new { @id = unfollowID });
         }
     }
 }
