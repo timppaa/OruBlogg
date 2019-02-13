@@ -253,6 +253,7 @@
     <Compile Include="Models\CategoryModels.cs" />
     <Compile Include="Models\HomePostViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\Jobs.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MeetingViewModels.cs" />
     <Compile Include="Models\MessageViewModel.cs" />

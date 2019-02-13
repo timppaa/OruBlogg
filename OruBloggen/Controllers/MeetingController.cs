@@ -52,7 +52,7 @@ namespace OruBloggen.Controllers
                                     .Contains(searchString) ||
                                     searchString == null).ToList();
 
-            
+
             var users = new List<SelectListItem>();
             foreach (var item in userList)
             {
@@ -69,17 +69,17 @@ namespace OruBloggen.Controllers
         [HttpPost]
         public ActionResult CreateMeeting(MeetingViewModel model)
         {
-                var ctx = new OruBloggenDbContext();
+            var ctx = new OruBloggenDbContext();
 
-                var meeting = ctx.Meetings.Add(new MeetingModel
-                {
-                    MeetingTitle = model.Meeting.MeetingTitle,
-                    MeetingDesc = model.Meeting.MeetingDesc,
-                    MeetingStartDate = model.Meeting.MeetingStartDate,
-                    MeetingEndDate = model.Meeting.MeetingEndDate,
-                    MeetingUserID = User.Identity.GetUserId()
-                });
-                ctx.SaveChanges();
+            var meeting = ctx.Meetings.Add(new MeetingModel
+            {
+                MeetingTitle = model.Meeting.MeetingTitle,
+                MeetingDesc = model.Meeting.MeetingDesc,
+                MeetingStartDate = model.Meeting.MeetingStartDate,
+                MeetingEndDate = model.Meeting.MeetingEndDate,
+                MeetingUserID = User.Identity.GetUserId()
+            });
+            ctx.SaveChanges();
 
                 var appCtx = new ApplicationDbContext();
                 var emails = new List<string>();
@@ -98,18 +98,18 @@ namespace OruBloggen.Controllers
                 }
                 }
 
-                ctx.SaveChanges();
+            ctx.SaveChanges();
 
-                var notificationController = new NotificationController();
-                var body = "Du har blivit inbjuden till " + model.Meeting.MeetingTitle + Environment.NewLine +
-                           "Startdatum: " + model.Meeting.MeetingStartDate.ToShortDateString() + " "
-                           + model.Meeting.MeetingStartDate.ToShortTimeString() + Environment.NewLine +
+            var notificationController = new NotificationController();
+            var body = "Du har blivit inbjuden till " + model.Meeting.MeetingTitle + Environment.NewLine +
+                       "Startdatum: " + model.Meeting.MeetingStartDate.ToShortDateString() + " "
+                       + model.Meeting.MeetingStartDate.ToShortTimeString() + Environment.NewLine +
 
-                           "Slutdatum: " + model.Meeting.MeetingEndDate.ToShortDateString() + " "
-                           + model.Meeting.MeetingEndDate.ToShortTimeString() + Environment.NewLine +
+                       "Slutdatum: " + model.Meeting.MeetingEndDate.ToShortDateString() + " "
+                       + model.Meeting.MeetingEndDate.ToShortTimeString() + Environment.NewLine +
 
-                           "Beskrivning: " + model.Meeting.MeetingDesc;
-                //notificationController.SendEmail(emails, "Inbjudan till möte", body);
+                       "Beskrivning: " + model.Meeting.MeetingDesc;
+            notificationController.SendEmail(emails, "Inbjudan till möte", body);
 
                 //foreach (var number in phoneNumbers)
                 //{
@@ -142,7 +142,7 @@ namespace OruBloggen.Controllers
         {
             var ctx = new OruBloggenDbContext();
             var userId = User.Identity.GetUserId();
-            
+
             var meetings = ctx.Meetings.Where(m => m.MeetingUserID.Equals(userId)).ToList();
             foreach (var meeting in meetings)
             {
@@ -179,7 +179,7 @@ namespace OruBloggen.Controllers
                 ctx.SaveChanges();
 
                 var notificationController = new NotificationController();
-                notificationController.SendEmail(emails, "Mötet är inställt", title + " " + startDate.ToShortDateString() + " är inställt.");              
+                notificationController.SendEmail(emails, "Mötet är inställt", title + " " + startDate.ToShortDateString() + " är inställt.");
             }
             return RedirectToAction("ListCreatedMeetings");
         }

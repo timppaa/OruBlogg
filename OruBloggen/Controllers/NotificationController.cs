@@ -84,8 +84,7 @@ namespace OruBloggen.Controllers
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-                throw;
+                return Content("fail hihi");
             }
         }
 

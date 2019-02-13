@@ -16,7 +16,20 @@ namespace OruBloggen.Controllers
         // GET: Calendar
         public ActionResult Index()
         {
-            
+            var ctx = new OruBloggenDbContext();
+            var meetings = ctx.Meetings.ToList();
+            foreach (var meeting in meetings)
+            {
+                if (meeting.MeetingActive)
+                {
+                    if (DateTime.Now > meeting.MeetingEndDate)
+                    {
+                        meeting.MeetingActive = false;
+                    }
+                }
+            }
+            ctx.SaveChanges();
+
             return View();
         }
 
