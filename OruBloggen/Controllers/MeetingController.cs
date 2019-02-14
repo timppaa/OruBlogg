@@ -71,6 +71,8 @@ namespace OruBloggen.Controllers
         {
             var ctx = new OruBloggenDbContext();
 
+            var userId = User.Identity.GetUserId();
+
             var meeting = ctx.Meetings.Add(new MeetingModel
             {
                 MeetingTitle = model.Meeting.MeetingTitle,
@@ -84,6 +86,7 @@ namespace OruBloggen.Controllers
                 var appCtx = new ApplicationDbContext();
                 var emails = new List<string>();
                 var phoneNumbers = new List<string>();
+                var pmReceivers = new List<UserModel>();
                 if (model.SelectedUserIds != null)
                 {
                     foreach (var item in model.SelectedUserIds)
@@ -95,6 +98,7 @@ namespace OruBloggen.Controllers
                         });
                         emails.Add(appCtx.Users.FirstOrDefault(u => u.Id.Equals(item)).Email);
                         phoneNumbers.Add(ctx.Users.FirstOrDefault(u => u.UserID.Equals(item)).UserPhoneNumber.ToString());
+                        pmReceivers.Add(ctx.Users.FirstOrDefault(u => u.UserID == item));   
                 }
                 }
 
@@ -102,19 +106,16 @@ namespace OruBloggen.Controllers
 
             var notificationController = new NotificationController();
             var body = "Du har blivit inbjuden till " + model.Meeting.MeetingTitle + Environment.NewLine +
-                       "Startdatum: " + model.Meeting.MeetingStartDate.ToShortDateString() + " "
-                       + model.Meeting.MeetingStartDate.ToShortTimeString() + Environment.NewLine +
+                        "Startdatum: " + model.Meeting.MeetingStartDate.ToShortDateString() + " "
+                        + model.Meeting.MeetingStartDate.ToShortTimeString() + Environment.NewLine +
 
-                       "Slutdatum: " + model.Meeting.MeetingEndDate.ToShortDateString() + " "
-                       + model.Meeting.MeetingEndDate.ToShortTimeString() + Environment.NewLine +
+                        "Slutdatum: " + model.Meeting.MeetingEndDate.ToShortDateString() + " "
+                        + model.Meeting.MeetingEndDate.ToShortTimeString() + Environment.NewLine +
 
-                       "Beskrivning: " + model.Meeting.MeetingDesc;
+                        "Beskrivning: " + model.Meeting.MeetingDesc;
             notificationController.SendEmail(emails, "Inbjudan till möte", body);
 
-                //foreach (var number in phoneNumbers)
-                //{
-                //    notificationController.SendSms(number, body);
-                //}
+            notificationController.SendMeetingPm(userId, pmReceivers, model.Meeting.MeetingTitle, model.Meeting.MeetingDesc, model.Meeting.MeetingStartDate, model.Meeting.MeetingEndDate);
 
             //return RedirectToAction("MeetingDetails", new { id = meeting.MeetingID});
             return RedirectToAction("Index", "MeetingCalendar");
@@ -143,8 +144,13 @@ namespace OruBloggen.Controllers
             var ctx = new OruBloggenDbContext();
             var userId = User.Identity.GetUserId();
 
-            var meetings = ctx.Meetings.Where(m => m.MeetingUserID.Equals(userId)).ToList();
-            foreach (var meeting in meetings)
+            var meetingUserView = new MeetingUserViewModel
+            {
+                Meetings = ctx.Meetings.Where(m => m.MeetingUserID.Equals(userId)).ToList(),
+                UserMeetings = ctx.UserMeetings.Where(u => u.UserID.Equals(userId)).ToList()
+            };
+
+            foreach (var meeting in meetingUserView.Meetings)
             {
                 if (meeting.MeetingActive)
                 {
@@ -156,7 +162,7 @@ namespace OruBloggen.Controllers
             }
             ctx.SaveChanges();
 
-            return View(meetings);
+            return View(meetingUserView);
         }
 
         public ActionResult CancelMeeting(int meetingId, string title, DateTime startDate)
@@ -182,6 +188,17 @@ namespace OruBloggen.Controllers
                 notificationController.SendEmail(emails, "Mötet är inställt", title + " " + startDate.ToShortDateString() + " är inställt.");
             }
             return RedirectToAction("ListCreatedMeetings");
+        }
+
+        public ActionResult AcceptMeeting(int meetingId, bool accepted)
+        {
+            var ctx = new OruBloggenDbContext();
+            var userId = User.Identity.GetUserId();
+            ctx.UserMeetings.FirstOrDefault(m => m.MeetingID == meetingId && m.UserID.Equals(userId)).AcceptedInvite = accepted;
+            ctx.SaveChanges();
+
+            return RedirectToAction("ListCreatedMeetings");
+
         }
     }
 }

@@ -39,7 +39,7 @@ namespace OruBloggen.Controllers
 
             var model = new ProfilePageViewModel
             {
-                      UserID = userId,
+                      userId = userId,
             /*model.*/ImagePath = path,
             /*model.*/Firstname = Users.UserFirstname,
             /*model.*/Lastname = Users.UserLastname,
@@ -62,32 +62,41 @@ namespace OruBloggen.Controllers
             var ctx = new OruBloggenDbContext();
             var identityCtx = new ApplicationDbContext();
 
+            var userId = User.Identity.GetUserId();
+
             var Users = ctx.Users.Find(id);
             var identityUser = identityCtx.Users.Find(id);
             var teamId = Users.UserTeamID;
             var team = ctx.Teams.FirstOrDefault(t => t.TeamID == teamId).TeamName;
             var path = "/Images/" + Users.UserImagePath;
+            var userID = User.Identity.GetUserId();
+            var notmodel = ctx.Notifications.Where(t => t.UserID == userID).ToList();
+            var isFollowed = "";
+            foreach(var item in notmodel)
+            {
+                if(item.FollowUserID == id)
+                {
+                    isFollowed = item.FollowUserID;
+                }
+            }
             var MeetingModels = ctx.Meetings.ToList();
             var UserMeetings = ctx.UserMeetings.Where(u => u.UserID.Equals(id)).ToList();
 
             var model = new ProfilePageViewModel
             {
-                /*model.*/
+                userId = userId,
                 ImagePath = path,
-                /*model.*/
                 Firstname = Users.UserFirstname,
-                /*model.*/
                 Lastname = Users.UserLastname,
-                /*model.*/
                 Email = identityUser.Email,
-                /*model*/
                 PhoneNumber = Users.UserPhoneNumber,
-                /*model.*/
                 Team = team,
                 /*model.*/
-                UserID = Users.UserID,
+                OtherUserID = id,
                 MeetingModels = MeetingModels,
                 UserMeetings = UserMeetings,
+                FollowedID = id,
+                UserIsFollowed = isFollowed,
                 Position = Users.UserPosition,
                 UserEmailNotification = Users.UserEmailNotification,
                 UserPmNotification = Users.UserPmNotification,

@@ -178,6 +178,10 @@ namespace OruBloggen.Controllers
                         model.ImagePath = fileName + fileType;
                         image.SaveAs(path); 
                     }
+                    else
+                    {
+                        model.ImagePath = "/noProfileImage.png";
+                    }
 
 
                     ctx.Users.Add(new UserModel
