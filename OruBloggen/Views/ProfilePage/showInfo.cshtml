@@ -131,26 +131,19 @@
             }
 
         </table>
-                <dd>
-                    @Html.DisplayFor(model => model.Team)
-                </dd>
+
                 @if (Model.userId != Model.FollowedID)
                 {
                     if (Model.UserIsFollowed == "")
                     {
-                        <dd>
+                        
                             <input type="button" value="Följ" onclick="location.href = '@Url.Action("FollowUser", "Following", new { followID = Model.FollowedID })'" />
-                        </dd>
                     }
                     else
                     {
-                        <dd>
                             <input type="button" value="Avfölj" onclick="location.href = '@Url.Action("UnfollowUser", "Following", new { unfollowID = Model.FollowedID })'" />
-                        </dd>
                     }
                 }
-            </dl>
-        </div>
     </div>
 }
 
