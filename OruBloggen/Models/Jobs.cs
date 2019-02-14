@@ -38,13 +38,34 @@ namespace OruBloggen.Models
                 if (-30 < total && total < 30)
                 {
                     var mailLista = new List<string>();
-                    foreach(var usermeeting in meeting.UserMeetingModel.Where(u => u.UserModel.UserEmailNotification == true))
+                    var phoneNumbers = new List<string>();
+                    foreach(var usermeeting in meeting.UserMeetingModel)
                     {
-                        mailLista.Add(atx.Users.FirstOrDefault(u => u.Id == usermeeting.UserID).Email);
+                        if (usermeeting.UserModel.UserEmailNotification)
+                        {
+                            mailLista.Add(atx.Users.FirstOrDefault(u => u.Id == usermeeting.UserID).Email);
+                        }
+
+                        if (usermeeting.UserModel.UserSmsNotification)
+                        {
+                            phoneNumbers.Add(ctx.Users.FirstOrDefault(u => u.UserID.Equals(usermeeting.UserID)).UserPhoneNumber.ToString());
+                        }
+
+                        if (usermeeting.UserModel.UserPmNotification)
+                        {
+                          
+                           
+                        }
                     }
+
+                    
                     var notificationController = new NotificationController();
                     var body = "Hej, du har ett möte om 30 minuter, du hittar mötet i OruBloggens kalender: " + meeting.MeetingTitle;
                     notificationController.SendEmail(mailLista, "Påminnelse av möte - Orubloggen", body);
+                    foreach (var number in phoneNumbers)
+                    {
+                        notificationController.SendSms(number, body);
+                    }
                 }
             }
         }
