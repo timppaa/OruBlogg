@@ -49,13 +49,13 @@ namespace OruBloggen.Controllers
             var model = new ProfilePageViewModel
             {
                       UserID = userId,
-            /*model.*/ImagePath = path,
-            /*model.*/Firstname = Users.UserFirstname,
-            /*model.*/Lastname = Users.UserLastname,
-            /*model.*/Email = identityUser.Email,
-            /*model*/ PhoneNumber = Users.UserPhoneNumber,
-            /*model.*/Team = team,
-            /*model.*/Position = Users.UserPosition,
+                      ImagePath = path,
+                      Firstname = Users.UserFirstname,
+                      Lastname = Users.UserLastname,
+                      Email = identityUser.Email,
+                      PhoneNumber = Users.UserPhoneNumber,
+                      Team = team,
+                      Position = Users.UserPosition,
                       MeetingModels = creator,
                       UserMeetings = invited,
                       UserEmailNotification = Users.UserEmailNotification,
@@ -77,25 +77,27 @@ namespace OruBloggen.Controllers
             var team = ctx.Teams.FirstOrDefault(t => t.TeamID == teamId).TeamName;
             var path = "/Images/" + Users.UserImagePath;
 
+            var creator = ctx.Meetings.Where(m => m.MeetingUserID.Equals(id)).ToList();
+            var invited = ctx.UserMeetings.Where(u => u.UserID.Equals(id)).Where(u => u.AcceptedInvite == false).ToList();
+            var accepted = ctx.UserMeetings.Where(u => u.UserID.Equals(id)).Where(u => u.AcceptedInvite == true).ToList();
+
+            foreach (var accept in accepted)
+            {
+                var meeting = ctx.Meetings.FirstOrDefault(m => m.MeetingID == accept.MeetingID);
+                creator.Add(meeting);
+            }
 
             var model = new ProfilePageViewModel
             {
-                /*model.*/
                 ImagePath = path,
-                /*model.*/
                 Firstname = Users.UserFirstname,
-                /*model.*/
                 Lastname = Users.UserLastname,
-                /*model.*/
                 Email = identityUser.Email,
-                /*model*/
                 PhoneNumber = Users.UserPhoneNumber,
-                /*model.*/
                 Team = team,
-                /*model.*/
                 UserID = Users.UserID,
-                MeetingModels = ctx.Meetings.Where(m => m.MeetingUserID.Equals(id)).ToList(),
-                UserMeetings = ctx.UserMeetings.Where(u => u.UserID.Equals(id)).ToList(),
+                MeetingModels = creator,
+                UserMeetings = invited,
                 Position = Users.UserPosition,
                 UserEmailNotification = Users.UserEmailNotification,
                 UserPmNotification = Users.UserPmNotification,
