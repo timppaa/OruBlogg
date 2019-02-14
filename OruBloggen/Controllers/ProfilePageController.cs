@@ -34,16 +34,25 @@ namespace OruBloggen.Controllers
         //    var team = ctx.Teams.FirstOrDefault(t => t.TeamID == teamId).TeamName;
         //    var path = "/Images/" + Users.UserImagePath;
 
-        //    var model = new ProfilePageViewModel
-        //    {
-        //    /*model.*/ImagePath = path,
-        //    /*model.*/Firstname = Users.UserFirstname,
-        //    /*model.*/Lastname = Users.UserLastname,
-        //    /*model.*/Email = identityUser.Email,
-        //    /*model*/PhoneNumber = Users.UserPhoneNumber,
-        //    /*model.*/Team = team,
-        //    /*model.*/Position = Users.UserPosition,
-        //    };
+            var MeetingModels = ctx.Meetings.ToList();
+            var UserMeetings = ctx.UserMeetings.Where(u => u.UserID.Equals(userId)).ToList();
+
+            var model = new ProfilePageViewModel
+            {
+                      UserID = userId,
+            /*model.*/ImagePath = path,
+            /*model.*/Firstname = Users.UserFirstname,
+            /*model.*/Lastname = Users.UserLastname,
+            /*model.*/Email = identityUser.Email,
+            /*model*/ PhoneNumber = Users.UserPhoneNumber,
+            /*model.*/Team = team,
+            /*model.*/Position = Users.UserPosition,
+                      MeetingModels = MeetingModels,
+                      UserMeetings = UserMeetings,
+                      UserEmailNotification = Users.UserEmailNotification,
+                      UserPmNotification = Users.UserPmNotification,
+                      UserSmsNotification = Users.UserSmsNotification
+            };
 
         //    return View(model);
         //}
@@ -60,6 +69,9 @@ namespace OruBloggen.Controllers
             var teamId = Users.UserTeamID;
             var team = ctx.Teams.FirstOrDefault(t => t.TeamID == teamId).TeamName;
             var path = "/Images/" + Users.UserImagePath;
+            var MeetingModels = ctx.Meetings.ToList();
+            var UserMeetings = ctx.UserMeetings.Where(u => u.UserID.Equals(id)).ToList();
+
             var userID = User.Identity.GetUserId();
             var notmodel = ctx.Notifications.Where(t => t.UserID == userID).ToList();
             var isFollowed = "";
@@ -81,6 +93,10 @@ namespace OruBloggen.Controllers
                 Team = team,
                 FollowedID = id,
                 UserIsFollowed = isFollowed,
+                /*model.*/
+                UserID = Users.UserID,
+                MeetingModels = MeetingModels,
+                UserMeetings = UserMeetings,
                 Position = Users.UserPosition,
                 UserEmailNotification = Users.UserEmailNotification,
                 UserPmNotification = Users.UserPmNotification,

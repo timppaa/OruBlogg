@@ -254,6 +254,7 @@
     <Compile Include="Models\CategoryModels.cs" />
     <Compile Include="Models\HomePostViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\Jobs.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MeetingViewModels.cs" />
     <Compile Include="Models\MessageViewModel.cs" />
@@ -289,6 +290,7 @@
     <Content Include="Icons\news.png" />
     <Content Include="Icons\oru.jpg" />
     <Content Include="Icons\post.png" />
+    <Content Include="Icons\profileBanner.jpg" />
     <Content Include="Icons\report.png" />
     <Content Include="Icons\request.png" />
     <Content Include="Icons\users.png" />

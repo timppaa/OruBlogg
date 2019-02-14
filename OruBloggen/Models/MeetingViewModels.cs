@@ -25,14 +25,19 @@ namespace OruBloggen.Models
         public DateTime MeetingStartDate { get; set; }
         public DateTime MeetingEndDate { get; set; }
         public bool MeetingActive { get; set; }
-
-
     }
 
     public class UserMeetingViewModel
     {
         public virtual UserModel UserModel { get; set; }
         public string UserID { get; set; }
+    }
+
+    public class MeetingUserViewModel
+    {
+        public List<MeetingModel> Meetings { get; set; }
+        public List<UserModel> Users { get; set; }
+        public List<UserMeetingModel> UserMeetings { get; set; }
     }
 
 }

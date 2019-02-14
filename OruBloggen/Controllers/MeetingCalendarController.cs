@@ -16,7 +16,20 @@ namespace OruBloggen.Controllers
         // GET: Calendar
         public ActionResult Index()
         {
-            
+            var ctx = new OruBloggenDbContext();
+            var meetings = ctx.Meetings.ToList();
+            foreach (var meeting in meetings)
+            {
+                if (meeting.MeetingActive)
+                {
+                    if (DateTime.Now > meeting.MeetingEndDate)
+                    {
+                        meeting.MeetingActive = false;
+                    }
+                }
+            }
+            ctx.SaveChanges();
+
             return View();
         }
 
@@ -68,6 +81,7 @@ namespace OruBloggen.Controllers
         {
             var ctx = new OruBloggenDbContext();
             var meetings = ctx.Meetings.ToList();
+            
 
             var sb = new StringBuilder();
 
@@ -77,17 +91,16 @@ namespace OruBloggen.Controllers
 
             foreach (var meeting in meetings)
             {
+                var user = ctx.Users.FirstOrDefault(u => u.UserID.Equals(meeting.MeetingUserID));
                 sb.AppendLine("BEGIN:VEVENT");
                 sb.AppendLine("UID:" + meeting.MeetingID);
-                sb.AppendLine("ORGANIZER:" + meeting.MeetingUserID);
+                sb.AppendLine("ORGANIZER:" + user.UserFirstname + " " + user.UserLastname);
                 sb.AppendLine("SUMMARY;LANGUAGE=en-us:" + meeting.MeetingTitle);
                 sb.AppendLine("DESCRIPTION:" + meeting.MeetingDesc);
-                sb.AppendLine("CLASS:PUBLIC");             
                 sb.AppendLine(string.Format("DTSTART:{0:yyyyMMddTHHmmssZ}", meeting.MeetingStartDate));
                 sb.AppendLine(string.Format("DTEND:{0:yyyyMMddTHHmmssZ}", meeting.MeetingEndDate));
-                sb.AppendLine("SEQUENCE:0");                
-                sb.AppendLine("END:VEVENT");             
-            }
+                sb.AppendLine("END:VEVENT");
+            }            
             sb.AppendLine("END:VCALENDAR");
 
             var bytes = Encoding.UTF8.GetBytes(sb.ToString());

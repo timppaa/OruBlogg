@@ -20,14 +20,9 @@
         @Html.ActionLink("Informella inlägg", "InformalPost", "Post")
     </li>
     <li>
-        @Html.ActionLink("Möte", "Meeting", "Meeting")
-    </li>
-    <li>
         @Html.ActionLink("Kalender", "Index", "MeetingCalendar")
     </li>
-    <li>
-        @Html.ActionLink("Mina Möten", "ListCreatedMeetings", "Meeting")
-    </li>
+
 
     @if (Request.IsAuthenticated)
     {
