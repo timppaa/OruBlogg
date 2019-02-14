@@ -142,9 +142,14 @@ namespace OruBloggen.Controllers
         {
             var ctx = new OruBloggenDbContext();
             var userId = User.Identity.GetUserId();
-            
-            var meetings = ctx.Meetings.Where(m => m.MeetingUserID.Equals(userId)).ToList();
-            foreach (var meeting in meetings)
+
+            var meetingUserView = new MeetingUserViewModel
+            {
+                Meetings = ctx.Meetings.Where(m => m.MeetingUserID.Equals(userId)).ToList(),
+                UserMeetings = ctx.UserMeetings.Where(u => u.UserID.Equals(userId)).ToList()
+            };
+
+            foreach (var meeting in meetingUserView.Meetings)
             {
                 if (meeting.MeetingActive)
                 {
@@ -156,7 +161,7 @@ namespace OruBloggen.Controllers
             }
             ctx.SaveChanges();
 
-            return View(meetings);
+            return View(meetingUserView);
         }
 
         public ActionResult CancelMeeting(int meetingId, string title, DateTime startDate)
@@ -182,6 +187,17 @@ namespace OruBloggen.Controllers
                 notificationController.SendEmail(emails, "Mötet är inställt", title + " " + startDate.ToShortDateString() + " är inställt.");              
             }
             return RedirectToAction("ListCreatedMeetings");
+        }
+
+        public ActionResult AcceptMeeting(int meetingId, bool accepted)
+        {
+            var ctx = new OruBloggenDbContext();
+            var userId = User.Identity.GetUserId();
+            ctx.UserMeetings.FirstOrDefault(m => m.MeetingID == meetingId && m.UserID.Equals(userId)).AcceptedInvite = accepted;
+            ctx.SaveChanges();
+
+            return RedirectToAction("ListCreatedMeetings");
+
         }
     }
 }
