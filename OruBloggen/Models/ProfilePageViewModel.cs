@@ -25,5 +25,8 @@ namespace OruBloggen.Models
 
         public List<MeetingModel> MeetingModels { get; set; }
         public List<UserMeetingModel> UserMeetings { get; set; }
+
+        public bool FollowCategory { get; set; }
+        public List<CategoryModel> ListCategories { get; set; }
     }
 }

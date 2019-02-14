@@ -37,6 +37,8 @@ namespace OruBloggen.Controllers
             var MeetingModels = ctx.Meetings.ToList();
             var UserMeetings = ctx.UserMeetings.Where(u => u.UserID.Equals(userId)).ToList();
 
+            var ListOfCategories = ctx.Categories.ToList();
+
             var model = new ProfilePageViewModel
             {
                       userId = userId,
@@ -51,7 +53,8 @@ namespace OruBloggen.Controllers
                       UserMeetings = UserMeetings,
                       UserEmailNotification = Users.UserEmailNotification,
                       UserPmNotification = Users.UserPmNotification,
-                      UserSmsNotification = Users.UserSmsNotification
+                      UserSmsNotification = Users.UserSmsNotification,
+                      ListCategories = ListOfCategories
             };
 
             return View(model);
