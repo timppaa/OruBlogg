@@ -4,11 +4,13 @@
 }
 
 <h2>Inkorg</h2>
+@Html.ActionLink("Skicka nytt meddelande", "Index", "Message")
+
 
 @using (Html.BeginForm("ShowMessages", "Messages", FormMethod.Post))
 {
     <link rel="stylesheet" type="text/css" href="~/Content/Site.css" />
-    if(Model.ListOfMessages.Count != 0)
+    if (Model.ListOfMessages.Count != 0)
     {
 
         //foreach (var sender in Model.ListOfSenders)
@@ -17,15 +19,15 @@
         {
             //if (sender.UserID == item.MessageSenderID)
             ///*{*/
-                <div class="Mydiv divbutton">
-                    <p><strong>Titel</strong>: @item.MessageTitle</p>
-                    <p>@*<strong>Text</strong>:*@ @item.MessageText</p>
+            <div class="Mydiv divbutton">
+                <p><strong>Titel</strong>: @item.MessageTitle</p>
+                <p>@*<strong>Text</strong>:*@ @item.MessageText</p>
 
-                    @*<p><strong>Avsändare</strong>: @sender.UserFirstname @sender.UserLastname</p>*@
+                @*<p><strong>Avsändare</strong>: @sender.UserFirstname @sender.UserLastname</p>*@
 
-                    <button type="button" style="display:none" onclick="location.href ='@Url.Action("ReturnResponsePage", "Message", new { userId = item.MessageSenderID })'">Svara </button>
-                </div>
-                <br/>
+                <button type="button" style="display:none" onclick="location.href ='@Url.Action("ReturnResponsePage", "Message", new { userId = item.MessageSenderID })'">Svara </button>
+            </div>
+            <br />
             //}
             //}
         }
@@ -34,7 +36,7 @@
     {
         <h4>Du har inga meddelanden</h4>
 
-        @Html.ActionLink("Skicka nytt meddelande","Index", "Message")
+
     }
 }
 
