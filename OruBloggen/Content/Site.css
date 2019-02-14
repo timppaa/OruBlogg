@@ -162,5 +162,10 @@ body > div.container.body-content > form > div > div:nth-child(8) {
     background-position: center;
 }
 
+.followBtn{
+    margin-bottom:12px;
+    width: 70px;
+}
+
 
 

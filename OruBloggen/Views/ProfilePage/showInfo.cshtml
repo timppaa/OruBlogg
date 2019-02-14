@@ -11,6 +11,20 @@
         <img src="@Model.ImagePath" class="images floatleft" style="margin-left:6%; width:160px;height:160px;" />
     </div>
     <br />
+
+    if (Model.userId != Model.FollowedID)
+    {
+        if (Model.UserIsFollowed == "")
+        {
+
+            <input type="button" class="followBtn" value="Följ" onclick="location.href = '@Url.Action("FollowUser", "Following", new { followID = Model.FollowedID })'" />
+        }
+        else
+        {
+            <input type="button" class="followBtn" value="Avfölj" onclick="location.href = '@Url.Action("UnfollowUser", "Following", new { unfollowID = Model.FollowedID })'" />
+        }
+    }
+
     <div>
         <dl style="float:left;">
 
@@ -69,7 +83,7 @@
 
 @if (Model.MeetingModels != null)
 {
-    
+
     <div class="myMeetings" style="float:right; height:500px; width:80%;">
         <h2>Dina möten</h2>
 
@@ -91,7 +105,7 @@
                     @Html.DisplayName("Slutdatum")
                 </th>
             </tr>
-           
+
             @foreach (var item in Model.UserMeetings)
             {
                 <tr>
@@ -133,22 +147,11 @@
 
         </table>
 
-                @if (Model.userId != Model.FollowedID)
-                {
-                    if (Model.UserIsFollowed == "")
-                    {
-                        
-                            <input type="button" value="Följ" onclick="location.href = '@Url.Action("FollowUser", "Following", new { followID = Model.FollowedID })'" />
-                    }
-                    else
-                    {
-                            <input type="button" value="Avfölj" onclick="location.href = '@Url.Action("UnfollowUser", "Following", new { unfollowID = Model.FollowedID })'" />
-                    }
-                }
     </div>
 }
 
-@if (User.Identity.GetUserId() == Model.UserID)
+
+@if (User.Identity.GetUserId() == Model.OtherUserID)
 {
     <div style="float:left;">
         @using (Html.BeginForm("ChosenNotifications", "ChooseNotification", FormMethod.Post, new { enctype = "multipart/form-data" }))
