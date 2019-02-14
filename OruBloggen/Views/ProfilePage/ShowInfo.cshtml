@@ -1,91 +1,158 @@
 ﻿@model OruBloggen.Models.ProfilePageViewModel
+@using Microsoft.AspNet.Identity;
+
 @{
     ViewBag.Title = "ProfilePage";
 }
-
-<h2>Välkommen @Model.Firstname</h2>
 @using (Html.BeginForm("ShowInfo", "ProfilePage", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     <link rel="stylesheet" type="text/css" href="~/Content/Site.css" />
+    <div class="ppImageContainer" style="height:140px; width:100%;">
+        <img src="@Model.ImagePath" class="images floatleft" style="margin-left:6%; width:160px;height:160px;" />
+    </div>
+    <br />
     <div>
+        <dl style="float:left;">
+            <dt>
+                @Html.DisplayNameFor(model => model.Firstname)
+            </dt>
 
-        <img src="@Model.ImagePath" class="images floatleft" />
+            <dd>
+                @Html.DisplayFor(model => model.Firstname)
+            </dd>
 
-        <br />
-        <div class="floatleft">
-            <dl class="dl-horizontal">
-                <dt>
-                    @Html.DisplayNameFor(model => model.Firstname)
-                </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.Lastname)
+            </dt>
 
-                <dd>
-                    @Html.DisplayFor(model => model.Firstname)
-                </dd>
+            <dd>
+                @Html.DisplayFor(model => model.Lastname)
+            </dd>
 
-                <dt>
-                    @Html.DisplayNameFor(model => model.Lastname)
-                </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.Position)
+            </dt>
 
-                <dd>
-                    @Html.DisplayFor(model => model.Lastname)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.Position)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.Position)
-                </dd>
+            <dd>
+                @Html.DisplayFor(model => model.Position)
+            </dd>
 
 
-                <dt>
-                    @Html.DisplayNameFor(model => model.Email)
-                </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.Email)
+            </dt>
 
-                <dd>
-                    @Html.DisplayFor(model => model.Email)
-                </dd>
+            <dd>
+                @Html.DisplayFor(model => model.Email)
+            </dd>
 
-                <dt>
-                    @Html.DisplayNameFor(model => model.PhoneNumber)
-                </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.PhoneNumber)
+            </dt>
 
-                <dd>
-                    @Html.DisplayFor(model => model.PhoneNumber)
-                </dd>
+            <dd>
+                @Html.DisplayFor(model => model.PhoneNumber)
+            </dd>
 
-                <dt>
-                    @Html.DisplayNameFor(model => model.Team)
-                </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.Team)
+            </dt>
 
-                <dd>
-                    @Html.DisplayFor(model => model.Team)
-                </dd>
+            <dd>
+                @Html.DisplayFor(model => model.Team)
+            </dd>
+
+        </dl>
+    </div>
+}
+
+@if (Model.MeetingModels != null)
+{
+    
+    <div class="myMeetings" style="float:right; height:500px; width:80%;">
+        <h2>Dina möten</h2>
+
+        <p>
+            @Html.ActionLink("Skapa nytt möte", "Meeting", "Meeting")
+        </p>
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayName("Titel")
+                </th>
+                <th>
+                    @Html.DisplayName("Beskrivning")
+                </th>
+                <th>
+                    @Html.DisplayName("Startdatum")
+                </th>
+                <th>
+                    @Html.DisplayName("Slutdatum")
+                </th>
+            </tr>
+           
+            @foreach (var item in Model.UserMeetings)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MeetingModel.MeetingTitle)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MeetingModel.MeetingDesc)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MeetingModel.MeetingStartDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MeetingModel.MeetingEndDate)
+                    </td>
+                    <td>
+                        @if (item.MeetingModel.MeetingActive)
+                        {
+                            if (DateTime.Now > item.MeetingModel.MeetingStartDate && DateTime.Now < item.MeetingModel.MeetingEndDate)
+                            {
+                                @Html.DisplayName("Pågående")
+                            }
+                            else
+                            {
+                                @Html.DisplayName("Kommande")
+                            }
+                        }
+                        else
+                        {
+                            @Html.DisplayName("Avslutat/Inställt")
+                        }
+                    </td>
+                    <td>
+                        @Html.ActionLink("Ställ in möte", "CancelMeeting",
+                             new { meetingId = item.MeetingID, title = item.MeetingModel.MeetingTitle, startDate = item.MeetingModel.MeetingStartDate })
+                    </td>
+                </tr>
+            }
+
+        </table>
+
                 @if (Model.userId != Model.FollowedID)
                 {
                     if (Model.UserIsFollowed == "")
                     {
-                        <dd>
+                        
                             <input type="button" value="Följ" onclick="location.href = '@Url.Action("FollowUser", "Following", new { followID = Model.FollowedID })'" />
-                        </dd>
                     }
                     else
                     {
-                        <dd>
                             <input type="button" value="Avfölj" onclick="location.href = '@Url.Action("UnfollowUser", "Following", new { unfollowID = Model.FollowedID })'" />
-                        </dd>
                     }
                 }
-            </dl>
-        </div>
     </div>
 }
 
-    <div>
+@if (User.Identity.GetUserId() == Model.UserID)
+{
+    <div style="float:left;">
         @using (Html.BeginForm("ChosenNotifications", "ChooseNotification", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
-            <h4>Notifikationer</h4>
+            <h4 style="font-weight:bold;">Notifikationer</h4>
             <p>
                 Notifikationer via PM
                 @Html.CheckBoxFor(m => Model.UserPmNotification, "true")
@@ -101,8 +168,7 @@
             <input type="submit" id="submitBtn" class="btn btn-default" value="Ändra Notifikationer" />
         }
     </div>
-
-
+}
 
 @section scripts{
     <script>
