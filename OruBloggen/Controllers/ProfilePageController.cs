@@ -34,8 +34,17 @@ namespace OruBloggen.Controllers
             var team = ctx.Teams.FirstOrDefault(t => t.TeamID == teamId).TeamName;
             var path = "/Images/" + Users.UserImagePath;
 
-            var MeetingModels = ctx.Meetings.ToList();
-            var UserMeetings = ctx.UserMeetings.Where(u => u.UserID.Equals(userId)).ToList();
+           var creator = ctx.Meetings.Where(m => m.MeetingUserID.Equals(userId)).ToList();
+           var invited = ctx.UserMeetings.Where(u => u.UserID.Equals(userId)).Where(u => u.AcceptedInvite == false).ToList();
+           var accepted = ctx.UserMeetings.Where(u => u.UserID.Equals(userId)).Where(u => u.AcceptedInvite == true).ToList();
+            
+            foreach(var accept in accepted)
+            {
+                var meeting = ctx.Meetings.FirstOrDefault(m => m.MeetingID == accept.MeetingID);
+                creator.Add(meeting);
+            }
+    
+            
 
             var model = new ProfilePageViewModel
             {
@@ -47,8 +56,8 @@ namespace OruBloggen.Controllers
             /*model*/ PhoneNumber = Users.UserPhoneNumber,
             /*model.*/Team = team,
             /*model.*/Position = Users.UserPosition,
-                      MeetingModels = MeetingModels,
-                      UserMeetings = UserMeetings,
+                      MeetingModels = creator,
+                      UserMeetings = invited,
                       UserEmailNotification = Users.UserEmailNotification,
                       UserPmNotification = Users.UserPmNotification,
                       UserSmsNotification = Users.UserSmsNotification
@@ -67,8 +76,7 @@ namespace OruBloggen.Controllers
             var teamId = Users.UserTeamID;
             var team = ctx.Teams.FirstOrDefault(t => t.TeamID == teamId).TeamName;
             var path = "/Images/" + Users.UserImagePath;
-            var MeetingModels = ctx.Meetings.ToList();
-            var UserMeetings = ctx.UserMeetings.Where(u => u.UserID.Equals(id)).ToList();
+
 
             var model = new ProfilePageViewModel
             {
@@ -86,8 +94,8 @@ namespace OruBloggen.Controllers
                 Team = team,
                 /*model.*/
                 UserID = Users.UserID,
-                MeetingModels = MeetingModels,
-                UserMeetings = UserMeetings,
+                MeetingModels = ctx.Meetings.Where(m => m.MeetingUserID.Equals(id)).ToList(),
+                UserMeetings = ctx.UserMeetings.Where(u => u.UserID.Equals(id)).ToList(),
                 Position = Users.UserPosition,
                 UserEmailNotification = Users.UserEmailNotification,
                 UserPmNotification = Users.UserPmNotification,
@@ -95,6 +103,46 @@ namespace OruBloggen.Controllers
             };
 
             return View("ShowInfo", model);
+        }
+
+        public ActionResult AcceptMeeting(int meetingId)
+        {
+            var ctx = new OruBloggenDbContext();
+
+            var userId = User.Identity.GetUserId();
+            
+            ctx.UserMeetings.FirstOrDefault(m => m.MeetingID == meetingId && m.UserID.Equals(userId)).AcceptedInvite = true;
+            ctx.SaveChanges();
+
+
+            return RedirectToAction("ShowInfo");
+
+        }
+
+  
+        public ActionResult CancelMeeting(int meetingId, string title, DateTime startDate)
+        {
+            var ctx = new OruBloggenDbContext();
+            //var meetingActive = ctx.Meetings.FirstOrDefault(m => m.MeetingID == meetingId).MeetingActive;
+
+            if (ctx.Meetings.FirstOrDefault(m => m.MeetingID == meetingId).MeetingActive)
+            {
+                ctx.Meetings.FirstOrDefault(m => m.MeetingID == meetingId).MeetingActive = false;
+
+                var appCtx = new ApplicationDbContext();
+
+                var userMeetings = ctx.UserMeetings.Where(m => m.MeetingID == meetingId);
+                var emails = new List<string>();
+                foreach (var user in userMeetings)
+                {
+                    emails.Add(appCtx.Users.FirstOrDefault(u => u.Id.Equals(user.UserID)).Email);
+                }
+                ctx.SaveChanges();
+
+                var notificationController = new NotificationController();
+                notificationController.SendEmail(emails, "Mötet är inställt", title + " " + startDate.ToShortDateString() + " är inställt.");
+            }
+            return RedirectToAction("ShowInfo");
         }
 
     }

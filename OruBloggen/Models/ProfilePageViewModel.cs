@@ -22,5 +22,7 @@ namespace OruBloggen.Models
 
         public List<MeetingModel> MeetingModels { get; set; }
         public List<UserMeetingModel> UserMeetings { get; set; }
+        public List<UserModel> Users { get; set; }
+        
     }
 }
