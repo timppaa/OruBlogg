@@ -43,24 +43,25 @@ namespace OruBloggen.Controllers
                 var meeting = ctx.Meetings.FirstOrDefault(m => m.MeetingID == accept.MeetingID);
                 creator.Add(meeting);
             }
-    
-            
+
+
 
             var model = new ProfilePageViewModel
             {
-                      userId = userId,
-                      ImagePath = path,
-                      Firstname = Users.UserFirstname,
-                      Lastname = Users.UserLastname,
-                      Email = identityUser.Email,
-                      PhoneNumber = Users.UserPhoneNumber,
-                      Team = team,
-                      Position = Users.UserPosition,
-                      MeetingModels = creator,
-                      UserMeetings = invited,
-                      UserEmailNotification = Users.UserEmailNotification,
-                      UserPmNotification = Users.UserPmNotification,
-                      UserSmsNotification = Users.UserSmsNotification
+                userId = userId,
+                OtherUserID = userId,
+                ImagePath = path,
+                Firstname = Users.UserFirstname,
+                Lastname = Users.UserLastname,
+                Email = identityUser.Email,
+                PhoneNumber = Users.UserPhoneNumber,
+                Team = team,
+                Position = Users.UserPosition,
+                MeetingModels = creator,
+                UserMeetings = invited,
+                UserEmailNotification = Users.UserEmailNotification,
+                UserPmNotification = Users.UserPmNotification,
+                UserSmsNotification = Users.UserSmsNotification
             };
 
             return View(model);
