@@ -14,7 +14,6 @@
 */
 .dl-horizontal dt {
     white-space: normal;
-
 }
 
 /* Set width on the form input elements since they're 100% wide by default */
@@ -152,7 +151,15 @@ body > div.container.body-content > form > div > div:nth-child(8) {
     color: #000000;
     background-color: #FFFFFF;
     border: none;
-    
+}
+
+.ppImageContainer {
+    margin-top: 2%;
+    background-image: url('/Icons/profileBanner.jpg');
+    background-repeat:no-repeat;
+    background-size:cover;
+    border-radius: 5px;
+    background-position: center;
 }
 
 

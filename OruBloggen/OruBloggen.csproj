@@ -289,6 +289,7 @@
     <Content Include="Icons\news.png" />
     <Content Include="Icons\oru.jpg" />
     <Content Include="Icons\post.png" />
+    <Content Include="Icons\profileBanner.jpg" />
     <Content Include="Icons\report.png" />
     <Content Include="Icons\request.png" />
     <Content Include="Icons\users.png" />

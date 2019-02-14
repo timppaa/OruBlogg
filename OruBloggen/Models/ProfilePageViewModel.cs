@@ -14,9 +14,13 @@ namespace OruBloggen.Models
         public int PhoneNumber { get; set; }
         public string Position { get; set; }
         public string ImagePath { get; set; }
+        public string UserID { get; set; }
 
         public bool UserSmsNotification { get; set; }
         public bool UserPmNotification { get; set; }
         public bool UserEmailNotification { get; set; }
+
+        public List<MeetingModel> MeetingModels { get; set; }
+        public List<UserMeetingModel> UserMeetings { get; set; }
     }
 }
