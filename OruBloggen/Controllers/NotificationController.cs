@@ -128,7 +128,11 @@ namespace OruBloggen.Controllers
             var message = name + " har gjort ett nytt " + formal + " inlägg. " + " Innehåll: " + text + " Datum: " + date.ToShortDateString() + ". I kategorin: " + category;
              foreach(var item in userFollowers)
             {
-                messageController.SendPmNotification(userid, item.UserID, title, message);
+                var userPmNotification = ctx.Users.Find(item.UserID);
+                if (userPmNotification.UserPmNotification)
+                {
+                    messageController.SendPmNotification(userid, item.UserID, title, message);
+                }
             }
         }
     }
