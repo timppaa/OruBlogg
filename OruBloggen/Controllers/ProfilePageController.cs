@@ -46,27 +46,27 @@ namespace OruBloggen.Controllers
     
             
 
-            var MeetingModels = ctx.Meetings.ToList();
-            var UserMeetings = ctx.UserMeetings.Where(u => u.UserID.Equals(userId)).ToList();
+            //var MeetingModels = ctx.Meetings.ToList();
+            //var UserMeetings = ctx.UserMeetings.Where(u => u.UserID.Equals(userId)).ToList();
 
             var ListOfCategories = ctx.Categories.ToList();
 
             var model = new ProfilePageViewModel
             {
-                      userId = userId,
-            /*model.*/ImagePath = path,
-            /*model.*/Firstname = Users.UserFirstname,
-            /*model.*/Lastname = Users.UserLastname,
-            /*model.*/Email = identityUser.Email,
-            /*model*/ PhoneNumber = Users.UserPhoneNumber,
-            /*model.*/Team = team,
-            /*model.*/Position = Users.UserPosition,
-                      MeetingModels = creator,
-                      UserMeetings = invited,
-                      UserEmailNotification = Users.UserEmailNotification,
-                      UserPmNotification = Users.UserPmNotification,
-                      UserSmsNotification = Users.UserSmsNotification,
-                      ListCategories = ListOfCategories
+                userId = userId,
+                ImagePath = path,
+                Firstname = Users.UserFirstname,
+                Lastname = Users.UserLastname,
+                Email = identityUser.Email,
+                PhoneNumber = Users.UserPhoneNumber,
+                Team = team,
+                Position = Users.UserPosition,
+                MeetingModels = creator,
+                UserMeetings = invited,
+                UserEmailNotification = Users.UserEmailNotification,
+                UserPmNotification = Users.UserPmNotification,
+                UserSmsNotification = Users.UserSmsNotification,
+                ListCategories = ListOfCategories
             };
 
             return View(model);
@@ -107,15 +107,11 @@ namespace OruBloggen.Controllers
                 Email = identityUser.Email,
                 PhoneNumber = Users.UserPhoneNumber,
                 Team = team,
-                /*model.*/
                 OtherUserID = id,
                 MeetingModels = MeetingModels,
                 UserMeetings = UserMeetings,
                 FollowedID = id,
                 UserIsFollowed = isFollowed,
-                UserID = Users.UserID,
-                MeetingModels = ctx.Meetings.Where(m => m.MeetingUserID.Equals(id)).ToList(),
-                UserMeetings = ctx.UserMeetings.Where(u => u.UserID.Equals(id)).ToList(),
                 Position = Users.UserPosition,
                 UserEmailNotification = Users.UserEmailNotification,
                 UserPmNotification = Users.UserPmNotification,
