@@ -72,43 +72,43 @@ namespace OruBloggen.Models
 
         [Required]
         //[RegularExpression("/^[a-z ,.'-]+$/i",ErrorMessage = "FEL NAMN")]
-        [Display(Name = "Firstname")]
+        [Display(Name = "Förnamn")]
         public string Firstname { get; set; }
 
         [Required]
         //[RegularExpression("/^[a-z ,.'-]+$/i", ErrorMessage = "FEL NAMN")]
-        [Display(Name = "Lastname")]
+        [Display(Name = "Efternamn")]
         public string Lastname { get; set; }
 
         [Required]
-        [Display(Name = "Birthdate")]
+        [Display(Name = "Födelsedatum")]
         [DataType(DataType.Date)]
         public DateTime Birthdate { get; set; }
 
         [Required]
-        [Display(Name = "Phonenumber")]
+        [Display(Name = "Telefonnummer")]
         public int Phonenumber { get; set; }
 
-        [Display(Name = "Image")]
+        [Display(Name = "Profilbild")]
         public string ImagePath { get; set; }
 
         [Required]
-        [Display(Name = "Team")]
+        [Display(Name = "Arbetslag")]
         public string Team { get; set; }
 
-        [Display(Name = "Position")]
+        [Display(Name = "Befattning")]
         public string Position { get; set; }
 
 
         [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [StringLength(100, ErrorMessage = "{0}et måste vara minst {2} tecken långt.", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "Lösenord")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Display(Name = "Bekräfta lösenord")]
+        [Compare("Password", ErrorMessage = "Lösenordet matchar inte.")]
         public string ConfirmPassword { get; set; }
     }
 
@@ -120,14 +120,14 @@ namespace OruBloggen.Models
         public string Email { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [StringLength(100, ErrorMessage = "{0}et måste vara minst {2} tecken långt.", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "Lösenordet")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Display(Name = "Bekräfta lösenord")]
+        [Compare("Password", ErrorMessage = "Lösenordet matchar inte.")]
         public string ConfirmPassword { get; set; }
 
         public string Code { get; set; }

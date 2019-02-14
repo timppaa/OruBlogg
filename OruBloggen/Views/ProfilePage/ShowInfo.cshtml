@@ -1,0 +1,114 @@
+﻿@model OruBloggen.Models.ProfilePageViewModel
+@{
+    ViewBag.Title = "ProfilePage";
+}
+
+<h2>Välkommen @Model.Firstname</h2>
+@using (Html.BeginForm("ShowInfo", "ProfilePage", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <link rel="stylesheet" type="text/css" href="~/Content/Site.css" />
+    <div>
+
+        <img src="@Model.ImagePath" class="images floatleft" />
+
+        <br />
+        <div class="floatleft">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Firstname)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Firstname)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Lastname)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Lastname)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Position)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Position)
+                </dd>
+
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Email)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Email)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.PhoneNumber)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.PhoneNumber)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Team)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Team)
+                </dd>
+                @if (Model.userId != Model.FollowedID)
+                {
+                    if (Model.UserIsFollowed == "")
+                    {
+                        <dd>
+                            <input type="button" value="Följ" onclick="location.href = '@Url.Action("FollowUser", "Following", new { followID = Model.FollowedID })'" />
+                        </dd>
+                    }
+                    else
+                    {
+                        <dd>
+                            <input type="button" value="Avfölj" onclick="location.href = '@Url.Action("UnfollowUser", "Following", new { unfollowID = Model.FollowedID })'" />
+                        </dd>
+                    }
+                }
+            </dl>
+        </div>
+    </div>
+}
+
+    <div>
+        @using (Html.BeginForm("ChosenNotifications", "ChooseNotification", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <h4>Notifikationer</h4>
+            <p>
+                Notifikationer via PM
+                @Html.CheckBoxFor(m => Model.UserPmNotification, "true")
+            </p>
+            <p>
+                Notifikationer via Email
+                @Html.CheckBoxFor(m => Model.UserEmailNotification, "true")
+            </p>
+            <p>
+                Notifikationer via SMS
+                @Html.CheckBoxFor(m => Model.UserSmsNotification, "true")
+            </p>
+            <input type="submit" id="submitBtn" class="btn btn-default" value="Ändra Notifikationer" />
+        }
+    </div>
+
+
+
+@section scripts{
+    <script>
+        $("#submitBtn").click(function () {
+            alert("Dina notifikationsval har ändrats.")
+        });
+
+    </script>
+}

@@ -26,18 +26,39 @@ namespace OruBloggen.Controllers
             //ListUsers();
             var ctx = new OruBloggenDbContext();
             var userId = User.Identity.GetUserId();
+            var sender = ctx.Users.Find(userId);
+            var name = sender.UserFirstname + " " + sender.UserLastname;
+            var message = name + " har skickat ett meddelande: " + model.MessageText;
 
             ctx.Messages.Add(new MessageModel
             {
                 MessageReceiverID = Users,
                 MessageSenderID = userId,
                 MessageTitle = model.MessageTitle,
-                MessageText = model.MessageText,
+                MessageText = message,
             });
 
             ctx.SaveChanges();
 
             return RedirectToAction("index");
+        }
+
+        public void SendPmNotification(string userId, string receiverId, string title, string desc)
+        {
+            //ListUsers();
+            var ctx = new OruBloggenDbContext();
+            //var userId = User.Identity.GetUserId();
+
+            ctx.Messages.Add(new MessageModel
+            {
+                MessageReceiverID = receiverId,
+                MessageSenderID = userId,
+                MessageTitle = title,
+                MessageText = desc,
+            });
+
+            ctx.SaveChanges();
+
         }
 
         public ActionResult ReturnResponsePage(string userId)
@@ -68,13 +89,16 @@ namespace OruBloggen.Controllers
             
             var ctx = new OruBloggenDbContext();
             var userId = User.Identity.GetUserId();
+            var sender = ctx.Users.Find(userId);
+            var name = sender.UserFirstname + " " + sender.UserLastname;
+            var message = name + " har skickat ett meddelande: " + MessageText;
 
             ctx.Messages.Add(new MessageModel
             {
                 MessageReceiverID = Users,
                 MessageSenderID = userId,
                 MessageTitle = MessageTitle,
-                MessageText = MessageText
+                MessageText = message
             });
 
             ctx.SaveChanges();
@@ -110,20 +134,20 @@ namespace OruBloggen.Controllers
             }
             ctx.SaveChanges();
         
-            var senders = new List<UserModel>();
+            //var senders = new List<UserModel>();
 
-            foreach (var item in messages)
-            {
-                senders.AddRange(ctx.Users
-                    .Distinct()
-                    .Where(s => s.UserID == item.MessageSenderID));
+            //foreach (var item in messages)
+            //{
+            //    senders.AddRange(ctx.Users
+            //        .Distinct()
+            //        .Where(s => s.UserID == item.MessageSenderID));
 
-            }
+            //}
 
             var model = new MessageViewModel()
             {
                 ListOfMessages = messages,
-                ListOfSenders = senders.Distinct().ToList(),
+                //    ListOfSenders = senders.Distinct().ToList(),
             };
 
             return View(model);

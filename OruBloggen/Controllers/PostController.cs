@@ -99,6 +99,8 @@ namespace OruBloggen.Controllers
 
                 ctx.SaveChanges();
             }
+            NotificationController notificationController = new NotificationController();
+            notificationController.SendPostPm(userID, post.AddPostViewModel.PostTitle, post.AddPostViewModel.PostText, DateTime.Now, post.AddPostViewModel.PostFormal, int.Parse(post.AddPostViewModel.PostCategory));
 
             if(post.AddPostViewModel.PostFormal)
             {
