@@ -48,7 +48,7 @@ namespace OruBloggen.Controllers
 
             var model = new ProfilePageViewModel
             {
-                      UserID = userId,
+                      userId = userId,
                       ImagePath = path,
                       Firstname = Users.UserFirstname,
                       Lastname = Users.UserLastname,
@@ -112,11 +112,8 @@ namespace OruBloggen.Controllers
                 Team = team,
                 /*model.*/
                 OtherUserID = id,
-                MeetingModels = MeetingModels,
-                UserMeetings = UserMeetings,
                 FollowedID = id,
                 UserIsFollowed = isFollowed,
-                UserID = Users.UserID,
                 MeetingModels = creator,
                 UserMeetings = invited,
                 Position = Users.UserPosition,
