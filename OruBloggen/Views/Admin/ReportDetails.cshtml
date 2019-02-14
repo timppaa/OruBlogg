@@ -1,0 +1,81 @@
+﻿@model OruBloggen.Models.PostReportPageViewModel
+
+@{
+    ViewBag.Title = "ReportDetails";
+}
+
+<h2>Rapporterade inlägg</h2>
+<br />
+<table class="table">
+    <tr>
+        <th>Inläggstitel</th>
+        <th>Anmälningsorsak</th>
+        <th>Postad av</th>
+        <th></th>
+    </tr>
+@foreach (var item in Model.ReportList)
+{
+    <tr>
+        <td><h5 style="float: left; padding-right:50px;">@item.PostTitle</h5></td>
+        <td><h5 style="float: left; padding-right:50px;">@item.ReportReason</h5></td>
+        <td><h5 style="float: left; padding-right:50px;">@item.PostSenderName</h5></td>
+        <td><a id="reviewPost" style="float:right; cursor:pointer;" data-toggle="modal" data-target="#@item.ReportID">Granska inlägg</a></td>
+    </tr>
+
+    <div id="@item.ReportID" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h5>Granska inlägg</h5>
+                </div>
+                <div class="modal-body">
+                    <h4>@item.PostTitle</h4>
+                    <p>@item.PostText</p>
+                    <hr />
+                    <p style="padding-right:10px; float:left;">Typ av inlägg: @item.PostFormal</p> &nbsp;
+                    <p style="float:left;">Postad av: @item.PostSenderName</p> &nbsp;
+                    <hr />
+                    <p>Anmälninsorsak: @item.ReportReason</p>
+                    <hr />
+
+                    @if (item.PostFilePath != null)
+                    {
+                        if (item.PostFilePath.Contains("png") || item.PostFilePath.Contains("jpg") || item.PostFilePath.Contains("jpeg") || item.PostFilePath.Contains("gif"))
+                        {
+                            <img src="/PostFiles/@item.PostFilePath" class="center-block" style="width:350px; height:auto;" />
+
+                        }
+
+                        else
+                        {
+                            <a href="/PostFiles/@item.PostFilePath" download>Granska dokument (@item.PostFilePath)</a>
+
+                        }
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" onclick="DeclinePost(@item.PostID, @item.ReportID)">Ta bort inlägget</button>
+                    <button type="button" class="btn btn-default" onclick="AcceptPost(@item.ReportID)">Godkänn inlägget</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+</table>
+
+@section scripts {
+    <script type="text/javascript">
+        
+        function DeclinePost(postID, reportID) {
+            location.href = '/Admin/DeclinePost?postID=' + postID + '&reportID=' + reportID;
+        };
+
+        function AcceptPost(reportID) {
+            location.href = '/Admin/AcceptPost?reportID=' + reportID;
+        };
+
+    </script>
+
+
+    }

@@ -15,7 +15,15 @@ namespace OruBloggen.Models
         public string UserLastname { get; set; }
         public DateTime UserBirthDate { get; set; }
         public int UserPhoneNumber { get; set; }
+        public string UserPosition { get; set; }
+
+        public bool UserSmsNotification { get; set; }
+        public bool UserPmNotification { get; set; }
+        public bool UserEmailNotification { get; set; }
+
+        [DataType(DataType.ImageUrl)]
         public string UserImagePath { get; set; }
+
         public bool UserIsAdmin { get; set; }
         [ForeignKey("UserTeamID")]
         public virtual TeamModel TeamModel { get; set; }
@@ -37,6 +45,9 @@ namespace OruBloggen.Models
         public UserModel()
         {
             UserIsAdmin = false;
+            UserSmsNotification = true;
+            UserPmNotification = true;
+            UserEmailNotification = true;
         }
     }
 }

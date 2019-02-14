@@ -22,10 +22,22 @@ namespace OruBloggen.Migrations
                 new TeamModel() { TeamName = "Juridik" }
                 );
 
-            //  This method will be called after migrating to the latest version.
+            context.Categories.AddOrUpdate(
+                new CategoryModel() { CategoryName = "Okategoriserade", IsFormel = false },
+                new CategoryModel() { CategoryName = "Okategoriserade", IsFormel = true },
+                new CategoryModel() { CategoryName = "Fest", IsFormel = false},
+                new CategoryModel() { CategoryName = "Semester", IsFormel = false },
+                new CategoryModel() { CategoryName = "After work", IsFormel = false },
+                new CategoryModel() { CategoryName = "Träning", IsFormel = false },
+                new CategoryModel() { CategoryName = "Fritid", IsFormel = false },
+                new CategoryModel() { CategoryName = "Utbildning", IsFormel = true },
+                new CategoryModel() { CategoryName = "Seminarium", IsFormel = true },
+                new CategoryModel() { CategoryName = "Ekonomi", IsFormel = true },
+                new CategoryModel() { CategoryName = "Informatik", IsFormel = true },
+                new CategoryModel() { CategoryName = "Juridik", IsFormel = true },
+                new CategoryModel() { CategoryName = "Statistik", IsFormel = true }
+                );
 
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
-            //  to avoid creating duplicate seed data.
         }
 
     }

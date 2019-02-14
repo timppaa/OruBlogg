@@ -1,8 +1,12 @@
-﻿using System;
+﻿using OruBloggen.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Web;
 using System.Web.Mvc;
+
 
 namespace OruBloggen.Controllers
 {
@@ -10,21 +14,19 @@ namespace OruBloggen.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            var list = NewsList();
+
+            return View(list);
         }
 
-        public ActionResult About()
+        public List<NewsModel> NewsList()
         {
-            ViewBag.Message = "Your application description page.";
+            var ctx = new OruBloggenDbContext();
+            var list = new List<NewsModel>();
+            list = ctx.News.OrderByDescending(n => n.NewsDate).Take(3).ToList();
 
-            return View();
+            return list;
         }
 
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
     }
 }

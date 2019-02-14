@@ -11,11 +11,10 @@ namespace OruBloggen.Models
     {
         [Key]
         public int PostReportID { get; set; }
+
         [ForeignKey("PostID")]
         public virtual PostModel PostModel { get; set; }
         public int PostID { get; set; }
-        [ForeignKey("ReportID")]
-        public virtual ReportModel ReportModel { get; set; }
-        public int ReportID { get; set; }
+        public string ReportReason { get; set; }
     }
 }
