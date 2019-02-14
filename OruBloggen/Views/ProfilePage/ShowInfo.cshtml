@@ -17,6 +17,7 @@
         if (Model.UserIsFollowed == "")
         {
 
+
             <input type="button" class="followBtn" value="Följ" onclick="location.href = '@Url.Action("FollowUser", "Following", new { followID = Model.FollowedID })'" />
         }
         else
