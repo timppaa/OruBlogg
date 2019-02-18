@@ -44,6 +44,9 @@ namespace OruBloggen.Controllers
                 creator.Add(meeting);
             }
 
+           creator = creator.OrderBy(u => u.MeetingStartDate).ToList();
+           creator = creator.Where(u => u.MeetingStartDate >= DateTime.Now).ToList();
+           invited = invited.Where(u => u.MeetingModel.MeetingUserID != u.UserID).ToList();
 
 
             var model = new ProfilePageViewModel
@@ -101,6 +104,9 @@ namespace OruBloggen.Controllers
                 var meeting = ctx.Meetings.FirstOrDefault(m => m.MeetingID == accept.MeetingID);
                 creator.Add(meeting);
             }
+
+            creator = creator.OrderBy(u => u.MeetingStartDate).ToList();
+            creator = creator.Where(u => u.MeetingStartDate >= DateTime.Now).ToList();
 
             var model = new ProfilePageViewModel
             {
