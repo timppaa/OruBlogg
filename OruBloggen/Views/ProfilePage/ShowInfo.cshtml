@@ -7,7 +7,7 @@
 @using (Html.BeginForm("ShowInfo", "ProfilePage", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     <link rel="stylesheet" type="text/css" href="~/Content/Site.css" />
-    <div class="ppImageContainer" style="height:140px; width:100%;">
+    <div class="ppImageContainer" style="height:140px; width:100%;" >
         <img src="@Model.ImagePath" class="images floatleft" style="margin-left:6%; width:160px;height:160px;" />
     </div>
     <br />
@@ -237,30 +237,38 @@
 @if (User.Identity.GetUserId() == Model.OtherUserID)
 {
     <div style="float:left;">
-        @using (Html.BeginForm("ChosenNotifications", "ChooseNotification", FormMethod.Post, new { enctype = "multipart/form-data" }))
-        {
             <h4 style="font-weight:bold;">Notifikationer</h4>
             <p>
                 Notifikationer via PM
-                @Html.CheckBoxFor(m => Model.UserPmNotification, "true")
+                @Html.CheckBoxFor(m => Model.UserPmNotification, new { id = "PmNotification" } )
             </p>
             <p>
                 Notifikationer via Email
-                @Html.CheckBoxFor(m => Model.UserEmailNotification, "true")
+                @Html.CheckBoxFor(m => Model.UserEmailNotification, new { id = "EmailNotification" } )
             </p>
             <p>
                 Notifikationer via SMS
-                @Html.CheckBoxFor(m => Model.UserSmsNotification, "true")
+                @Html.CheckBoxFor(m => Model.UserSmsNotification, new { id = "SmsNotification" } )
             </p>
-            <input type="submit" id="submitBtn" class="btn btn-default" value="Ändra Notifikationer" />
-        }
     </div>
 }
 
 @section scripts{
     <script>
-        $("#submitBtn").click(function () {
-            alert("Dina notifikationsval har ändrats.")
+
+        $("#PmNotification").click(function () {
+            var PmActive = $("#PmNotification").is(":checked");
+            document.location.href = '/ChooseNotification/ChosenNotifications?isActive=' + PmActive + '&value=' + "pm";
+        });
+
+        $("#SmsNotification").click(function () {
+            var SmsActive = $("#SmsNotification").is(":checked");
+            document.location.href = '/ChooseNotification/ChosenNotifications?isActive=' + SmsActive + '&value=' + "sms";
+        });
+
+        $("#EmailNotification").click(function () {
+            var EmailActive = $("#EmailNotification").is(":checked");
+            document.location.href = '/ChooseNotification/ChosenNotifications?isActive=' + EmailActive + '&value=' + "email";
         });
 
     </script>
