@@ -45,21 +45,6 @@ namespace OruBloggen.Controllers
             }
 
             var notmodel = ctx.Notifications.Where(t => t.UserID == userId).ToList();
-            //var categories = ctx.Categories.ToList();
-            //var CategoryIsFollowed = new List<int>();
-            //foreach (var item in notmodel)
-            //{
-            //    foreach (var cat in categories)
-            //    {
-            //        if (item.FollowCategoryID == cat.CategoryID)
-            //        {
-            //            CategoryIsFollowed.Add(item.FollowCategoryID);
-            //        }
-            //    }
-            //}
-
-            //var MeetingModels = ctx.Meetings.ToList();
-            //var UserMeetings = ctx.UserMeetings.Where(u => u.UserID.Equals(userId)).ToList();
 
             var ListOfCategories = ctx.Categories.ToList();
 
