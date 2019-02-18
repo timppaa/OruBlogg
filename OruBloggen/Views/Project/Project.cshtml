@@ -1,0 +1,169 @@
+﻿@model OruBloggen.Models.ProjectViewModel
+
+@{
+    ViewBag.Title = "Project";
+}
+
+<h2>Projekt</h2>
+
+<button class="btn btn-default" data-toggle="modal" data-target="#createNew">Skapa nytt projekt</button>
+
+
+<div id="createNew" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4>Skapa nytt projekt</h4>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("CreateProject", "Project", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(p => p.NewProject.ProjectName, new { @class = "form-control", @placeholder = "Titel" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            @Html.TextAreaFor(p => p.NewProject.ProjectDesc, new { @class = "form-control", @placeholder = "Beskrivning ..." })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            @Html.Label("Välj projekttyp") @Html.DropDownList("NewProject.ProjectType", ViewData["Types"] as List<SelectListItem>, new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            @Html.Label("Välj arbetslag") @Html.DropDownList("NewProject.ProjectTeamID", ViewData["Teams"] as List<SelectListItem>, new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            @Html.Label("Välj status") @Html.DropDownList("NewProject.ProjectStatus", ViewData["Status"] as List<SelectListItem>, new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            <input id="uploadFile" type="file" name="files" accept=".pdf, .doc, .docx, .xlxs, .xls, .ppt, .pptx" onchange="validateFile()" value="Ladda upp en fil" multiple />
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button id="sumbitProject" type="submit" class="btn btn-default">Skapa projekt</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<hr />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Projektnamn</th>
+            <th>Projekttyp</th>
+            <th>Arbetslag</th>
+            <th>Projektägare</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var project in Model.ProjectList)
+        {
+            <tr>
+                <td>@project.ProjectName</td>
+                <td>@project.ProjectType</td>
+                <td>@project.TeamName</td>
+                <td>@project.ProjectCreatorName</td>
+                <td>
+                    @if (project.ProjectStatus == "Ej påbörjat")
+                    {
+                        <div style="background-color:red; text-align:center; border-radius:25px; color:#333333; ">@project.ProjectStatus</div>
+                    }
+                    @if (project.ProjectStatus == "Pågående")
+                    {
+                        <div style="background-color:yellow; text-align:center; border-radius:25px; color:#333333; ">@project.ProjectStatus</div>
+                    }
+                    @if (project.ProjectStatus == "Avslutat")
+                    {
+                        <div style="background-color:green; text-align:center; border-radius:25px; color:#333333; ">@project.ProjectStatus</div>
+                    }
+                </td>
+                <td><a id="viewProject" style="float:right; cursor:pointer;" data-toggle="modal" data-target="#open_@project.ProjectID">Visa projekt</a></td>
+            </tr>
+
+            <div id="open_@project.ProjectID" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button><br />
+                            <h4>@project.ProjectName</h4> &nbsp;
+                            <p style="font-size:x-small; float:left; margin-right:10px;">Projekttyp: @project.ProjectType</p> &nbsp;
+                            <p style="font-size:x-small; float:left; margin-right:10px;">Projektägare: @project.ProjectCreatorName</p> &nbsp;
+                            <p style="font-size:x-small; float:left;">Arbetslag: @project.TeamName</p>
+
+                            @if (project.ProjectStatus == "Ej påbörjat")
+                            {
+                                <div style="background-color:red; text-align:center; border-radius:25px; color:#333333; float:right; margin-top:-3px; padding:2px 8px; font-size:x-small;">@project.ProjectStatus</div>
+                            }
+                            @if (project.ProjectStatus == "Pågående")
+                            {
+                                <div style="background-color:yellow; text-align:center; border-radius:25px; color:#333333; float:right; padding:2px 8px; margin-top:-3px; font-size:x-small;">@project.ProjectStatus</div>
+                            }
+                            @if (project.ProjectStatus == "Avslutat")
+                            {
+                                <div style="background-color:green; text-align:center; border-radius:25px; color:#333333; float:right; padding:2px 8px; margin-top:-3px; font-size:x-small;">@project.ProjectStatus</div>
+                            }
+                        </div>
+                        <div class="modal-body">
+
+                            <p style="word-wrap:break-word;">@project.ProjectDesc</p>
+
+                            @if (project.ProjectFiles != null)
+                            {
+                                <hr />
+                                <p style="font-size:x-small;">Uppladdade dokument</p>
+                                foreach (var file in project.ProjectFiles)
+                                {
+                                    <a href="/ProjectFiles/@file.FilePath" download>@file.FilePath</a><br />
+                                }
+                            }
+                        </div>
+                        <div class="modal-footer">
+                            <button id="button" type="button" class="btn btn-default" data-dismiss="modal">Stäng</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </tbody>
+</table>
+
+
+
+
+@section scripts {
+    <script type="text/javascript">
+
+        function validateFile() {
+            var fileName = document.getElementById("uploadFile").value;
+            var idxDot = fileName.lastIndexOf(".") + 1;
+            var extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
+            if (extFile == "pdf" || extFile == "docx" || extFile == "doc" || extFile == "xls" || extFile == "xlxs" || extFile == "ppt" || extFile == "pptx") {
+            } else {
+                alert("Endast filer är godkänt. Filformat som stöds är: .pdf, .docx, .doc, .xls, .xlxs, .ppt, .pptx ");
+                $("#uploadFile").val('');
+            }
+        }
+
+    </script>
+}
