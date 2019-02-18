@@ -134,5 +134,13 @@ namespace OruBloggen.Controllers
                 }
             }
         }
+
+        public void SendReminderPM(string userId, string title, string description,
+            DateTime start, DateTime end)
+        {
+            var messeage = "Hej, du har ett möte om 30 minuter, du hittar mötet i OruBloggens kalender: " + "Innehåll: " + description + ". Startdatum: " + start.ToShortDateString() + ": " + start.ToShortTimeString() +
+                           ". Slutdatum: " + end.ToShortDateString() + ": " + end.ToShortTimeString() + ".";
+            messageController.SendPmNotification(null, userId, title, messeage);
+        }
     }
 }

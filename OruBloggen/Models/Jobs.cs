@@ -39,7 +39,7 @@ namespace OruBloggen.Models
                 {
                     var mailLista = new List<string>();
                     var phoneNumbers = new List<string>();
-                    foreach(var usermeeting in meeting.UserMeetingModel)
+                    foreach(var usermeeting in meeting.UserMeetingModel.Where(m => m.MeetingModel.MeetingActive == true))
                     {
                         if (usermeeting.UserModel.UserEmailNotification)
                         {
@@ -53,7 +53,8 @@ namespace OruBloggen.Models
 
                         if (usermeeting.UserModel.UserPmNotification)
                         {
-                          
+                          var notification = new NotificationController();
+                          notification.SendReminderPM(usermeeting.UserID, usermeeting.MeetingModel.MeetingTitle, usermeeting.MeetingModel.MeetingDesc, usermeeting.MeetingModel.MeetingStartDate, usermeeting.MeetingModel.MeetingEndDate);
                            
                         }
                     }

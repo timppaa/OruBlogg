@@ -261,3 +261,4 @@ __pycache__/
 *.pyc
 /OruBloggen/Images
 /OruBloggen/PostFiles
+/OruBloggen/Controllers
