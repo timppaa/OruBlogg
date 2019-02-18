@@ -344,5 +344,28 @@ namespace OruBloggen.Controllers
 
             return RedirectToAction("AdminNews");
         }
+
+        public ActionResult ActivateUser ()
+        {
+            var UserList = ctx.Users.Where(u => !u.UserActive);
+
+            return View(UserList);
+        }
+
+        public ActionResult ActivateNewUser(string id)
+        {
+            var account = ctx.Users.FirstOrDefault(u => u.UserID == id);
+            account.UserActive = true;
+            ctx.SaveChanges();
+            return RedirectToAction("ActivateUser");
+        }
+
+        public int CountUnactivatedUsers()
+        {
+            int count = 0;
+            count = ctx.Users.Where(u => !u.UserActive).Count();
+
+            return count;
+        }
     }
 }
