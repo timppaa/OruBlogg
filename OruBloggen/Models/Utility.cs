@@ -11,12 +11,12 @@ namespace OruBloggen.Models
 
 
 
-        public static bool isAdmin(string userId)
-        {
-            var ctx = new OruBloggenDbContext();
+        //public static bool isAdmin(string userId)
+        //{
+        //    var ctx = new OruBloggenDbContext();
 
-            return ctx.Users.FirstOrDefault(u => u.UserID == userId).UserIsAdmin;
-        }
+        //    return ctx.Users.FirstOrDefault(u => u.UserID == userId).UserIsAdmin;
+        //}
 
         public static string getCategoryById(int categoryId)
         {

@@ -83,7 +83,7 @@
 
 @if (Model.MeetingModels != null)
 {
-    
+
     <div class="myMeetings" style="float:right; height:500px; width:80%;">
         @if (User.Identity.GetUserId() == Model.OtherUserID)
         {
@@ -228,7 +228,7 @@
 
         </table>
     </div>
-    }
+}
 
 
 @if (User.Identity.GetUserId() == Model.OtherUserID)
@@ -252,6 +252,8 @@
             <input type="submit" id="submitBtn" class="btn btn-default" value="Ändra Notifikationer" />
         }
     </div>
+
+
 }
 
 @section scripts{
