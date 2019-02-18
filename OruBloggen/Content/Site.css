@@ -163,11 +163,8 @@ body > div.container.body-content > form > div > div:nth-child(8) {
 .button1, button:focus {
     outline: 0;
     font-size: 14px;
-    color: #000000;
     background-color: #FFFFFF;
     border: none;
     
 }
-
-
 
