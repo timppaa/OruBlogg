@@ -9,7 +9,7 @@
 @using (Html.BeginForm("SendMessage", "Message", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     <div class="form-group">
-        <div class="col-md-10">
+        <div style="padding-left:0px;" class="col-md-10">
 
             @Html.DropDownList("Users", ViewData["Users"] as List<SelectListItem>, new { @class = "form-control" })
         </div>
