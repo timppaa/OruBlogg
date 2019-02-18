@@ -21,6 +21,8 @@ namespace OruBloggen.Models
         public bool UserPmNotification { get; set; }
         public bool UserEmailNotification { get; set; }
 
+        public bool UserActive { get; set; }
+
         [DataType(DataType.ImageUrl)]
         public string UserImagePath { get; set; }
 
@@ -45,6 +47,7 @@ namespace OruBloggen.Models
         public UserModel()
         {
             UserIsAdmin = false;
+            UserActive = false;
             UserSmsNotification = true;
             UserPmNotification = true;
             UserEmailNotification = true;

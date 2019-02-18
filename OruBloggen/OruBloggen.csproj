@@ -364,13 +364,14 @@
     <Content Include="Views\Message\RespondToMessage.cshtml" />
     <Content Include="Views\Admin\AdminCategories.cshtml" />
     <Content Include="Views\Admin\AdminNews.cshtml" />
+    <Content Include="Views\Admin\ActivateUser.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Images\" />
     <Folder Include="PostFiles\" />
-    <Folder Include="Views\Following\" />
     <Folder Include="Views\ChooseNotification\" />
+    <Folder Include="Views\Following\" />
     <Folder Include="Views\Image\" />
     <Folder Include="Views\Notification\" />
     <Folder Include="Views\ReportPost\" />
