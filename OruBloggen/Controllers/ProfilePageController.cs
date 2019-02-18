@@ -8,6 +8,7 @@ using System.Web.Mvc;
 
 namespace OruBloggen.Controllers
 {
+    [Authorize, AuthorizeUser]
     public class ProfilePageController : Controller
     {
         // GET: ProfilePage

@@ -9,7 +9,7 @@ using System.Web.Mvc;
 
 namespace OruBloggen.Controllers
 {
-    [Authorize]
+    [Authorize, AuthorizeUser]
     public class PostController : Controller
     {
 

@@ -367,6 +367,7 @@
     <Content Include="Views\Admin\AdminNews.cshtml" />
     <Content Include="Views\Admin\ActivateUser.cshtml" />
     <Content Include="Views\Project\Project.cshtml" />
+    <Content Include="Views\Home\Unauthorised.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

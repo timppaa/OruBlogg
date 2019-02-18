@@ -9,7 +9,7 @@ using Microsoft.AspNet.Identity;
 
 namespace OruBloggen.Controllers
 {
-    [Authorize]
+    [Authorize, AuthorizeUser]
     public class AdminController : Controller
     {
         public OruBloggenDbContext ctx = new OruBloggenDbContext();
