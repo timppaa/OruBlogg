@@ -198,55 +198,6 @@
                     </td>
                     <td>
 
-                        @if (item.AcceptedInvite)
-                        {
-                            @Html.ActionLink("'", "AcceptMeeting", new { meetingId = item.MeetingModel.MeetingID });
-                        }
-                        else
-                        {
-                            @Html.ActionLink("Acceptera", "AcceptMeeting", new { meetingId = item.MeetingModel.MeetingID });
-
-                        }
-                    </td>
-                </tr>
-            }
-
-        </table>
-
-        <h2>Kommande möten</h2>
-
-        <table class="table">
-            <tr>
-                <th>
-                    @Html.DisplayName("Titel")
-                </th>
-                <th>
-                    @Html.DisplayName("Beskrivning")
-                </th>
-                <th>
-                    @Html.DisplayName("Startdatum")
-                </th>
-                <th>
-                    @Html.DisplayName("Slutdatum")
-                </th>
-            </tr>
-
-            @foreach (var item in Model.MeetingModels)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(model => item.MeetingTitle)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.MeetingDesc)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.MeetingStartDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.MeetingEndDate, new { type = "YYYY-MM-DD" })
-                    </td>
-                    <td>
                         @if (item.MeetingActive)
                         {
                             if (DateTime.Now > item.MeetingStartDate && DateTime.Now < item.MeetingEndDate)
@@ -256,23 +207,24 @@
                             else
                             {
                                 @Html.DisplayName("Kommande")
-                            }
-                        }
-                        else
-                        {
-                            @Html.DisplayName("Avslutat/Inställt")
-                        }
-                    </td>
-                    <td>
-                        @if (item.MeetingUserID == User.Identity.GetUserId())
-                        {
+                            <td>
+                                @if (item.MeetingUserID == User.Identity.GetUserId() && User.Identity.GetUserId() == Model.OtherUserID)
+                                {
 
-                            @Html.ActionLink("Ställ in möte", "CancelMeeting", new { meetingId = item.MeetingID, title = item.MeetingTitle, startDate = item.MeetingStartDate })
+                                    @Html.ActionLink("Ställ in möte", "CancelMeeting", new { meetingId = item.MeetingID, title = item.MeetingTitle, startDate = item.MeetingStartDate })
 
+                                }
+                            </td>
                         }
-                    </td>
-                </tr>
-            }
+                    }
+                    else
+                    {
+                        @Html.DisplayName("Avslutat/Inställt")
+                    }
+
+
+                    </tr>
+                }
 
         </table>
     </div>
