@@ -12,16 +12,16 @@
     </div>
     <br />
 
-    if (Model.userId != Model.FollowedID)
+    if (Model.userId != Model.OtherUserID)
     {
         if (Model.UserIsFollowed == "")
         {
 
-            <input type="button" class="followBtn" value="Följ" onclick="location.href = '@Url.Action("FollowUser", "Following", new { followID = Model.FollowedID })'" />
+            <input type="button" class="btn btn-success" value="Följ" onclick="location.href = '@Url.Action("FollowUser", "Following", new { followID = Model.FollowedID })'" />
         }
         else
         {
-            <input type="button" class="followBtn" value="Avfölj" onclick="location.href = '@Url.Action("UnfollowUser", "Following", new { unfollowID = Model.FollowedID })'" />
+            <input type="button" class="btn btn-danger" value="Avfölj" onclick="location.href = '@Url.Action("UnfollowUser", "Following", new { unfollowID = Model.FollowedID })'" />
         }
     }
 
@@ -234,31 +234,91 @@
 @if (User.Identity.GetUserId() == Model.OtherUserID)
 {
     <div style="float:left;">
-        @using (Html.BeginForm("ChosenNotifications", "ChooseNotification", FormMethod.Post, new { enctype = "multipart/form-data" }))
-        {
+
             <h4 style="font-weight:bold;">Notifikationer</h4>
             <p>
                 Notifikationer via PM
-                @Html.CheckBoxFor(m => Model.UserPmNotification, "true")
+                @Html.CheckBoxFor(m => Model.UserPmNotification, new { id = "PmNotification" })
             </p>
             <p>
                 Notifikationer via Email
-                @Html.CheckBoxFor(m => Model.UserEmailNotification, "true")
+                @Html.CheckBoxFor(m => Model.UserEmailNotification, new { id = "EmailNotification" })
             </p>
             <p>
                 Notifikationer via SMS
-                @Html.CheckBoxFor(m => Model.UserSmsNotification, "true")
+                @Html.CheckBoxFor(m => Model.UserSmsNotification, new { id = "SmsNotification" })
             </p>
-            <input type="submit" id="submitBtn" class="btn btn-default" value="Ändra Notifikationer" />
-        }
+
+        
     </div>
 }
 
-@section scripts{
-    <script>
-        $("#submitBtn").click(function () {
-            alert("Dina notifikationsval har ändrats.")
-        });
+@if (User.Identity.GetUserId() == Model.OtherUserID)
+{
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Kategorier</h4>
+                </div>
+                <div class="modal-body row">
 
-    </script>
+
+                    @foreach (var item in Model.ListCategories)
+                    {
+                        if (item.CategoryName != "Okategoriserade")
+                        {
+
+                        <div class="col-lg-2" style="margin-bottom:10px">
+
+                            <strong>@item.CategoryName</strong>
+                            @if (!Model.IsFollowed.Any(i => i.FollowCategoryID == item.CategoryID))
+                            {
+                                <input type="button" class="btn btn-success" value="Följ" onclick="location.href = '@Url.Action("FollowCategory", "Following", new { categoryID = item.CategoryID })'" />
+                            }
+                            else
+                            {
+                                <input type="button" class="btn btn-danger" value="Avfölj" onclick="location.href = '@Url.Action("UnfollowCategory", "Following", new { categoryID = item.CategoryID })'" />
+                            }
+
+                        </div>
+                        }
+                    }
+                    
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Stäng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button type="button" style="float:left" class="btn btn-default" data-toggle="modal" data-target="#myModal">Följ kategorier</button>
 }
+
+
+
+    @section scripts{
+        <script>
+            $("#submitBtn").click(function () {
+                alert("Dina notifikationsval har ändrats.")
+            });
+
+            $("#PmNotification").click(function () {
+                var PmActive = $("#PmNotification").is(":checked");
+                document.location.href = '/ChooseNotification/ChosenNotifications?isActive=' + PmActive + '&value=' + "pm";
+            });
+
+            $("#SmsNotification").click(function () {
+                var SmsActive = $("#SmsNotification").is(":checked");
+                document.location.href = '/ChooseNotification/ChosenNotifications?isActive=' + SmsActive + '&value=' + "sms";
+            });
+
+            $("#EmailNotification").click(function () {
+                var EmailActive = $("#EmailNotification").is(":checked");
+                document.location.href = '/ChooseNotification/ChosenNotifications?isActive=' + EmailActive + '&value=' + "email";
+            });
+
+        </script>
+    }

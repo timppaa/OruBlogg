@@ -41,17 +41,22 @@
 
                     @if (item.PostFilePath != null)
                     {
-                        if (item.PostFilePath.Contains("png") || item.PostFilePath.Contains("jpg") || item.PostFilePath.Contains("jpeg") || item.PostFilePath.Contains("gif"))
-                        {
-                            <img src="/PostFiles/@item.PostFilePath" class="center-block" style="width:350px; height:auto;" />
+                        <div class="postImgBlock">
+                            @foreach (var file in item.PostFilePath)
+                            {
+                                if (file.FilePath.Contains("png") || file.FilePath.Contains("jpg") || file.FilePath.Contains("jpeg") || file.FilePath.Contains("gif"))
+                                {
+                                    <img src="/PostFiles/@file.FilePath" class="postImg"/>
 
-                        }
+                                }
 
-                        else
-                        {
-                            <a href="/PostFiles/@item.PostFilePath" download>Granska dokument (@item.PostFilePath)</a>
+                                else
+                                {
+                                <a href="/PostFiles/@file.FilePath" download>Granska dokument [@file.FilePath]</a> <br />
 
-                        }
+                                }
+                            }
+                        </div>
                     }
                 </div>
                 <div class="modal-footer">

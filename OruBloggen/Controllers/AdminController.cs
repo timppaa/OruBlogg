@@ -9,7 +9,7 @@ using Microsoft.AspNet.Identity;
 
 namespace OruBloggen.Controllers
 {
-    [Authorize]
+    [Authorize, AuthorizeUser]
     public class AdminController : Controller
     {
         public OruBloggenDbContext ctx = new OruBloggenDbContext();
@@ -50,16 +50,16 @@ namespace OruBloggen.Controllers
                         {
                             isFormal = "Informellt inlägg";
                         }
-                    
 
+                        var fileList = ctx.PostFiles.Where(f => f.PostID == post.PostID).ToList();
 
                         list.Add(new PostReportViewModel
                         {
                             PostID = post.PostID,
                             PostTitle = post.PostTitle,
                             PostText = post.PostText,
-                            PostSenderName = senderName, 
-                            PostFilePath = post.PostFilePath,
+                            PostSenderName = senderName,
+                            PostFilePath = fileList,
                             PostFormal = isFormal,
                             ReportID = report.PostReportID,
                             ReportReason = report.ReportReason
@@ -75,6 +75,14 @@ namespace OruBloggen.Controllers
         {
             var report = ctx.PostReports.FirstOrDefault(r => r.PostReportID == reportID);
             ctx.PostReports.Remove(report);
+            ctx.SaveChanges();
+
+            var fileList = ctx.PostFiles.Where(f => f.PostID == postID);
+
+            foreach (var file in fileList)
+            {
+                ctx.PostFiles.Remove(file);
+            }
             ctx.SaveChanges();
 
             var post = ctx.Posts.FirstOrDefault(p => p.PostID == postID);
@@ -163,61 +171,6 @@ namespace OruBloggen.Controllers
             return RedirectToAction("AdminCategories");
         }
 
-   
-        // Posts
-        //public ActionResult Posts ()
-        //{
-        //    AVM.postModelList = ctx.Posts.ToList();
-        //    return View(AVM);
-        //}
-
-        //public ActionResult PostDetails (int? id)
-        //{
-
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    AVM.postModel = ctx.Posts.Find(id);
-        //    AVM.userModel = ctx.Users.FirstOrDefault(u => u.UserID == AVM.postModel.PostUserID);
-        //    if (AVM.postModel == null)
-        //    {
-        //        Console.WriteLine("Test");
-        //        return HttpNotFound();
-        //    }
-        //    return View(AVM);
-        //}
-
-        //public ActionResult DeletePost(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    AVM.postModel = ctx.Posts.Find(id);
-        //    AVM.userModelList = ctx.Users.ToList();
-        //    if (AVM.postModel == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(AVM);
-        //}
-
-        // POST: PostModels/Delete/5
-        [HttpPost, ActionName("DeletePost")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-
-            PostModel postModel = ctx.Posts.Find(id);
-            
-            ctx.Posts.Remove(postModel);
-            ctx.SaveChanges();
-            return RedirectToAction("Posts");
-        }
-
-
-
         //Users
         public ActionResult AllUsers()
         {
@@ -302,7 +255,6 @@ namespace OruBloggen.Controllers
             return View(newsView);
         }
 
-
         public List<NewsModel> FillNewsList ()
         {
             var list = new List<NewsModel>();
@@ -320,7 +272,6 @@ namespace OruBloggen.Controllers
 
             return list;
         }
-
 
         [HttpPost]
         public ActionResult AddNews(NewsModel news)
@@ -345,6 +296,89 @@ namespace OruBloggen.Controllers
             return RedirectToAction("AdminNews");
         }
 
+        //Posts
+        public ActionResult AdminPosts ()
+        {
+
+            var adminView = new AdminViewModel();
+            adminView.PostList = FillPostList();
+
+            return View(adminView);
+        }
+
+        public List<PostViewModel> FillPostList ()
+        {
+            var list = new List<PostViewModel>();
+            var posts = ctx.Posts.ToList();
+            var categories = ctx.Categories.ToList();
+            var users = ctx.Users.ToList();
+
+            foreach (var post in posts)
+            {
+                var postSenderName = users.FirstOrDefault(u => u.UserID == post.PostUserID).UserFirstname + " " + users.FirstOrDefault(u => u.UserID == post.PostUserID).UserLastname;
+                string senderImage = users.FirstOrDefault(u => u.UserID == post.PostUserID).UserImagePath;
+
+                var fileList = ctx.PostFiles.Where(f => f.PostID == post.PostID).ToList();
+
+                list.Add(new PostViewModel
+                {
+                    PostID = post.PostID,
+                    PostTitle = post.PostTitle,
+                    PostText = post.PostText,
+                    PostDate = post.PostDate,
+                    PostCategory = categories.FirstOrDefault(c => c.CategoryID == post.PostCategoryID).CategoryName,
+                    PostFormal = post.PostFormal,
+                    PostSenderName = postSenderName,
+                    PostFilePath = fileList,
+                    SenderProfilePath = senderImage,
+                    PostSender = post.PostUserID
+
+                });
+            }
+
+            return list;
+        }
+
+        [HttpPost]
+        public ActionResult ChangePost(PostViewModel post)
+        {
+            var ctx = new OruBloggenDbContext();
+            var previousPost = ctx.Posts.FirstOrDefault(p => p.PostID == post.PostID);
+
+            previousPost.PostTitle = post.PostTitle;
+            previousPost.PostText = post.PostText;
+            ctx.SaveChanges();
+
+            return RedirectToAction("AdminPosts");
+        }
+
+        public ActionResult RemovePost(int postID)
+        {
+            var reportedPost = ctx.PostReports.FirstOrDefault(p => p.PostID == postID);
+
+            if (reportedPost != null)
+            {
+                ctx.PostReports.Remove(reportedPost);
+            }
+
+            var post = ctx.Posts.FirstOrDefault(p => p.PostID == postID);
+            var fileList = ctx.PostFiles.Where(f => f.PostID == postID);
+
+            foreach (var file in fileList)
+            {
+                ctx.PostFiles.Remove(file);
+            }
+
+            ctx.Posts.Remove(post);
+            ctx.SaveChanges();
+
+            return RedirectToAction("AdminPosts");
+        }
+
+
+
+
+        //Accept user
         public ActionResult ActivateUser ()
         {
             var UserList = ctx.Users.Where(u => !u.UserActive);

@@ -4,6 +4,7 @@ namespace OruBloggen.Migrations
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
+    using Microsoft.AspNet.Identity.EntityFramework;
     using Models;
 
     internal sealed class Configuration : DbMigrationsConfiguration<OruBloggen.Models.OruBloggenDbContext>
@@ -22,6 +23,7 @@ namespace OruBloggen.Migrations
                 new TeamModel() { TeamName = "Juridik" }
                 );
 
+
             context.Categories.AddOrUpdate(
                 new CategoryModel() { CategoryName = "Okategoriserade", IsFormel = false },
                 new CategoryModel() { CategoryName = "Okategoriserade", IsFormel = true },
@@ -37,7 +39,6 @@ namespace OruBloggen.Migrations
                 new CategoryModel() { CategoryName = "Juridik", IsFormel = true },
                 new CategoryModel() { CategoryName = "Statistik", IsFormel = true }
                 );
-
         }
 
     }

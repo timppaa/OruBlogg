@@ -7,8 +7,7 @@ namespace OruBloggen.Models
 {
     public class AdminViewModel
     {
-        public List<PostModel> postModelList { get; set; }
-        public PostModel postModel { get; set; }
+        public List<PostViewModel> PostList { get; set; }
 
         public PostReportModel postReportModel { get; set; }
 
