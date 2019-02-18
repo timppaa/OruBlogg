@@ -1,4 +1,5 @@
-﻿using OruBloggen.Models;
+﻿using Microsoft.AspNet.Identity;
+using OruBloggen.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,7 @@ using System.Web.Mvc;
 
 namespace OruBloggen.Controllers
 {
+    [Authorize, AuthorizeUser]
     public class AllUsersController : Controller
     {
         // GET: AllUsers
@@ -21,7 +23,10 @@ namespace OruBloggen.Controllers
 
             foreach(var item in ctx.Users)
             {
-                userList.Add(item);
+                if (User.Identity.GetUserId() != item.UserID)
+                {
+                    userList.Add(item);
+                }
             }
             var model = new AllUsersViewModelcs
             {

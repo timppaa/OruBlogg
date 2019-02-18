@@ -234,6 +234,7 @@
     <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\PostController.cs" />
     <Compile Include="Controllers\ProfilePageController.cs" />
+    <Compile Include="Controllers\ProjectController.cs" />
     <Compile Include="Controllers\ReportPostController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -261,9 +262,11 @@
     <Compile Include="Models\NotificationModels.cs" />
     <Compile Include="Models\NewsModels.cs" />
     <Compile Include="Models\OruBloggenDbContext.cs" />
+    <Compile Include="Models\PostFilesModels.cs" />
     <Compile Include="Models\PostReportModels.cs" />
     <Compile Include="Models\PostViewModels.cs" />
     <Compile Include="Models\ProfilePageViewModel.cs" />
+    <Compile Include="Models\ProjectFilesModels.cs" />
     <Compile Include="Models\UserMeetingModels.cs" />
     <Compile Include="Models\MeetingModels.cs" />
     <Compile Include="Models\MessageModels.cs" />
@@ -346,9 +349,7 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Meeting\Meeting.cshtml" />
-    <Content Include="Views\Admin\Posts.cshtml" />
-    <Content Include="Views\Admin\PostDetails.cshtml" />
-    <Content Include="Views\Admin\DeletePost.cshtml" />
+    <Content Include="Views\Admin\AdminPosts.cshtml" />
     <Content Include="Views\Admin\AllUsers.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\ProfilePage\ShowInfo.cshtml" />
@@ -364,13 +365,17 @@
     <Content Include="Views\Message\RespondToMessage.cshtml" />
     <Content Include="Views\Admin\AdminCategories.cshtml" />
     <Content Include="Views\Admin\AdminNews.cshtml" />
+    <Content Include="Views\Admin\ActivateUser.cshtml" />
+    <Content Include="Views\Project\Project.cshtml" />
+    <Content Include="Views\Home\Unauthorised.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Images\" />
     <Folder Include="PostFiles\" />
-    <Folder Include="Views\Following\" />
+    <Folder Include="ProjectFiles\" />
     <Folder Include="Views\ChooseNotification\" />
+    <Folder Include="Views\Following\" />
     <Folder Include="Views\Image\" />
     <Folder Include="Views\Notification\" />
     <Folder Include="Views\ReportPost\" />

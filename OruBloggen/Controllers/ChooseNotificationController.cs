@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 
 namespace OruBloggen.Controllers
 {
+    [Authorize, AuthorizeUser]
     public class ChooseNotificationController : Controller
     {
         // GET: ChooseNotification
@@ -17,19 +18,30 @@ namespace OruBloggen.Controllers
             return View();
         }
 
-        public ActionResult ChosenNotifications(ProfilePageViewModel ppv)
+        public ActionResult ChosenNotifications(bool isActive, string value)
         {
             var ctx = new OruBloggenDbContext();
             var currentUser = User.Identity.GetUserId();
             var userModel = ctx.Users.FirstOrDefault(u => u.UserID == currentUser);
 
-            userModel.UserPmNotification = ppv.UserPmNotification;
-            userModel.UserSmsNotification = ppv.UserSmsNotification;
-            userModel.UserEmailNotification = ppv.UserEmailNotification;
+            if (value == "pm")
+            {
+                userModel.UserPmNotification = isActive;
+            }
+            else if (value == "sms")
+            {
+                userModel.UserSmsNotification = isActive;
+            }
+            else 
+            {
+                userModel.UserEmailNotification = isActive;
+            }
 
             ctx.SaveChanges();
 
             return RedirectToAction("ProfileRedirect", "ProfilePage");
         }
+
+
     }
 }

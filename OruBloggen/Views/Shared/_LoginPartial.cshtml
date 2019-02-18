@@ -8,7 +8,10 @@
 
 <ul class="nav navbar-nav navbar-right">
     <li>
-        @Html.ActionLink("Min profil", "ProfileReDirect", "ProfilePage")
+        @Html.ActionLink("Min profil", "ShowInfo", "ProfilePage")
+    </li>
+    <li>
+        @Html.ActionLink("Alla användare", "ShowAllUsers", "AllUsers")
     </li>
     <li>
         @Html.ActionLink("Inkorg: " + Html.Action("count", "message"), "ShowMessages", "Message")
@@ -20,6 +23,9 @@
         @Html.ActionLink("Informella inlägg", "InformalPost", "Post")
     </li>
     <li>
+        @Html.ActionLink("Projekt", "Project", "Project")
+    </li>
+    <li>
         @Html.ActionLink("Kalender", "Index", "MeetingCalendar")
     </li>
 
@@ -28,7 +34,7 @@
     {
         if (Utility.isAdmin(User.Identity.GetUserId()))
         {
-            <li>@Html.ActionLink("Admin", "Index", "Admin")</li>
+                        <li>@Html.ActionLink("Admin", "Index", "Admin")</li>
         }
 
 
