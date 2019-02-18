@@ -126,7 +126,7 @@ namespace OruBloggen.Controllers
                 Team = team,
                 OtherUserID = id,
                 FollowedID = id,
-                UserIsFollowed = isFollowed,
+                //UserIsFollowed = isFollowed,
                 MeetingModels = creator,
                 UserMeetings = invited,
                 UserIsFollowed = PersonIsFollowed,
