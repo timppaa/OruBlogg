@@ -44,6 +44,7 @@ namespace OruBloggen.Models
         public string ProjectStatus { get; set; }
         public string TeamName { get; set; }
         public string ProjectCreatorName { get; set; }
+        public string ProjectCreatorID { get; set; }
         public List<ProjectFilesModel> ProjectFiles { get; set; }
     }
 }
