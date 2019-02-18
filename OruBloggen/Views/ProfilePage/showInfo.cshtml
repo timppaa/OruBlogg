@@ -12,11 +12,10 @@
     </div>
     <br />
 
-    if (Model.userId != Model.FollowedID)
+    if (Model.userId != Model.OtherUserID)
     {
         if (Model.UserIsFollowed == "")
         {
-
             <input type="button" class="followBtn" value="Följ" onclick="location.href = '@Url.Action("FollowUser", "Following", new { followID = Model.FollowedID })'" />
         }
         else
@@ -146,8 +145,9 @@
                             <td>
 
 
-
-                                @if (item.AcceptedInvite)
+                                @if (Model.OtherUserID == User.Identity.GetUserId())
+                                {
+                                if (item.AcceptedInvite)
                                 {
                                     @Html.ActionLink("'", "AcceptMeeting", new { meetingId = item.MeetingModel.MeetingID });
                                 }
@@ -156,7 +156,7 @@
                                     @Html.ActionLink("Acceptera", "AcceptMeeting", new { meetingId = item.MeetingModel.MeetingID });
 
                                 }
-
+                                }
                             </td>
                         </tr>
                     }
