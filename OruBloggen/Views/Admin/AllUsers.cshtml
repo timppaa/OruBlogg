@@ -78,7 +78,7 @@
                                     @Html.CheckBoxFor(m => item.isAdmin, "true")
                                 </div>
                                 <div class="form-group">
-                                    @Html.DropDownListFor(m => item.TeamID, ViewData["Teams"] as List<SelectListItem>, new { @class = "form-control"})
+                                    @Html.DropDownListFor(m => item.TeamID, ViewData["Teams"] as List<SelectListItem> , new { @class = "form-control"})
                                 </div>
 
                                 <div class="modal-footer">

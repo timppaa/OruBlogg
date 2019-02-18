@@ -378,7 +378,7 @@ namespace OruBloggen.Controllers
 
 
 
-
+        //Accept user
         public ActionResult ActivateUser ()
         {
             var UserList = ctx.Users.Where(u => !u.UserActive);

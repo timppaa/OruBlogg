@@ -12,6 +12,7 @@ namespace OruBloggen.Controllers
     [Authorize, AuthorizeUser]
     public class ProjectController : Controller
     {
+
         // GET: Project
         public ActionResult Project()
         {
@@ -166,8 +167,79 @@ namespace OruBloggen.Controllers
                 ProjectStatus = status,
                 ProjectType = project.ProjectType,
                 ProjectFiles = fileList,
+                ProjectCreatorID = project.ProjectUserID,
                 TeamName = team
             });
         }
+
+        public ActionResult UpdateStatus(int projectID, string status)
+        {
+            var ctx = new OruBloggenDbContext();
+            var project = ctx.Projects.FirstOrDefault(p => p.ProjectID == projectID);
+
+            project.ProjectStatus = status;
+            ctx.SaveChanges();
+
+            return RedirectToAction("Project");
+        }
+
+        public ActionResult FilterOnTeams(int filterID)
+        {
+            var ctx = new OruBloggenDbContext();
+            var list = new List<ProjectItemViewModel>();
+            var projects = ctx.Projects.Where(p => p.ProjectTeamID == filterID);
+
+            foreach(var project in projects)
+            {
+                AddToViewList(project, list);
+            }
+
+            var projectView = new ProjectViewModel();
+            projectView.ProjectList = list;
+            ListTeams();
+            ListTypes();
+            ListStatus();
+
+            return View("Project", projectView);
+        }
+
+        public ActionResult FilterOnStatus(string filterID)
+        {
+            var ctx = new OruBloggenDbContext();
+            var list = new List<ProjectItemViewModel>();
+            var projects = ctx.Projects.Where(p => p.ProjectStatus == filterID);
+
+            foreach (var project in projects)
+            {
+                AddToViewList(project, list);
+            }
+
+            var projectView = new ProjectViewModel();
+            projectView.ProjectList = list;
+            ListTeams();
+            ListTypes();
+            ListStatus();
+
+            return View("Project", projectView);
+        }
+
+        public ActionResult RemoveProject(int projectID)
+        {
+            var ctx = new OruBloggenDbContext();
+            var project = ctx.Projects.FirstOrDefault(p => p.ProjectID == projectID);
+            var fileList = ctx.ProjectFiles.Where(f => f.ProjectID == projectID);
+
+            foreach(var file in fileList)
+            {
+                ctx.ProjectFiles.Remove(file);
+            }
+
+            ctx.SaveChanges();
+            ctx.Projects.Remove(project);
+            ctx.SaveChanges();
+
+            return RedirectToAction("Project");
+        }
+
     }
 }
