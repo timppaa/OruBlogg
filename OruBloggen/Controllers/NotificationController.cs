@@ -17,6 +17,7 @@ using Twilio.AspNet.Mvc;
 
 namespace OruBloggen.Controllers
 {
+    [Authorize, AuthorizeUser]
     public class NotificationController : Controller
     {
         MessageController messageController = new MessageController();

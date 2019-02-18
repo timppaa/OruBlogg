@@ -9,12 +9,12 @@ using System.Web.Mvc;
 
 namespace OruBloggen.Controllers
 {
+    [Authorize, AuthorizeUser]
     public class MeetingController : Controller
     {
         // GET: Meeting
         public ActionResult Meeting()
         {
-
             var meetingView = ListUsersBeginning();
 
             return View(meetingView);
