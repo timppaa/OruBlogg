@@ -18,7 +18,7 @@ namespace OruBloggen.Controllers
 
         public ActionResult ProfileRedirect()
         {
-            return RedirectToAction("ShowOtherUser", new { id = User.Identity.GetUserId() });
+            return RedirectToAction("ShowInfo");
         }
 
         public ActionResult ShowInfo()
@@ -49,6 +49,10 @@ namespace OruBloggen.Controllers
            invited = invited.Where(u => u.MeetingModel.MeetingUserID != u.UserID).ToList();
 
 
+            var notmodel = ctx.Notifications.Where(t => t.UserID == userId).ToList();
+
+            var ListOfCategories = ctx.Categories.ToList();
+
             var model = new ProfilePageViewModel
             {
                 userId = userId,
@@ -64,7 +68,9 @@ namespace OruBloggen.Controllers
                 UserMeetings = invited,
                 UserEmailNotification = Users.UserEmailNotification,
                 UserPmNotification = Users.UserPmNotification,
-                UserSmsNotification = Users.UserSmsNotification
+                UserSmsNotification = Users.UserSmsNotification,
+                ListCategories = ListOfCategories,
+                IsFollowed = notmodel,
             };
 
             return View(model);
@@ -84,14 +90,15 @@ namespace OruBloggen.Controllers
             var path = "/Images/" + Users.UserImagePath;
             var userID = User.Identity.GetUserId();
             var notmodel = ctx.Notifications.Where(t => t.UserID == userID).ToList();
-            var isFollowed = "";
+            var PersonIsFollowed = "";
             foreach(var item in notmodel)
             {
                 if(item.FollowUserID == id)
                 {
-                    isFollowed = item.FollowUserID;
+                    PersonIsFollowed = item.FollowUserID;
                 }
             }
+
             var MeetingModels = ctx.Meetings.ToList();
             var UserMeetings = ctx.UserMeetings.Where(u => u.UserID.Equals(id)).ToList();
 
@@ -117,16 +124,16 @@ namespace OruBloggen.Controllers
                 Email = identityUser.Email,
                 PhoneNumber = Users.UserPhoneNumber,
                 Team = team,
-                /*model.*/
                 OtherUserID = id,
                 FollowedID = id,
                 UserIsFollowed = isFollowed,
                 MeetingModels = creator,
                 UserMeetings = invited,
+                UserIsFollowed = PersonIsFollowed,
                 Position = Users.UserPosition,
                 UserEmailNotification = Users.UserEmailNotification,
                 UserPmNotification = Users.UserPmNotification,
-                UserSmsNotification = Users.UserSmsNotification
+                UserSmsNotification = Users.UserSmsNotification,
             };
 
             return View("ShowInfo", model);
