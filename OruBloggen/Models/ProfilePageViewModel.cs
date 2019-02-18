@@ -18,6 +18,7 @@ namespace OruBloggen.Models
         public string ImagePath { get; set; }
         public string UserIsFollowed { get; set; }
         public string FollowedID { get; set; }
+        public List<NotificationModel> IsFollowed { get; set; }
 
         public bool UserSmsNotification { get; set; }
         public bool UserPmNotification { get; set; }
@@ -26,9 +27,7 @@ namespace OruBloggen.Models
         public List<MeetingModel> MeetingModels { get; set; }
         public List<UserMeetingModel> UserMeetings { get; set; }
         public List<UserModel> Users { get; set; }
-        
 
-        public bool FollowCategory { get; set; }
         public List<CategoryModel> ListCategories { get; set; }
     }
 }

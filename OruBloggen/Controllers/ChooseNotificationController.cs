@@ -31,5 +31,7 @@ namespace OruBloggen.Controllers
 
             return RedirectToAction("ProfileRedirect", "ProfilePage");
         }
+
+
     }
 }

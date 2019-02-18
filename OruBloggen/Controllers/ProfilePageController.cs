@@ -18,7 +18,7 @@ namespace OruBloggen.Controllers
 
         public ActionResult ProfileRedirect()
         {
-            return RedirectToAction("ShowOtherUser", new { id = User.Identity.GetUserId() });
+            return RedirectToAction("ShowInfo");
         }
 
         public ActionResult ShowInfo()
@@ -43,8 +43,20 @@ namespace OruBloggen.Controllers
                 var meeting = ctx.Meetings.FirstOrDefault(m => m.MeetingID == accept.MeetingID);
                 creator.Add(meeting);
             }
-    
-            
+
+            var notmodel = ctx.Notifications.Where(t => t.UserID == userId).ToList();
+            //var categories = ctx.Categories.ToList();
+            //var CategoryIsFollowed = new List<int>();
+            //foreach (var item in notmodel)
+            //{
+            //    foreach (var cat in categories)
+            //    {
+            //        if (item.FollowCategoryID == cat.CategoryID)
+            //        {
+            //            CategoryIsFollowed.Add(item.FollowCategoryID);
+            //        }
+            //    }
+            //}
 
             //var MeetingModels = ctx.Meetings.ToList();
             //var UserMeetings = ctx.UserMeetings.Where(u => u.UserID.Equals(userId)).ToList();
@@ -54,6 +66,7 @@ namespace OruBloggen.Controllers
             var model = new ProfilePageViewModel
             {
                 userId = userId,
+                OtherUserID = userId,
                 ImagePath = path,
                 Firstname = Users.UserFirstname,
                 Lastname = Users.UserLastname,
@@ -66,7 +79,8 @@ namespace OruBloggen.Controllers
                 UserEmailNotification = Users.UserEmailNotification,
                 UserPmNotification = Users.UserPmNotification,
                 UserSmsNotification = Users.UserSmsNotification,
-                ListCategories = ListOfCategories
+                ListCategories = ListOfCategories,
+                IsFollowed = notmodel,
             };
 
             return View(model);
@@ -86,14 +100,15 @@ namespace OruBloggen.Controllers
             var path = "/Images/" + Users.UserImagePath;
             var userID = User.Identity.GetUserId();
             var notmodel = ctx.Notifications.Where(t => t.UserID == userID).ToList();
-            var isFollowed = "";
+            var PersonIsFollowed = "";
             foreach(var item in notmodel)
             {
                 if(item.FollowUserID == id)
                 {
-                    isFollowed = item.FollowUserID;
+                    PersonIsFollowed = item.FollowUserID;
                 }
             }
+
             var MeetingModels = ctx.Meetings.ToList();
             var UserMeetings = ctx.UserMeetings.Where(u => u.UserID.Equals(id)).ToList();
 
@@ -111,11 +126,11 @@ namespace OruBloggen.Controllers
                 MeetingModels = MeetingModels,
                 UserMeetings = UserMeetings,
                 FollowedID = id,
-                UserIsFollowed = isFollowed,
+                UserIsFollowed = PersonIsFollowed,
                 Position = Users.UserPosition,
                 UserEmailNotification = Users.UserEmailNotification,
                 UserPmNotification = Users.UserPmNotification,
-                UserSmsNotification = Users.UserSmsNotification
+                UserSmsNotification = Users.UserSmsNotification,
             };
 
             return View("ShowInfo", model);
