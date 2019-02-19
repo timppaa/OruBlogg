@@ -35,5 +35,27 @@ namespace OruBloggen.Controllers
             };
             return View(model);
         }
+
+        public JsonResult ListSearchedUsers(string searchString)
+        {
+            var ctx = new OruBloggenDbContext();
+
+            var userList = ctx.Users.Where(u => String.Concat(u.UserFirstname, " ", u.UserLastname)
+            .Contains(searchString)|| u.TeamModel.TeamName.Contains(searchString) || searchString == null).ToList();
+
+            var users = new List<UserModel>();
+            foreach (var item in userList)
+            {
+                users.Add(new UserModel
+                {
+                    UserFirstname = item.UserFirstname,
+                    UserLastname = item.UserLastname,
+                    UserID = item.UserID
+                });
+            }
+
+            return new JsonResult { Data = users, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+           
+        }
     }
 }
