@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -9,6 +10,7 @@ namespace OruBloggen.Models
     {
         public string MessageSenderID { get; set; }
         public string MessageReceiverID { get; set; }
+        [Required(ErrorMessage = "Du måste skriva en titel")]
         public string MessageTitle { get; set; }
         public string MessageText { get; set; }
         public string ReceiverName { get; set; }

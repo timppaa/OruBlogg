@@ -8,5 +8,6 @@ namespace OruBloggen.Models
     public class AllUsersViewModelcs
     {
         public List<UserModel> AllUsers { get; set; }
+        
     }
 }
