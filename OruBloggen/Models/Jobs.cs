@@ -35,6 +35,7 @@ namespace OruBloggen.Models
                 string totalString = days + hours + minutes + seconds + "";
                 int total = int.Parse(totalString);
                 Debug.WriteLine("MellanSkillnad: " + total);
+
                 if (-30 < total && total < 30)
                 {
                     var mailLista = new List<string>();
@@ -53,8 +54,10 @@ namespace OruBloggen.Models
 
                         if (usermeeting.UserModel.UserPmNotification)
                         {
-                          var notification = new NotificationController();
-                          notification.SendReminderPM(usermeeting.UserID, usermeeting.MeetingModel.MeetingTitle, usermeeting.MeetingModel.MeetingDesc, usermeeting.MeetingModel.MeetingStartDate, usermeeting.MeetingModel.MeetingEndDate);
+                            var message = "Du har blivit inbjuden till ett möte. " + "Innehåll: " + usermeeting.MeetingModel.MeetingDesc + ". Startdatum: " + usermeeting.MeetingModel.MeetingStartDate.ToShortDateString() + ": " + usermeeting.MeetingModel.MeetingStartDate.ToShortTimeString() +
+                                          ". Slutdatum: " + usermeeting.MeetingModel.MeetingEndDate.ToShortDateString() + ": " + usermeeting.MeetingModel.MeetingEndDate.ToShortTimeString() + ".";
+                            var notification = new NotificationController();
+                          notification.SendReminderPM(usermeeting.UserID, usermeeting.MeetingModel.MeetingTitle, usermeeting.MeetingModel.MeetingDesc, message, usermeeting.MeetingModel.MeetingStartDate, usermeeting.MeetingModel.MeetingEndDate);
                            
                         }
                     }
