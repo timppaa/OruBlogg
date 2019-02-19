@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace OruBloggen.Models
 {
     public class AdminViewModel
     {
         public List<PostViewModel> PostList { get; set; }
+        public List<SelectListItem> Teams { get; set; }
 
         public PostReportModel postReportModel { get; set; }
 
@@ -27,6 +29,7 @@ namespace OruBloggen.Models
         public int TeamID { get; set; }
         public string Team { get; set; }
         public string Position { get; set; }
+        public string Email { get; set; }
     }
 
     public class NewsViewModel

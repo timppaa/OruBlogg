@@ -143,6 +143,7 @@ namespace OruBloggen.Controllers
             var fileList = ctx.ProjectFiles.Where(f => f.ProjectID == project.ProjectID).ToList();
             var creatorName = ctx.Users.FirstOrDefault(u => u.UserID == project.ProjectUserID).UserFirstname + " " + ctx.Users.FirstOrDefault(u => u.UserID == project.ProjectUserID).UserLastname;
             var team = ctx.Teams.FirstOrDefault(t => t.TeamID == project.ProjectTeamID).TeamName;
+            var comments = ctx.ProjectComments.Where(c => c.ProjectID == project.ProjectID).OrderByDescending(p => p.CommentDate).ToList();
             string status = null;
 
             if (project.ProjectStatus == "1")
@@ -168,7 +169,8 @@ namespace OruBloggen.Controllers
                 ProjectType = project.ProjectType,
                 ProjectFiles = fileList,
                 ProjectCreatorID = project.ProjectUserID,
-                TeamName = team
+                TeamName = team,
+                ProjectComments = comments
             });
         }
 
@@ -228,17 +230,54 @@ namespace OruBloggen.Controllers
             var ctx = new OruBloggenDbContext();
             var project = ctx.Projects.FirstOrDefault(p => p.ProjectID == projectID);
             var fileList = ctx.ProjectFiles.Where(f => f.ProjectID == projectID);
+            var comments = ctx.ProjectComments.Where(c => c.ProjectID == project.ProjectID).ToList();
 
-            foreach(var file in fileList)
+            foreach(var comment in comments)
+            {
+                ctx.ProjectComments.Remove(comment);
+            }
+            ctx.SaveChanges();
+
+            foreach (var file in fileList)
             {
                 ctx.ProjectFiles.Remove(file);
             }
-
             ctx.SaveChanges();
             ctx.Projects.Remove(project);
+
             ctx.SaveChanges();
 
             return RedirectToAction("Project");
+        }
+
+        [HttpPost]
+        public string CommentProject(int projectID, string comment)
+        {
+            var ctx = new OruBloggenDbContext();
+            var userID = User.Identity.GetUserId();
+            var userName = ctx.Users.FirstOrDefault(u => u.UserID == userID).UserFirstname + " " + ctx.Users.FirstOrDefault(u => u.UserID == userID).UserLastname;
+
+            var commentObject = new ProjectCommentModel
+            {
+                Comment = comment,
+                CommentDate = DateTime.Now,
+                ProjectID = projectID,
+                UserCommentID = userID,
+                UserCommentName = userName
+            };
+
+            ctx.ProjectComments.Add(commentObject);
+            ctx.SaveChanges();
+
+            return userName;
+        }
+
+        public void RemoveComment(int commentID)
+        {
+            var ctx = new OruBloggenDbContext();
+            var comment = ctx.ProjectComments.FirstOrDefault(c => c.CommentID == commentID);
+            ctx.ProjectComments.Remove(comment);
+            ctx.SaveChanges();
         }
 
     }

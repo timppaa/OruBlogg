@@ -180,30 +180,41 @@ namespace OruBloggen.Controllers
             var currentUser = User.Identity.GetUserId();
             adminView.MyAccount = ctx.Users.FirstOrDefault(u => u.UserID == currentUser);
 
+            var autoCtx = new ApplicationDbContext();
+            var usersInfoList = autoCtx.Users;
+
             foreach(var user in ctx.Users)
             {
-                adminViewList.Add( new UserAdminViewModel
+                if (User.Identity.GetUserId() != user.UserID)
                 {
-                    UserID = user.UserID,
-                    Firstname = user.UserFirstname,
-                    Lastname = user.UserLastname,
-                    Socialnumber = user.UserBirthDate,
-                    Phonenumber = user.UserPhoneNumber,
-                    Position = user.UserPosition,
-                    isAdmin = user.UserIsAdmin,
-                    TeamID = user.UserTeamID,
-                    Team = teams.FirstOrDefault(t => t.TeamID == user.UserTeamID).TeamName,
-                    ImagePath = user.UserImagePath
-                });
+
+                    var email = usersInfoList.FirstOrDefault(u => u.Id == user.UserID).Email;
+
+
+                    adminViewList.Add(new UserAdminViewModel
+                    {
+                        UserID = user.UserID,
+                        Firstname = user.UserFirstname,
+                        Lastname = user.UserLastname,
+                        Socialnumber = user.UserBirthDate,
+                        Phonenumber = user.UserPhoneNumber,
+                        Position = user.UserPosition,
+                        isAdmin = user.UserIsAdmin,
+                        TeamID = user.UserTeamID,
+                        Team = teams.FirstOrDefault(t => t.TeamID == user.UserTeamID).TeamName,
+                        ImagePath = user.UserImagePath,
+                        Email = email
+                    });
+                }
             }
 
             adminView.Userlist = adminViewList;
-            ListTeams();
+            adminView.Teams = ListTeams();
 
             return View(adminView);
         }
 
-        public void ListTeams()
+        public List<SelectListItem> ListTeams()
         {
             var ctx = new OruBloggenDbContext();
             List<SelectListItem> List = new List<SelectListItem>();
@@ -211,7 +222,8 @@ namespace OruBloggen.Controllers
             {
                 List.Add(new SelectListItem() { Text = item.TeamName, Value = item.TeamID.ToString() });
             }
-            ViewData["Teams"] = List;
+
+            return List;
 
         }
 
@@ -244,6 +256,12 @@ namespace OruBloggen.Controllers
             account.UserTeamID = item.TeamID;
             ctx.SaveChanges();
 
+            var autoCtx = new ApplicationDbContext();
+            var loginInfo = autoCtx.Users.FirstOrDefault(l => l.Id == item.UserID);
+            loginInfo.Email = item.Email;
+            loginInfo.UserName = item.Email;
+            autoCtx.SaveChanges();
+
             return RedirectToAction("AllUsers");
         }
 
@@ -260,6 +278,7 @@ namespace OruBloggen.Controllers
             foreach(var p in projects)
             {
                 RemoveProjectFiles(p.ProjectID);
+                RemoveComments(p.ProjectID);
                 ctx.Projects.Remove(p);
                 ctx.SaveChanges();
             }
@@ -321,6 +340,17 @@ namespace OruBloggen.Controllers
             foreach (var file in fileList)
             {
                 ctx.ProjectFiles.Remove(file);
+                ctx.SaveChanges();
+            }
+        }
+
+        private void RemoveComments(int projectID)
+        {
+            var comments = ctx.ProjectComments.Where(c => c.ProjectID == projectID);
+
+            foreach (var comment in comments)
+            {
+                ctx.ProjectComments.Remove(comment);
                 ctx.SaveChanges();
             }
         }
