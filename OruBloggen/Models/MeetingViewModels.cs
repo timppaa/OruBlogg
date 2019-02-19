@@ -25,6 +25,7 @@ namespace OruBloggen.Models
         public DateTime MeetingStartDate { get; set; }
         public DateTime MeetingEndDate { get; set; }
         public bool MeetingActive { get; set; }
+        public string TeamName { get; set; }
     }
 
     public class UserMeetingViewModel

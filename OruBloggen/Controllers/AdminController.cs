@@ -9,7 +9,7 @@ using Microsoft.AspNet.Identity;
 
 namespace OruBloggen.Controllers
 {
-    [Authorize]
+    [Authorize, AuthorizeUser]
     public class AdminController : Controller
     {
         public OruBloggenDbContext ctx = new OruBloggenDbContext();
@@ -378,7 +378,7 @@ namespace OruBloggen.Controllers
 
 
 
-
+        //Accept user
         public ActionResult ActivateUser ()
         {
             var UserList = ctx.Users.Where(u => !u.UserActive);

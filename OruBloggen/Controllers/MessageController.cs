@@ -11,16 +11,18 @@ using System.Web.Mvc;
 
 namespace OruBloggen.Controllers
 {
+    [Authorize]
     public class MessageController : Controller
     {
         // GET: Message
+        [AuthorizeUser]
         public ActionResult Index()
         {
             ListUsers();
             return View();       
         }
 
-
+        [AuthorizeUser]
         public ActionResult SendMessage(MessageViewModel model, string Users)
         {
             //ListUsers();
@@ -43,6 +45,7 @@ namespace OruBloggen.Controllers
             return RedirectToAction("index");
         }
 
+        [AuthorizeUser]
         public void SendPmNotification(string userId, string receiverId, string title, string desc)
         {
             //ListUsers();
@@ -61,6 +64,7 @@ namespace OruBloggen.Controllers
 
         }
 
+        [AuthorizeUser]
         public ActionResult ReturnResponsePage(string userId)
         {
             var ctx = new OruBloggenDbContext();
@@ -84,6 +88,7 @@ namespace OruBloggen.Controllers
             return View("RespondToMessage", model);
         }
 
+        [AuthorizeUser]
         public ActionResult RespondToMessage(string MessageTitle, string MessageText, string Users)
         {
             
@@ -106,6 +111,7 @@ namespace OruBloggen.Controllers
             return RedirectToAction("ShowMessages");
         }
 
+        [AuthorizeUser]
         public void ListUsers()
         {
             var ctx = new OruBloggenDbContext();
@@ -117,6 +123,7 @@ namespace OruBloggen.Controllers
             ViewData["Users"] = List;
         }
 
+        [AuthorizeUser]
         public ActionResult ShowMessages()
         {
             var ctx = new OruBloggenDbContext();

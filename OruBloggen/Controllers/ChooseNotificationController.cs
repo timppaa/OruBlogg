@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 
 namespace OruBloggen.Controllers
 {
+    [Authorize, AuthorizeUser]
     public class ChooseNotificationController : Controller
     {
         // GET: ChooseNotification
@@ -40,5 +41,7 @@ namespace OruBloggen.Controllers
 
             return RedirectToAction("ProfileRedirect", "ProfilePage");
         }
+
+
     }
 }
