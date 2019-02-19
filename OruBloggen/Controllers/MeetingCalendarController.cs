@@ -11,6 +11,7 @@ using System.Web.Mvc;
 
 namespace OruBloggen.Controllers
 {
+    [Authorize]
     public class MeetingCalendarController : Controller
     {
         // GET: Calendar

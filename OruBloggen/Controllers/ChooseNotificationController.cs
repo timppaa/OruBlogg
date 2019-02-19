@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 
 namespace OruBloggen.Controllers
 {
+    [Authorize]
     public class ChooseNotificationController : Controller
     {
         // GET: ChooseNotification

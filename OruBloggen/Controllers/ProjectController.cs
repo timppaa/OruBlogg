@@ -9,6 +9,7 @@ using System.Web.Mvc;
 
 namespace OruBloggen.Controllers
 {
+    [Authorize]
     public class ProjectController : Controller
     {
 

@@ -7,6 +7,7 @@ using System.Web.Mvc;
 
 namespace OruBloggen.Controllers
 {
+    [Authorize]
     public class ReportPostController : Controller
     {
        [HttpPost]

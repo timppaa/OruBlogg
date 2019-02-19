@@ -9,6 +9,7 @@ using System.Web.Mvc;
 
 namespace OruBloggen.Controllers
 {
+    [Authorize]
     public class MeetingController : Controller
     {
         // GET: Meeting
