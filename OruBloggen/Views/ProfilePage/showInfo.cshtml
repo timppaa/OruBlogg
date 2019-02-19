@@ -301,24 +301,36 @@
 
     @section scripts{
         <script>
-            $("#submitBtn").click(function () {
-                alert("Dina notifikationsval har ändrats.")
-            });
+            $(function () {
+                $(document) 
 
-            $("#PmNotification").click(function () {
-                var PmActive = $("#PmNotification").is(":checked");
-                document.location.href = '/ChooseNotification/ChosenNotifications?isActive=' + PmActive + '&value=' + "pm";
-            });
+                    .on("click", "#PmNotification", function () {
+                    var PmActive = $("#PmNotification").is(":checked");
+                        $.ajax({
+                            type: "POST",
+                            url: '/ChooseNotification/ChosenNotifications',
+                            data: { 'isActive': PmActive, 'value': "pm" },
+                        });
+                    })
 
-            $("#SmsNotification").click(function () {
-                var SmsActive = $("#SmsNotification").is(":checked");
-                document.location.href = '/ChooseNotification/ChosenNotifications?isActive=' + SmsActive + '&value=' + "sms";
+                    .on("click", "#EmailNotification", function () {
+                        var PmActive = $("#EmailNotification").is(":checked");
+                        $.ajax({
+                            type: "POST",
+                            url: '/ChooseNotification/ChosenNotifications',
+                            data: { 'isActive': PmActive, 'value': "email" },
+                        });
+                    })
+                
+                    .on("click", "#SmsNotification", function () {
+                    var PmActive = $("#SmsNotification").is(":checked");
+                    $.ajax({
+                        type: "POST",
+                        url: '/ChooseNotification/ChosenNotifications',
+                        data: { 'isActive': PmActive, 'value': "sms" },
+                    });
+                    });
             });
-
-            $("#EmailNotification").click(function () {
-                var EmailActive = $("#EmailNotification").is(":checked");
-                document.location.href = '/ChooseNotification/ChosenNotifications?isActive=' + EmailActive + '&value=' + "email";
-            });
-
+        
         </script>
     }
