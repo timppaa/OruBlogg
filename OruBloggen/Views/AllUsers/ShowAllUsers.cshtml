@@ -29,28 +29,7 @@
             }
         </tbody>
     </table>
-    
 
-        @*<table class="table textSize" id="users">
-
-                <tbody class="hover">
-
-
-                    @foreach (var item in Model.AllUsers)
-                    {
-
-                        <tr id="trhover" onclick="location.href = '@(Url.Action("ShowOtherUser" , "ProfilePage", new { id = item.UserID}))'">
-                            <td>
-                                <img src="/Images/@item.UserImagePath" class="images" />
-
-                            </td>
-                            <td>
-                                @item.UserFirstname @item.UserLastname
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>*@
     }
 @section Scripts {
         <script>

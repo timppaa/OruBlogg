@@ -34,32 +34,32 @@ namespace OruBloggen.Controllers
         [AuthorizeUser]
         public ActionResult SendMessage(MessageViewModel model, string Users)
         {
-            //ListUsers();
-            var ctx = new OruBloggenDbContext();
-            var userId = User.Identity.GetUserId();
-            var sender = ctx.Users.Find(userId);
-            var name = sender.UserFirstname + " " + sender.UserLastname;
-            var message = name + " har skickat ett meddelande: " + model.MessageText;
+            
+                var ctx = new OruBloggenDbContext();
+                var userId = User.Identity.GetUserId();
+                var sender = ctx.Users.Find(userId);
+                var name = sender.UserFirstname + " " + sender.UserLastname;
+                var message = name + " har skickat ett meddelande: " + model.MessageText;
 
-            ctx.Messages.Add(new MessageModel
-            {
-                MessageReceiverID = Users,
-                MessageSenderID = userId,
-                MessageTitle = model.MessageTitle,
-                MessageText = message,
-            });
+                ctx.Messages.Add(new MessageModel
+                {
+                    MessageReceiverID = Users,
+                    MessageSenderID = userId,
+                    MessageTitle = model.MessageTitle,
+                    MessageText = message,
+                });
 
-            ctx.SaveChanges();
-
+                ctx.SaveChanges();
+  
+            
             return RedirectToAction("index");
         }
 
         [AuthorizeUser]
         public void SendPmNotification(string userId, string receiverId, string title, string desc)
         {
-            //ListUsers();
+
             var ctx = new OruBloggenDbContext();
-            //var userId = User.Identity.GetUserId();
 
             ctx.Messages.Add(new MessageModel
             {
@@ -161,20 +161,10 @@ namespace OruBloggen.Controllers
             }
             ctx.SaveChanges();
         
-            //var senders = new List<UserModel>();
-
-            //foreach (var item in messages)
-            //{
-            //    senders.AddRange(ctx.Users
-            //        .Distinct()
-            //        .Where(s => s.UserID == item.MessageSenderID));
-
-            //}
 
             var model = new MessageViewModel()
             {
                 ListOfMessages = messages,
-                //    ListOfSenders = senders.Distinct().ToList(),
             };
 
             return View(model);
