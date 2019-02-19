@@ -67,7 +67,7 @@ namespace OruBloggen.Models
     {
         [Required]
         [EmailAddress]
-        [Display(Name = "Email")]
+        [Display(Name = "Epost")]
         public string Email { get; set; }
 
         [Required]
@@ -108,7 +108,7 @@ namespace OruBloggen.Models
 
         [DataType(DataType.Password)]
         [Display(Name = "Bekräfta lösenord")]
-        [Compare("Password", ErrorMessage = "Lösenordet matchar inte.")]
+        [Compare("Password", ErrorMessage = "Lösenorden stämmer inte överens.\nFörsök igen.")]
         public string ConfirmPassword { get; set; }
     }
 
@@ -127,7 +127,7 @@ namespace OruBloggen.Models
 
         [DataType(DataType.Password)]
         [Display(Name = "Bekräfta lösenord")]
-        [Compare("Password", ErrorMessage = "Lösenordet matchar inte.")]
+        [Compare("Password", ErrorMessage = "Lösenorden stämmer inte överens.\nFörsök igen.")]
         public string ConfirmPassword { get; set; }
 
         public string Code { get; set; }
