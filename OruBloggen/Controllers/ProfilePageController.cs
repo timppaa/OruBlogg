@@ -158,16 +158,21 @@ namespace OruBloggen.Controllers
         public ActionResult CancelMeeting(int meetingId, string title, DateTime startDate)
         {
             var ctx = new OruBloggenDbContext();
+            var appCtx = new ApplicationDbContext();
+            var userMeetings = ctx.UserMeetings.Where(m => m.MeetingID == meetingId);
+            var applicationUsers = appCtx.Users.ToList();
+            var emails = new List<string>();
+            var phoneNumbers = new List<string>();
+            var notification = new NotificationController();
+            string ebody = "";
+
+            var userList = ctx.Users.ToList() as IEnumerable<UserModel>;
             //var meetingActive = ctx.Meetings.FirstOrDefault(m => m.MeetingID == meetingId).MeetingActive;
 
             if (ctx.Meetings.FirstOrDefault(m => m.MeetingID == meetingId).MeetingActive)
             {
                 ctx.Meetings.FirstOrDefault(m => m.MeetingID == meetingId).MeetingActive = false;
 
-                var appCtx = new ApplicationDbContext();
-
-                var userMeetings = ctx.UserMeetings.Where(m => m.MeetingID == meetingId);
-                var emails = new List<string>();
                 foreach (var user in userMeetings)
                 {
 
