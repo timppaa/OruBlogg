@@ -192,7 +192,8 @@ namespace OruBloggen.Controllers
                                "Beskrivning: " + user.MeetingModel.MeetingDesc;
                     ebody = body;
 
-                    foreach(var userModel in userList) { 
+                    foreach(var userModel in userList)
+                    { 
 
                         if (userModel.UserEmailNotification == true)
                         {
