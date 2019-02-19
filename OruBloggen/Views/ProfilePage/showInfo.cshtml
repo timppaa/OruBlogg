@@ -264,7 +264,6 @@
                 </div>
                 <div class="modal-body row">
 
-
                     @foreach (var item in Model.ListCategories)
                     {
                         if (item.CategoryName != "Okategoriserade")
@@ -275,18 +274,19 @@
                             <strong>@item.CategoryName</strong>
                             @if (!Model.IsFollowed.Any(i => i.FollowCategoryID == item.CategoryID))
                             {
-                                <input type="button" class="btn btn-success" value="Följ" onclick="location.href = '@Url.Action("FollowCategory", "Following", new { categoryID = item.CategoryID })'" />
+                                <input type="button" class="btn btn-success" id="@item.CategoryID" value="Följ" onclick="location.href = '@Url.Action("FollowCategory", "Following", new { categoryID = item.CategoryID })'" />
                             }
                             else
                             {
-                                <input type="button" class="btn btn-danger" value="Avfölj" onclick="location.href = '@Url.Action("UnfollowCategory", "Following", new { categoryID = item.CategoryID })'" />
+                                <input type="button" class="btn btn-danger" id="@item.CategoryID" value="Avfölj" onclick="location.href = '@Url.Action("UnfollowCategory", "Following", new { categoryID = item.CategoryID })'"/>
+                                
                             }
+
 
                         </div>
                         }
                     }
                     
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Stäng</button>
@@ -299,26 +299,36 @@
 
 
 
-    @section scripts{
-        <script>
-            $("#submitBtn").click(function () {
-                alert("Dina notifikationsval har ändrats.")
-            });
 
-            $("#PmNotification").click(function () {
-                var PmActive = $("#PmNotification").is(":checked");
-                document.location.href = '/ChooseNotification/ChosenNotifications?isActive=' + PmActive + '&value=' + "pm";
-            });
+@section scripts{
+    <script>
 
-            $("#SmsNotification").click(function () {
-                var SmsActive = $("#SmsNotification").is(":checked");
-                document.location.href = '/ChooseNotification/ChosenNotifications?isActive=' + SmsActive + '&value=' + "sms";
-            });
+       
 
-            $("#EmailNotification").click(function () {
-                var EmailActive = $("#EmailNotification").is(":checked");
-                document.location.href = '/ChooseNotification/ChosenNotifications?isActive=' + EmailActive + '&value=' + "email";
-            });
 
-        </script>
-    }
+        $("#submitBtn").click(function () {
+            alert("Dina notifikationsval har ändrats.")
+        });
+
+        $("#PmNotification").click(function () {
+            var PmActive = $("#PmNotification").is(":checked");
+            document.location.href = '/ChooseNotification/ChosenNotifications?isActive=' + PmActive + '&value=' + "pm";
+        });
+
+        $("#SmsNotification").click(function () {
+            var SmsActive = $("#SmsNotification").is(":checked");
+            document.location.href = '/ChooseNotification/ChosenNotifications?isActive=' + SmsActive + '&value=' + "sms";
+        });
+
+        $("#EmailNotification").click(function () {
+            var EmailActive = $("#EmailNotification").is(":checked");
+            document.location.href = '/ChooseNotification/ChosenNotifications?isActive=' + EmailActive + '&value=' + "email";
+        });
+
+
+
+
+
+
+    </script>
+}
