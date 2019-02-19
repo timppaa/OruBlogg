@@ -43,6 +43,8 @@ namespace OruBloggen.Models
         public virtual List<MeetingModel> MeetingModel { get; set; }
         [InverseProperty("UserModel")]
         public virtual List<PostModel> PostModel { get; set; }
+        [InverseProperty("UserModel")]
+        public virtual List<ProjectCommentModel> ProjectComments { get; set; }
 
         public UserModel()
         {

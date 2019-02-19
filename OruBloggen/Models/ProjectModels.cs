@@ -26,7 +26,31 @@ namespace OruBloggen.Models
 
         [InverseProperty("ProjectModel")]
         public virtual List<ProjectFilesModel> ProjectFiles { get; set; }
+
+        [InverseProperty("ProjectModel")]
+        public virtual List<ProjectCommentModel> ProjectComments { get; set; }
+
     }
+
+    public class ProjectCommentModel
+    {
+        [Key]
+        public int CommentID { get; set; }
+        public string Comment { get; set; }
+
+        [ForeignKey("ProjectID")]
+        public virtual ProjectModel ProjectModel { get; set; }
+        public int ProjectID { get; set; }
+
+        [ForeignKey("UserCommentID")]
+        public virtual UserModel UserModel { get; set; }
+        public string UserCommentID { get; set; }
+
+        public string UserCommentName { get; set; }
+        public DateTime CommentDate { get; set; }
+    }
+
+
 
     public class ProjectViewModel
     {
@@ -46,5 +70,6 @@ namespace OruBloggen.Models
         public string ProjectCreatorName { get; set; }
         public string ProjectCreatorID { get; set; }
         public List<ProjectFilesModel> ProjectFiles { get; set; }
+        public List<ProjectCommentModel> ProjectComments { get; set; }
     }
 }

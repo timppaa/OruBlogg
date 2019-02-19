@@ -69,6 +69,7 @@
                                 </div>
                                 <div class="form-group">
                                     @Html.EditorFor(m => item.Phonenumber)
+                                    @Html.EditorFor(m => item.Email)
                                 </div>
                                 <div class="form-group">
                                     @Html.EditorFor(m => item.Position)
@@ -78,7 +79,19 @@
                                     @Html.CheckBoxFor(m => item.isAdmin, "true")
                                 </div>
                                 <div class="form-group">
-                                    @Html.DropDownListFor(m => item.TeamID, ViewData["Teams"] as List<SelectListItem> , new { @class = "form-control"})
+                                    <select name="item.TeamID" id="item.TeamID" class="form-control">
+                                        @foreach (var option in Model.Teams)
+                                        {
+                                            if (option.Value == item.TeamID.ToString())
+                                            {
+                                                <option selected="selected" value="@option.Value">@option.Text</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@option.Value">@option.Text</option>
+                                            }
+                                        }
+                                    </select>
                                 </div>
 
                                 <div class="modal-footer">
