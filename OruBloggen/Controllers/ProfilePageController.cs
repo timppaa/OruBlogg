@@ -89,7 +89,6 @@ namespace OruBloggen.Controllers
             var teamId = Users.UserTeamID;
             var team = ctx.Teams.FirstOrDefault(t => t.TeamID == teamId).TeamName;
             var path = "/Images/" + Users.UserImagePath;
-<<<<<<<<< Temporary merge branch 1
             var userID = User.Identity.GetUserId();
             var notmodel = ctx.Notifications.Where(t => t.UserID == userID).ToList();
             var PersonIsFollowed = "";

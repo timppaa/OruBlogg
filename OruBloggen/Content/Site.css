@@ -192,4 +192,24 @@ body > div.container.body-content > form > div > div:nth-child(8) {
     border: solid 1px;
     border-radius: 5px;
 }
+.team{
+width: 57px;
+float: left;
+margin: 10px!important;
+text-align:center;
+margin-top:20px!important;
+}   
+.team:last-child{
+    width:86px;
+    opacity: 0.7;
+}
+.team:first-child {
+    margin-left: 0px !important;
+}
+
+@media (max-width: 1050px) {
+    #logoutForm > ul > li > a {
+        font-size: 10px;
+    }
+}
 
