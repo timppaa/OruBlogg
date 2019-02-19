@@ -10,7 +10,7 @@ using OruBloggen.Models;
 
 namespace OruBloggen.Controllers
 {
-    [Authorize]
+    [Authorize, AuthorizeUser]
     public class ManageController : Controller
     {
         private ApplicationSignInManager _signInManager;

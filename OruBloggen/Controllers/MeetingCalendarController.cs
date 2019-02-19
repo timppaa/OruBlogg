@@ -11,6 +11,7 @@ using System.Web.Mvc;
 
 namespace OruBloggen.Controllers
 {
+    [AuthorizeUser, Authorize]
     public class MeetingCalendarController : Controller
     {
         // GET: Calendar
@@ -35,29 +36,29 @@ namespace OruBloggen.Controllers
 
         public JsonResult GetEvents()
         {
-            using (var ctx = new OruBloggenDbContext())
-            {
+            var ctx = new OruBloggenDbContext();
+            
                 List<CalenderViewModel> meetings = new List<CalenderViewModel>();
 
-                var events = ctx.Meetings.ToList();
-                foreach (var item in events)
+                foreach (var item in ctx.Meetings.ToList())
                 {
-                    foreach (var user in ctx.Users.Where(u => u.UserID == item.MeetingUserID))
-                    {
-                        meetings.Add(new CalenderViewModel
-                        {
-                            MeetingTitle = item.MeetingTitle,
-                            MeetingDesc = item.MeetingDesc,
-                            MeetingEndDate = item.MeetingEndDate,
-                            MeetingStartDate = item.MeetingStartDate,
-                            MeetingID = item.MeetingID,
-                            MeetingCreator = user.UserFirstname + " " + user.UserLastname,
-                            MeetingActive = item.MeetingActive
-                        });
-                    }
+                var creator = ctx.Users.FirstOrDefault(u => u.UserID.Equals(item.MeetingUserID));
+                var teamName = ctx.Teams.FirstOrDefault(t => t.TeamID == item.UserModel.UserTeamID).TeamName;
+
+                meetings.Add(new CalenderViewModel
+                {
+                    MeetingTitle = item.MeetingTitle,
+                    MeetingDesc = item.MeetingDesc,
+                    MeetingEndDate = item.MeetingEndDate,
+                    MeetingStartDate = item.MeetingStartDate,
+                    MeetingID = item.MeetingID,
+                    MeetingCreator = creator.UserFirstname + " " + creator.UserLastname,
+                    MeetingActive = item.MeetingActive,
+                    TeamName = teamName
+                    });
                 }
                 return new JsonResult { Data = meetings, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-            }
+            
         }
 
         public JsonResult ListMembers(int meetingID)

@@ -8,6 +8,7 @@ using System.Web.Mvc;
 
 namespace OruBloggen.Controllers
 {
+    [Authorize, AuthorizeUser]
     public class ProfilePageController : Controller
     {
         // GET: ProfilePage
@@ -18,7 +19,7 @@ namespace OruBloggen.Controllers
 
         public ActionResult ProfileRedirect()
         {
-            return RedirectToAction("ShowOtherUser", new { id = User.Identity.GetUserId() });
+            return RedirectToAction("ShowInfo");
         }
 
         public ActionResult ShowInfo()
@@ -34,24 +35,43 @@ namespace OruBloggen.Controllers
             var team = ctx.Teams.FirstOrDefault(t => t.TeamID == teamId).TeamName;
             var path = "/Images/" + Users.UserImagePath;
 
-            var MeetingModels = ctx.Meetings.ToList();
-            var UserMeetings = ctx.UserMeetings.Where(u => u.UserID.Equals(userId)).ToList();
+           var creator = ctx.Meetings.Where(m => m.MeetingUserID.Equals(userId)).ToList();
+           var invited = ctx.UserMeetings.Where(u => u.UserID.Equals(userId)).Where(u => u.AcceptedInvite == false).ToList();
+           var accepted = ctx.UserMeetings.Where(u => u.UserID.Equals(userId)).Where(u => u.AcceptedInvite == true).ToList();
+            
+            foreach(var accept in accepted)
+            {
+                var meeting = ctx.Meetings.FirstOrDefault(m => m.MeetingID == accept.MeetingID);
+                creator.Add(meeting);
+            }
+
+           creator = creator.OrderBy(u => u.MeetingStartDate).ToList();
+           creator = creator.Where(u => u.MeetingStartDate >= DateTime.Now).ToList();
+           invited = invited.Where(u => u.MeetingModel.MeetingUserID != u.UserID).ToList();
+
+
+            var notmodel = ctx.Notifications.Where(t => t.UserID == userId).ToList();
+
+            var ListOfCategories = ctx.Categories.ToList();
 
             var model = new ProfilePageViewModel
             {
-                      userId = userId,
-            /*model.*/ImagePath = path,
-            /*model.*/Firstname = Users.UserFirstname,
-            /*model.*/Lastname = Users.UserLastname,
-            /*model.*/Email = identityUser.Email,
-            /*model*/ PhoneNumber = Users.UserPhoneNumber,
-            /*model.*/Team = team,
-            /*model.*/Position = Users.UserPosition,
-                      MeetingModels = MeetingModels,
-                      UserMeetings = UserMeetings,
-                      UserEmailNotification = Users.UserEmailNotification,
-                      UserPmNotification = Users.UserPmNotification,
-                      UserSmsNotification = Users.UserSmsNotification
+                userId = userId,
+                OtherUserID = userId,
+                ImagePath = path,
+                Firstname = Users.UserFirstname,
+                Lastname = Users.UserLastname,
+                Email = identityUser.Email,
+                PhoneNumber = Users.UserPhoneNumber,
+                Team = team,
+                Position = Users.UserPosition,
+                MeetingModels = creator,
+                UserMeetings = invited,
+                UserEmailNotification = Users.UserEmailNotification,
+                UserPmNotification = Users.UserPmNotification,
+                UserSmsNotification = Users.UserSmsNotification,
+                ListCategories = ListOfCategories,
+                IsFollowed = notmodel,
             };
 
             return View(model);
@@ -71,16 +91,30 @@ namespace OruBloggen.Controllers
             var path = "/Images/" + Users.UserImagePath;
             var userID = User.Identity.GetUserId();
             var notmodel = ctx.Notifications.Where(t => t.UserID == userID).ToList();
-            var isFollowed = "";
+            var PersonIsFollowed = "";
             foreach(var item in notmodel)
             {
                 if(item.FollowUserID == id)
                 {
-                    isFollowed = item.FollowUserID;
+                    PersonIsFollowed = item.FollowUserID;
                 }
             }
+
             var MeetingModels = ctx.Meetings.ToList();
             var UserMeetings = ctx.UserMeetings.Where(u => u.UserID.Equals(id)).ToList();
+
+            var creator = ctx.Meetings.Where(m => m.MeetingUserID.Equals(id)).ToList();
+            var invited = ctx.UserMeetings.Where(u => u.UserID.Equals(id)).Where(u => u.AcceptedInvite == false).ToList();
+            var accepted = ctx.UserMeetings.Where(u => u.UserID.Equals(id)).Where(u => u.AcceptedInvite == true).ToList();
+
+            foreach (var accept in accepted)
+            {
+                var meeting = ctx.Meetings.FirstOrDefault(m => m.MeetingID == accept.MeetingID);
+                creator.Add(meeting);
+            }
+
+            creator = creator.OrderBy(u => u.MeetingStartDate).ToList();
+            creator = creator.Where(u => u.MeetingStartDate >= DateTime.Now).ToList();
 
             var model = new ProfilePageViewModel
             {
@@ -91,19 +125,59 @@ namespace OruBloggen.Controllers
                 Email = identityUser.Email,
                 PhoneNumber = Users.UserPhoneNumber,
                 Team = team,
-                /*model.*/
                 OtherUserID = id,
-                MeetingModels = MeetingModels,
-                UserMeetings = UserMeetings,
                 FollowedID = id,
-                UserIsFollowed = isFollowed,
+                //UserIsFollowed = isFollowed,
+                MeetingModels = creator,
+                UserMeetings = invited,
+                UserIsFollowed = PersonIsFollowed,
                 Position = Users.UserPosition,
                 UserEmailNotification = Users.UserEmailNotification,
                 UserPmNotification = Users.UserPmNotification,
-                UserSmsNotification = Users.UserSmsNotification
+                UserSmsNotification = Users.UserSmsNotification,
             };
 
             return View("ShowInfo", model);
+        }
+
+        public ActionResult AcceptMeeting(int meetingId)
+        {
+            var ctx = new OruBloggenDbContext();
+
+            var userId = User.Identity.GetUserId();
+            
+            ctx.UserMeetings.FirstOrDefault(m => m.MeetingID == meetingId && m.UserID.Equals(userId)).AcceptedInvite = true;
+            ctx.SaveChanges();
+
+
+            return RedirectToAction("ShowInfo");
+
+        }
+
+  
+        public ActionResult CancelMeeting(int meetingId, string title, DateTime startDate)
+        {
+            var ctx = new OruBloggenDbContext();
+            //var meetingActive = ctx.Meetings.FirstOrDefault(m => m.MeetingID == meetingId).MeetingActive;
+
+            if (ctx.Meetings.FirstOrDefault(m => m.MeetingID == meetingId).MeetingActive)
+            {
+                ctx.Meetings.FirstOrDefault(m => m.MeetingID == meetingId).MeetingActive = false;
+
+                var appCtx = new ApplicationDbContext();
+
+                var userMeetings = ctx.UserMeetings.Where(m => m.MeetingID == meetingId);
+                var emails = new List<string>();
+                foreach (var user in userMeetings)
+                {
+                    emails.Add(appCtx.Users.FirstOrDefault(u => u.Id.Equals(user.UserID)).Email);
+                }
+                ctx.SaveChanges();
+
+                var notificationController = new NotificationController();
+                notificationController.SendEmail(emails, "Mötet är inställt", title + " " + startDate.ToShortDateString() + " är inställt.");
+            }
+            return RedirectToAction("ShowInfo");
         }
 
     }

@@ -17,6 +17,7 @@ using Twilio.AspNet.Mvc;
 
 namespace OruBloggen.Controllers
 {
+    [Authorize, AuthorizeUser]
     public class NotificationController : Controller
     {
         MessageController messageController = new MessageController();
@@ -112,6 +113,7 @@ namespace OruBloggen.Controllers
         {
             var ctx = new OruBloggenDbContext();
             var userFollowers = ctx.Notifications.Where(u => u.FollowUserID == userid).ToList();
+            var categoryFollowers = ctx.Notifications.Where(c => c.FollowCategoryID == categoryId).ToList();
             var user = ctx.Users.Find(userid);
             var name = user.UserFirstname + " " + user.UserLastname;
             var category = ctx.Categories.Find(categoryId).CategoryName;
@@ -125,7 +127,7 @@ namespace OruBloggen.Controllers
                 formal = "informellt";
             }
             var message = name + " har gjort ett nytt " + formal + " inlägg. " + " Innehåll: " + text + " Datum: " + date.ToShortDateString() + ". I kategorin: " + category;
-             foreach(var item in userFollowers)
+            foreach(var item in userFollowers)
             {
                 var userPmNotification = ctx.Users.Find(item.UserID);
                 if (userPmNotification.UserPmNotification)
@@ -133,14 +135,17 @@ namespace OruBloggen.Controllers
                     messageController.SendPmNotification(userid, item.UserID, title, message);
                 }
             }
+            foreach (var item in categoryFollowers)
+            {
+                var userPmNotification = ctx.Users.Find(item.UserID);
+                if (userPmNotification.UserPmNotification)
+                {
+                    messageController.SendPmNotification(userid, item.UserID, title, message);
+                }
+
+            }
         }
 
-        public void SendReminderPM(string userId, string title, string description,
-            DateTime start, DateTime end)
-        {
-            var messeage = "Hej, du har ett möte om 30 minuter, du hittar mötet i OruBloggens kalender: " + "Innehåll: " + description + ". Startdatum: " + start.ToShortDateString() + ": " + start.ToShortTimeString() +
-                           ". Slutdatum: " + end.ToShortDateString() + ": " + end.ToShortTimeString() + ".";
-            messageController.SendPmNotification(null, userId, title, messeage);
-        }
+
     }
 }

@@ -52,7 +52,8 @@
                             end: v.MeetingEndDate != null ? moment(v.MeetingEndDate) : null,
                             meetingID: v.MeetingID,
                             meetingCreator: v.MeetingCreator,
-                            meetingActive: v.MeetingActive
+                            meetingActive: v.MeetingActive,
+                            teamName: v.TeamName
                         });
                     })
                     GenerateCalender(events);
@@ -76,18 +77,46 @@
             },
 
 
-            eventRender: function (event, element) {
-            if (event.meetingActive) {
-            element.css('background-color', '#008000');
+            //eventRender: function (event, element) {
+            //if (event.meetingActive) {
+            //element.css('background-color', '#008000');
 
-            }
-            else {
-            element.css('background-color', '#808080');
-            element.css('border-color', '#808080');
-            element.css('opacity', '0.7');
+            //}
+            //else {
+            //element.css('background-color', '#808080');
+            //element.css('border-color', '#808080');
+            //element.css('opacity', '0.7');
 
-            }
-            },
+            //}
+            //},
+
+                eventRender: function (event, element) {
+                    if (event.meetingActive == false) {
+                        element.css('background-color', '#808080');
+                        element.css('border-color', '#808080');
+                        element.css('opacity', '0.7');
+
+                    }
+                    else if (event.teamName == "Informatik") {
+                        element.css('background-color', '#4169E1');
+                        element.css('border-color', '#4169E1');
+
+                    }
+                    else if (event.teamName == "Ekonomi") {
+                        element.css('background-color', '#228B22');
+                        element.css('border-color', '#228B22');
+                    }
+
+                    else if (event.teamName == "Statistik") {
+                        element.css('background-color', '#A52A2A');
+                        element.css('border-color', '#A52A2A');
+                    }
+
+                    else if (event.teamName == "Juridik") {
+                        element.css('background-color', '#BA55D3');
+                        element.css('border-color', '#BA55D3');
+                    }
+                },
 
             events: events,
             eventClick: function (calEvent, jsEvent, view) {
