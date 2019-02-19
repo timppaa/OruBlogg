@@ -145,6 +145,12 @@ namespace OruBloggen.Controllers
 
             }
         }
+        public void SendReminderPM(string userId, string title, string description, string message,
+            DateTime start, DateTime end)
+        {
+           
+            messageController.SendPmNotification(null, userId, title, message);
+        }
 
 
     }

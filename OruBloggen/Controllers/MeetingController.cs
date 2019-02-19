@@ -70,8 +70,17 @@ namespace OruBloggen.Controllers
         public ActionResult CreateMeeting(MeetingViewModel model)
         {
             var ctx = new OruBloggenDbContext();
-
             var userId = User.Identity.GetUserId();
+
+            var notification = new NotificationController();
+            var body = "Du har blivit inbjuden till " + model.Meeting.MeetingTitle + Environment.NewLine +
+                       "Startdatum: " + model.Meeting.MeetingStartDate.ToShortDateString() + " "
+                       + model.Meeting.MeetingStartDate.ToShortTimeString() + Environment.NewLine +
+
+                       "Slutdatum: " + model.Meeting.MeetingEndDate.ToShortDateString() + " "
+                       + model.Meeting.MeetingEndDate.ToShortTimeString() + Environment.NewLine +
+
+                       "Beskrivning: " + model.Meeting.MeetingDesc;
 
             var meeting = ctx.Meetings.Add(new MeetingModel
             {
@@ -96,26 +105,38 @@ namespace OruBloggen.Controllers
                             MeetingID = ctx.Meetings.OrderByDescending(m => m.MeetingID).First().MeetingID,
                             UserID = item
                         });
-                        emails.Add(appCtx.Users.FirstOrDefault(u => u.Id.Equals(item)).Email);
-                        phoneNumbers.Add(ctx.Users.FirstOrDefault(u => u.UserID.Equals(item)).UserPhoneNumber.ToString());
-                        pmReceivers.Add(ctx.Users.FirstOrDefault(u => u.UserID == item));   
+                    var user = ctx.Users.FirstOrDefault(u => u.UserID.Equals(item));
+
+
+                    if (user.UserEmailNotification == true)
+                    {
+                        emails.Add(appCtx.Users.FirstOrDefault(u => u.Id.Equals(user.UserID)).Email);
+                    }
+
+                    if (user.UserSmsNotification == true)
+                    {
+                        phoneNumbers.Add(ctx.Users.FirstOrDefault(u => u.UserID.Equals(user.UserID)).UserPhoneNumber.ToString());
+                        notification.SendSms(ctx.Users.FirstOrDefault(u => u.UserID.Equals(user.UserID)).UserPhoneNumber.ToString(), body);
+                    }
+
+                    if (user.UserPmNotification == true)
+                    {
+                        notification.SendReminderPM(user.UserID, meeting.MeetingTitle, meeting.MeetingDesc, body, meeting.MeetingStartDate, meeting.MeetingEndDate);
+                    }
+
                 }
-                }
+            }
 
             ctx.SaveChanges();
 
-            var notificationController = new NotificationController();
-            var body = "Du har blivit inbjuden till " + model.Meeting.MeetingTitle + Environment.NewLine +
-                        "Startdatum: " + model.Meeting.MeetingStartDate.ToShortDateString() + " "
-                        + model.Meeting.MeetingStartDate.ToShortTimeString() + Environment.NewLine +
+           
+            notification.SendEmail(emails, "Inbjudan till möte", body);
 
-                        "Slutdatum: " + model.Meeting.MeetingEndDate.ToShortDateString() + " "
-                        + model.Meeting.MeetingEndDate.ToShortTimeString() + Environment.NewLine +
-
-                        "Beskrivning: " + model.Meeting.MeetingDesc;
-            notificationController.SendEmail(emails, "Inbjudan till möte", body);
-
-            notificationController.SendMeetingPm(userId, pmReceivers, model.Meeting.MeetingTitle, model.Meeting.MeetingDesc, model.Meeting.MeetingStartDate, model.Meeting.MeetingEndDate);
+            //foreach (var number in phoneNumbers)
+            //{
+            //    notificationController.SendSms(number, body);
+            //}
+            //notificationController.SendMeetingPm(userId, pmReceivers, model.Meeting.MeetingTitle, model.Meeting.MeetingDesc, model.Meeting.MeetingStartDate, model.Meeting.MeetingEndDate);
 
             //return RedirectToAction("MeetingDetails", new { id = meeting.MeetingID});
             return RedirectToAction("Index", "MeetingCalendar");
@@ -164,28 +185,62 @@ namespace OruBloggen.Controllers
 
             return View(meetingUserView);
         }
-
+        /// <summary>
+        /// //////////////////////////////////////////////////////////////////////////////
+        /// </summary>
+        /// <param name="meetingId"></param>
+        /// <param name="title"></param>
+        /// <param name="startDate"></param>
+        /// <returns></returns>
         public ActionResult CancelMeeting(int meetingId, string title, DateTime startDate)
         {
             var ctx = new OruBloggenDbContext();
+            var appCtx = new ApplicationDbContext();
+            var notification = new NotificationController();
+            var emails = new List<string>();
+            var phoneNumbers = new List<string>();
+
             //var meetingActive = ctx.Meetings.FirstOrDefault(m => m.MeetingID == meetingId).MeetingActive;
 
             if (ctx.Meetings.FirstOrDefault(m => m.MeetingID == meetingId).MeetingActive)
             {
                 ctx.Meetings.FirstOrDefault(m => m.MeetingID == meetingId).MeetingActive = false;
 
-                var appCtx = new ApplicationDbContext();
-
                 var userMeetings = ctx.UserMeetings.Where(m => m.MeetingID == meetingId);
-                var emails = new List<string>();
+                string ebody = "";
                 foreach (var user in userMeetings)
+                
                 {
-                    emails.Add(appCtx.Users.FirstOrDefault(u => u.Id.Equals(user.UserID)).Email);
+                    var body = "Du har blivit inbjuden till " + user.MeetingModel.MeetingTitle + Environment.NewLine +
+                               "Startdatum: " + user.MeetingModel.MeetingStartDate.ToShortDateString() + " "
+                               + user.MeetingModel.MeetingStartDate.ToShortTimeString() + Environment.NewLine +
+
+                               "Slutdatum: " + user.MeetingModel.MeetingEndDate.ToShortDateString() + " "
+                               + user.MeetingModel.MeetingEndDate.ToShortTimeString() + Environment.NewLine +
+
+                               "Beskrivning: " + user.MeetingModel.MeetingDesc;
+                    ebody = body;
+
+                    if (user.UserModel.UserEmailNotification == true)
+                    {
+                        emails.Add(appCtx.Users.FirstOrDefault(u => u.Id.Equals(user.UserID)).Email);
+                    }
+
+                    if (user.UserModel.UserSmsNotification == true)
+                    {
+                        phoneNumbers.Add(ctx.Users.FirstOrDefault(u => u.UserID.Equals(user.UserID)).UserPhoneNumber.ToString());
+                        notification.SendSms(ctx.Users.FirstOrDefault(u => u.UserID.Equals(user.UserID)).UserPhoneNumber.ToString(), body);
+                    }
+
+                    if (user.UserModel.UserPmNotification == true)
+                    {
+                        notification.SendReminderPM(user.UserID, user.MeetingModel.MeetingTitle, user.MeetingModel.MeetingDesc, body, user.MeetingModel.MeetingStartDate, user.MeetingModel.MeetingEndDate);
+                    }
                 }
                 ctx.SaveChanges();
 
                 var notificationController = new NotificationController();
-                notificationController.SendEmail(emails, "Mötet är inställt", title + " " + startDate.ToShortDateString() + " är inställt.");
+                notificationController.SendEmail(emails, "Mötet är inställt", ebody);
             }
             return RedirectToAction("ListCreatedMeetings");
         }
