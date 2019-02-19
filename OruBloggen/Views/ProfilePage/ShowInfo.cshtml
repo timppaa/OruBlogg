@@ -14,16 +14,20 @@
 
     if (Model.userId != Model.OtherUserID)
     {
+        <input type="button" class="btn btn-success" style="float: right; margin-left: 8px;" value="PM" onclick="location.href = '@Url.Action("Index", "Message", new { userID = Model.OtherUserID })'" />
+
         if (Model.UserIsFollowed == "")
         {
 
-            <input type="button" class="btn btn-success" value="Följ" onclick="location.href = '@Url.Action("FollowUser", "Following", new { followID = Model.FollowedID })'" />
+            <input type="button" class="btn btn-success" style="float: right; "value="Följ" onclick="location.href = '@Url.Action("FollowUser", "Following", new { followID = Model.FollowedID })'" />
         }
         else
         {
-            <input type="button" class="btn btn-danger" value="Avfölj" onclick="location.href = '@Url.Action("UnfollowUser", "Following", new { unfollowID = Model.FollowedID })'" />
+            <input type="button" class="btn btn-danger" style="float: right; "value="Avfölj" onclick="location.href = '@Url.Action("UnfollowUser", "Following", new { unfollowID = Model.FollowedID })'" />
         }
     }
+
+
 
     <div>
         <dl style="float:left;">
@@ -83,7 +87,7 @@
 
 @if (Model.MeetingModels != null)
 {
-    
+
     <div class="myMeetings" style="float:right; height:500px; width:80%;">
         @if (User.Identity.GetUserId() == Model.OtherUserID)
         {
@@ -227,29 +231,30 @@
                 }
 
         </table>
-    </div>
-    }
+        </div>
+    
+}
 
 
 @if (User.Identity.GetUserId() == Model.OtherUserID)
 {
     <div style="float:left;">
 
-            <h4 style="font-weight:bold;">Notifikationer</h4>
-            <p>
-                Notifikationer via PM
-                @Html.CheckBoxFor(m => Model.UserPmNotification, new { id = "PmNotification" })
-            </p>
-            <p>
-                Notifikationer via Email
-                @Html.CheckBoxFor(m => Model.UserEmailNotification, new { id = "EmailNotification" })
-            </p>
-            <p>
-                Notifikationer via SMS
-                @Html.CheckBoxFor(m => Model.UserSmsNotification, new { id = "SmsNotification" })
-            </p>
+        <h4 style="font-weight:bold;">Notifikationer</h4>
+        <p>
+            Notifikationer via PM
+            @Html.CheckBoxFor(m => Model.UserPmNotification, new { id = "PmNotification" })
+        </p>
+        <p>
+            Notifikationer via Email
+            @Html.CheckBoxFor(m => Model.UserEmailNotification, new { id = "EmailNotification" })
+        </p>
+        <p>
+            Notifikationer via SMS
+            @Html.CheckBoxFor(m => Model.UserSmsNotification, new { id = "SmsNotification" })
+        </p>
 
-        
+
     </div>
 }
 
@@ -270,22 +275,22 @@
                         if (item.CategoryName != "Okategoriserade")
                         {
 
-                        <div class="col-lg-2" style="margin-bottom:10px">
+                            <div class="col-lg-2" style="margin-bottom:10px">
 
-                            <strong>@item.CategoryName</strong>
-                            @if (!Model.IsFollowed.Any(i => i.FollowCategoryID == item.CategoryID))
-                            {
-                                <input type="button" class="btn btn-success" value="Följ" onclick="location.href = '@Url.Action("FollowCategory", "Following", new { categoryID = item.CategoryID })'" />
-                            }
-                            else
-                            {
-                                <input type="button" class="btn btn-danger" value="Avfölj" onclick="location.href = '@Url.Action("UnfollowCategory", "Following", new { categoryID = item.CategoryID })'" />
-                            }
+                                <strong>@item.CategoryName</strong>
+                                @if (!Model.IsFollowed.Any(i => i.FollowCategoryID == item.CategoryID))
+                                {
+                                    <input type="button" class="btn btn-success" value="Följ" onclick="location.href = '@Url.Action("FollowCategory", "Following", new { categoryID = item.CategoryID })'" />
+                                }
+                                else
+                                {
+                                    <input type="button" class="btn btn-danger" value="Avfölj" onclick="location.href = '@Url.Action("UnfollowCategory", "Following", new { categoryID = item.CategoryID })'" />
+                                }
 
-                        </div>
+                            </div>
                         }
                     }
-                    
+
 
                 </div>
                 <div class="modal-footer">
@@ -301,24 +306,36 @@
 
     @section scripts{
         <script>
-            $("#submitBtn").click(function () {
-                alert("Dina notifikationsval har ändrats.")
-            });
+            $(function () {
+                $(document) 
 
-            $("#PmNotification").click(function () {
-                var PmActive = $("#PmNotification").is(":checked");
-                document.location.href = '/ChooseNotification/ChosenNotifications?isActive=' + PmActive + '&value=' + "pm";
-            });
+                    .on("click", "#PmNotification", function () {
+                    var PmActive = $("#PmNotification").is(":checked");
+                        $.ajax({
+                            type: "POST",
+                            url: '/ChooseNotification/ChosenNotifications',
+                            data: { 'isActive': PmActive, 'value': "pm" },
+                        });
+                    })
 
-            $("#SmsNotification").click(function () {
-                var SmsActive = $("#SmsNotification").is(":checked");
-                document.location.href = '/ChooseNotification/ChosenNotifications?isActive=' + SmsActive + '&value=' + "sms";
+                    .on("click", "#EmailNotification", function () {
+                        var PmActive = $("#EmailNotification").is(":checked");
+                        $.ajax({
+                            type: "POST",
+                            url: '/ChooseNotification/ChosenNotifications',
+                            data: { 'isActive': PmActive, 'value': "email" },
+                        });
+                    })
+                
+                    .on("click", "#SmsNotification", function () {
+                    var PmActive = $("#SmsNotification").is(":checked");
+                    $.ajax({
+                        type: "POST",
+                        url: '/ChooseNotification/ChosenNotifications',
+                        data: { 'isActive': PmActive, 'value': "sms" },
+                    });
+                    });
             });
-
-            $("#EmailNotification").click(function () {
-                var EmailActive = $("#EmailNotification").is(":checked");
-                document.location.href = '/ChooseNotification/ChosenNotifications?isActive=' + EmailActive + '&value=' + "email";
-            });
-
+        
         </script>
     }

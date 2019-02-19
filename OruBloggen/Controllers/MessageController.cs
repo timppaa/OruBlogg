@@ -16,41 +16,50 @@ namespace OruBloggen.Controllers
     {
         // GET: Message
         [AuthorizeUser]
-        public ActionResult Index()
+        public ActionResult Index(string userID)
         {
-            ListUsers();
-            return View();       
+            if (userID == null)
+            {
+                ListUsers();
+                return View();
+            }
+            else
+            {
+                ListSpecificUser(userID);
+                return View();
+            }
         }
+
 
         [AuthorizeUser]
         public ActionResult SendMessage(MessageViewModel model, string Users)
         {
-            //ListUsers();
-            var ctx = new OruBloggenDbContext();
-            var userId = User.Identity.GetUserId();
-            var sender = ctx.Users.Find(userId);
-            var name = sender.UserFirstname + " " + sender.UserLastname;
-            var message = name + " har skickat ett meddelande: " + model.MessageText;
+            
+                var ctx = new OruBloggenDbContext();
+                var userId = User.Identity.GetUserId();
+                var sender = ctx.Users.Find(userId);
+                var name = sender.UserFirstname + " " + sender.UserLastname;
+                var message = name + " har skickat ett meddelande: " + model.MessageText;
 
-            ctx.Messages.Add(new MessageModel
-            {
-                MessageReceiverID = Users,
-                MessageSenderID = userId,
-                MessageTitle = model.MessageTitle,
-                MessageText = message,
-            });
+                ctx.Messages.Add(new MessageModel
+                {
+                    MessageReceiverID = Users,
+                    MessageSenderID = userId,
+                    MessageTitle = model.MessageTitle,
+                    MessageText = message,
+                });
 
-            ctx.SaveChanges();
-
+                ctx.SaveChanges();
+  
+            
             return RedirectToAction("index");
         }
 
         [AuthorizeUser]
         public void SendPmNotification(string userId, string receiverId, string title, string desc)
         {
-            //ListUsers();
+
             var ctx = new OruBloggenDbContext();
-            //var userId = User.Identity.GetUserId();
 
             ctx.Messages.Add(new MessageModel
             {
@@ -123,6 +132,17 @@ namespace OruBloggen.Controllers
             ViewData["Users"] = List;
         }
 
+        public void ListSpecificUser(string userID)
+        {
+            var ctx = new OruBloggenDbContext();
+            List<SelectListItem> List = new List<SelectListItem>();
+            foreach (var item in ctx.Users.Where(u => u.UserID.Equals(userID)))
+            {
+                List.Add(new SelectListItem() { Text = item.UserFirstname + " " + item.UserLastname, Value = item.UserID });
+            }
+            ViewData["Users"] = List;
+        }
+
         [AuthorizeUser]
         public ActionResult ShowMessages()
         {
@@ -141,20 +161,10 @@ namespace OruBloggen.Controllers
             }
             ctx.SaveChanges();
         
-            //var senders = new List<UserModel>();
-
-            //foreach (var item in messages)
-            //{
-            //    senders.AddRange(ctx.Users
-            //        .Distinct()
-            //        .Where(s => s.UserID == item.MessageSenderID));
-
-            //}
 
             var model = new MessageViewModel()
             {
                 ListOfMessages = messages,
-                //    ListOfSenders = senders.Distinct().ToList(),
             };
 
             return View(model);

@@ -21,6 +21,7 @@ namespace OruBloggen.Models
         public DbSet<NewsModel> News { get; set; }
         public DbSet<PostFilesModel> PostFiles { get; set; }
         public DbSet<ProjectFilesModel> ProjectFiles { get; set; }
+        public DbSet<ProjectCommentModel> ProjectComments { get; set; }
 
 
         public OruBloggenDbContext() : base("OruBloggen") {}

@@ -18,18 +18,27 @@
                 <p id="pDetails"></p>
             </div>
             <div class="modal-footer">
-                <button type="button" style="float:left;" id="meetingAccess" class="btn btn-default">Details</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
+<div>
+    <input type="button" class="btn btn-default" style="float: right; margin-top: 10px;" value="Export iCal"
+           onclick="location.href='@Url.Action("ExportToIcal", "MeetingCalendar")'" />
 
-<input type="button" class="btn btn-default" style="float: right; margin-top: 10px;" value="Export iCal" 
-       onclick="location.href='@Url.Action("ExportToIcal", "MeetingCalendar")'" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.css" rel="stylesheet" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.print.css" rel="stylesheet" media="print" />
+</div>
+<div class="teams">
 
-<link href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.css" rel="stylesheet" />
-<link href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.print.css" rel="stylesheet" media="print" />
+    <a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end team" style="margin-bottom: 2px; background-color: #228B22; border-color: #228B22;"><div class="fc-content"><span class="fc-title">Ekonomi</span></div></a>
+    <a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end team" style="margin-bottom: 2px; background-color: #4169E1; border-color: #4169E1;"><div class="fc-content"><span class="fc-title">Informatik</span></div></a>
+    <a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end team" style="margin-bottom: 2px; background-color: #BA55D3; border-color: #BA55D3;"><div class="fc-content"><span class="fc-title">Juridik</span></div></a>
+    <a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end team" style="margin-bottom: 2px; background-color: #A52A2A; border-color: #A52A2A;"><div class="fc-content"><span class="fc-title">Statistik</span></div></a>
+    <a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end team" style="margin-bottom: 2px; background-color: #808080; border-color: #808080;"><div class="fc-content"><span class="fc-title">Inställt/Avslutat</span></div></a>
+
+</div>
 
 @section scripts{
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>

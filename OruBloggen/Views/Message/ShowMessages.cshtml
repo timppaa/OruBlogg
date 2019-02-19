@@ -5,6 +5,8 @@
 
 <h2>Inkorg</h2>
 @Html.ActionLink("Skicka nytt meddelande", "Index", "Message")
+
+
 @using (Html.BeginForm("ShowMessages", "Messages", FormMethod.Post))
 {
     <link rel="stylesheet" type="text/css" href="~/Content/Site.css" />
@@ -24,6 +26,7 @@
     else
     {
         <h4>Du har inga meddelanden</h4>
+
 
     }
 }

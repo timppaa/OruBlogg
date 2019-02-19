@@ -35,16 +35,41 @@ namespace OruBloggen.Models
                 string totalString = days + hours + minutes + seconds + "";
                 int total = int.Parse(totalString);
                 Debug.WriteLine("MellanSkillnad: " + total);
+
                 if (-30 < total && total < 30)
                 {
                     var mailLista = new List<string>();
-                    foreach(var usermeeting in meeting.UserMeetingModel.Where(u => u.UserModel.UserEmailNotification == true))
+                    var phoneNumbers = new List<string>();
+                    foreach(var usermeeting in meeting.UserMeetingModel.Where(m => m.MeetingModel.MeetingActive == true))
                     {
-                        mailLista.Add(atx.Users.FirstOrDefault(u => u.Id == usermeeting.UserID).Email);
+                        if (usermeeting.UserModel.UserEmailNotification)
+                        {
+                            mailLista.Add(atx.Users.FirstOrDefault(u => u.Id == usermeeting.UserID).Email);
+                        }
+
+                        if (usermeeting.UserModel.UserSmsNotification)
+                        {
+                            phoneNumbers.Add(ctx.Users.FirstOrDefault(u => u.UserID.Equals(usermeeting.UserID)).UserPhoneNumber.ToString());
+                        }
+
+                        if (usermeeting.UserModel.UserPmNotification)
+                        {
+                            var message = "Påmminelse: följande möte börjar om 30 minuter. " + usermeeting.MeetingModel.MeetingTitle + "Innehåll: " + usermeeting.MeetingModel.MeetingDesc + ". Startdatum: " + usermeeting.MeetingModel.MeetingStartDate.ToShortDateString() + ": " + usermeeting.MeetingModel.MeetingStartDate.ToShortTimeString() +
+                                          ". Slutdatum: " + usermeeting.MeetingModel.MeetingEndDate.ToShortDateString() + ": " + usermeeting.MeetingModel.MeetingEndDate.ToShortTimeString() + ".";
+                            var notification = new NotificationController();
+                          notification.SendReminderPM(usermeeting.UserID, usermeeting.MeetingModel.MeetingTitle, usermeeting.MeetingModel.MeetingDesc, message, usermeeting.MeetingModel.MeetingStartDate, usermeeting.MeetingModel.MeetingEndDate);
+                           
+                        }
                     }
+
+                    
                     var notificationController = new NotificationController();
                     var body = "Hej, du har ett möte om 30 minuter, du hittar mötet i OruBloggens kalender: " + meeting.MeetingTitle;
                     notificationController.SendEmail(mailLista, "Påminnelse av möte - Orubloggen", body);
+                    foreach (var number in phoneNumbers)
+                    {
+                        notificationController.SendSms(number, body);
+                    }
                 }
             }
         }

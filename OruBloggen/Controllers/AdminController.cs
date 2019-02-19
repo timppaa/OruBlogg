@@ -180,30 +180,41 @@ namespace OruBloggen.Controllers
             var currentUser = User.Identity.GetUserId();
             adminView.MyAccount = ctx.Users.FirstOrDefault(u => u.UserID == currentUser);
 
+            var autoCtx = new ApplicationDbContext();
+            var usersInfoList = autoCtx.Users;
+
             foreach(var user in ctx.Users)
             {
-                adminViewList.Add( new UserAdminViewModel
+                if (User.Identity.GetUserId() != user.UserID)
                 {
-                    UserID = user.UserID,
-                    Firstname = user.UserFirstname,
-                    Lastname = user.UserLastname,
-                    Socialnumber = user.UserBirthDate,
-                    Phonenumber = user.UserPhoneNumber,
-                    Position = user.UserPosition,
-                    isAdmin = user.UserIsAdmin,
-                    TeamID = user.UserTeamID,
-                    Team = teams.FirstOrDefault(t => t.TeamID == user.UserTeamID).TeamName,
-                    ImagePath = user.UserImagePath
-                });
+
+                    var email = usersInfoList.FirstOrDefault(u => u.Id == user.UserID).Email;
+
+
+                    adminViewList.Add(new UserAdminViewModel
+                    {
+                        UserID = user.UserID,
+                        Firstname = user.UserFirstname,
+                        Lastname = user.UserLastname,
+                        Socialnumber = user.UserBirthDate,
+                        Phonenumber = user.UserPhoneNumber,
+                        Position = user.UserPosition,
+                        isAdmin = user.UserIsAdmin,
+                        TeamID = user.UserTeamID,
+                        Team = teams.FirstOrDefault(t => t.TeamID == user.UserTeamID).TeamName,
+                        ImagePath = user.UserImagePath,
+                        Email = email
+                    });
+                }
             }
 
             adminView.Userlist = adminViewList;
-            ListTeams();
+            adminView.Teams = ListTeams();
 
             return View(adminView);
         }
 
-        public void ListTeams()
+        public List<SelectListItem> ListTeams()
         {
             var ctx = new OruBloggenDbContext();
             List<SelectListItem> List = new List<SelectListItem>();
@@ -211,7 +222,8 @@ namespace OruBloggen.Controllers
             {
                 List.Add(new SelectListItem() { Text = item.TeamName, Value = item.TeamID.ToString() });
             }
-            ViewData["Teams"] = List;
+
+            return List;
 
         }
 
@@ -244,8 +256,137 @@ namespace OruBloggen.Controllers
             account.UserTeamID = item.TeamID;
             ctx.SaveChanges();
 
+            var autoCtx = new ApplicationDbContext();
+            var loginInfo = autoCtx.Users.FirstOrDefault(l => l.Id == item.UserID);
+            loginInfo.Email = item.Email;
+            loginInfo.UserName = item.Email;
+            autoCtx.SaveChanges();
+
             return RedirectToAction("AllUsers");
         }
+
+        public ActionResult RemoveUser(string id)
+        {
+            var userMeeting = ctx.UserMeetings.Where(u => u.UserID == id);
+            foreach(var um in userMeeting)
+            {
+                ctx.UserMeetings.Remove(um);
+                ctx.SaveChanges();
+            }
+
+            var projects = ctx.Projects.Where(p => p.ProjectUserID == id);
+            foreach(var p in projects)
+            {
+                RemoveProjectFiles(p.ProjectID);
+                RemoveComments(p.ProjectID);
+                ctx.Projects.Remove(p);
+                ctx.SaveChanges();
+            }
+
+            var posts = ctx.Posts.Where(p => p.PostUserID == id);
+            foreach(var p in posts)
+            {
+                RemovePostFiles(p.PostID);
+                RemovePostReports(p.PostID);
+                ctx.Posts.Remove(p);
+                ctx.SaveChanges();
+            }
+
+            var noticifation = ctx.Notifications.Where(n => n.UserID == id);
+            foreach(var n in noticifation)
+            {
+                ctx.Notifications.Remove(n);
+                ctx.SaveChanges();
+            }
+
+            var postReceiver = ctx.Messages.Where(m => m.MessageReceiverID == id);
+            var postSender = ctx.Messages.Where(m => m.MessageSenderID == id);
+            foreach(var pr in postReceiver)
+            {
+                ctx.Messages.Remove(pr);
+                ctx.SaveChanges();
+            }
+
+            foreach(var ps in postSender)
+            {
+                ctx.Messages.Remove(ps);
+                ctx.SaveChanges();
+            }
+
+            var meeting = ctx.Meetings.Where(m => m.MeetingUserID == id);
+            foreach(var m in meeting)
+            {
+                RemoveInvited(m.MeetingID);
+                ctx.Meetings.Remove(m);
+                ctx.SaveChanges();
+            }
+
+            var user = ctx.Users.FirstOrDefault(u => u.UserID == id);
+            ctx.Users.Remove(user);
+            ctx.SaveChanges();
+
+            var autoCtx = new ApplicationDbContext();
+            var account = autoCtx.Users.FirstOrDefault(p => p.Id == id);
+            autoCtx.Users.Remove(account);
+            autoCtx.SaveChanges();
+
+            return RedirectToAction("AllUsers");
+        }
+
+        private void RemoveProjectFiles(int projectID)
+        {
+            var fileList = ctx.ProjectFiles.Where(f => f.ProjectID == projectID);
+
+            foreach (var file in fileList)
+            {
+                ctx.ProjectFiles.Remove(file);
+                ctx.SaveChanges();
+            }
+        }
+
+        private void RemoveComments(int projectID)
+        {
+            var comments = ctx.ProjectComments.Where(c => c.ProjectID == projectID);
+
+            foreach (var comment in comments)
+            {
+                ctx.ProjectComments.Remove(comment);
+                ctx.SaveChanges();
+            }
+        }
+
+        private void RemovePostFiles(int postID)
+        {
+            var postList = ctx.PostFiles.Where(f => f.PostID == postID);
+
+            foreach (var post in postList)
+            {
+                ctx.PostFiles.Remove(post);
+                ctx.SaveChanges();
+            }
+        }
+
+        private void RemovePostReports(int postID)
+        {
+            var reportList = ctx.PostReports.Where(p => p.PostID == postID);
+            
+            foreach(var report in reportList)
+            {
+                ctx.PostReports.Remove(report);
+                ctx.SaveChanges();
+            }
+        }
+
+        private void RemoveInvited(int meetingID)
+        {
+            var invited = ctx.UserMeetings.Where(u => u.MeetingID == meetingID);
+            foreach(var i in invited)
+            {
+                ctx.UserMeetings.Remove(i);
+                ctx.SaveChanges();
+            }
+        }
+
 
         //News
         public ActionResult AdminNews ()
