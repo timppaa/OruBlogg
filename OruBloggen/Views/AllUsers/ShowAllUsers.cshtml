@@ -3,53 +3,78 @@
     ViewBag.Title = "ShowAllUsers";
 }
 
-<h3>Hitta personal</h3>
 @using (Html.BeginForm("ShowAllUsers", "AllUsers", FormMethod.Post))
 {
-    
-    <input class="form-control" type="text" id="searchString" autocomplete="off" placeholder="Sök användare/arbetslag" style="margin-top:10px; margin-bottom:10px"/>
+
+  
 
     <link rel="stylesheet" type="text/css" href="~/Content/Site.css" />
-    <table class="table textSize">
 
+    <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Sök användare" autocomplete="off">
+
+
+    <table id="myTable" class="table textSize">
         <tbody class="hover">
-
+            <tr class="header">
+                
+            </tr>
 
             @foreach (var item in Model.AllUsers)
             {
-                <tr id="trhover" onclick="location.href = '@(Url.Action("ShowOtherUser" , "ProfilePage", new { id = item.UserID}))'">
-                    <td>
-                        <img src="/Images/@item.UserImagePath" class="images" />
+                <tr id="users" style="font-size: 15px;" onclick="location.href = '@(Url.Action("ShowOtherUser" , "ProfilePage", new { id = item.UserID}))'">
 
-                    </td>
-                    <td>
-                        @item.UserFirstname @item.UserLastname
-                    </td>
+                    <td> <img src="/Images/@item.UserImagePath" class="images" /> <strong> @item.UserFirstname @item.UserLastname</strong>, @item.TeamModel.TeamName-avdelningen</td>
                 </tr>
+
             }
         </tbody>
     </table>
-}
-@section Scripts {
-<script>
-    $(function () {
-        $(document)
-            .on("input", "#searchString", function () {
-                listUsers();
-            })
+    
 
-        function listUsers() {
-            $.ajax({
-                url: '/AllUsers/ListSearchedUsers',
-                type: "get",
-                dataType: "json",
-                data: { searchString: $("#searchString").val() },
-                success: function (data) {
-                    $("#trhover").remove();
-                    $("#trhover").append(data);
-                }
-            });
-        }
-    });
-</script>
+        @*<table class="table textSize" id="users">
+
+                <tbody class="hover">
+
+
+                    @foreach (var item in Model.AllUsers)
+                    {
+
+                        <tr id="trhover" onclick="location.href = '@(Url.Action("ShowOtherUser" , "ProfilePage", new { id = item.UserID}))'">
+                            <td>
+                                <img src="/Images/@item.UserImagePath" class="images" />
+
+                            </td>
+                            <td>
+                                @item.UserFirstname @item.UserLastname
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>*@
     }
+@section Scripts {
+        <script>
+                function myFunction() {
+          
+                var input, filter, table, tr, td, i, txtValue;
+                input = document.getElementById("myInput");
+                filter = input.value.toUpperCase();
+                table = document.getElementById("myTable");
+                tr = table.getElementsByTagName("tr");
+
+                
+                for (i = 0; i < tr.length; i++) {
+                    td = tr[i].getElementsByTagName("td")[0];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+              }
+            }
+          }
+        </script>
+  
+}

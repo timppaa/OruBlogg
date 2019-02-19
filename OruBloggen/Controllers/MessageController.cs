@@ -16,11 +16,20 @@ namespace OruBloggen.Controllers
     {
         // GET: Message
         [AuthorizeUser]
-        public ActionResult Index()
+        public ActionResult Index(string userID)
         {
-            ListUsers();
-            return View();       
+            if (userID == null)
+            {
+                ListUsers();
+                return View();
+            }
+            else
+            {
+                ListSpecificUser(userID);
+                return View();
+            }
         }
+
 
         [AuthorizeUser]
         public ActionResult SendMessage(MessageViewModel model, string Users)
@@ -117,6 +126,17 @@ namespace OruBloggen.Controllers
             var ctx = new OruBloggenDbContext();
             List<SelectListItem> List = new List<SelectListItem>();
             foreach (var item in ctx.Users)
+            {
+                List.Add(new SelectListItem() { Text = item.UserFirstname + " " + item.UserLastname, Value = item.UserID });
+            }
+            ViewData["Users"] = List;
+        }
+
+        public void ListSpecificUser(string userID)
+        {
+            var ctx = new OruBloggenDbContext();
+            List<SelectListItem> List = new List<SelectListItem>();
+            foreach (var item in ctx.Users.Where(u => u.UserID.Equals(userID)))
             {
                 List.Add(new SelectListItem() { Text = item.UserFirstname + " " + item.UserLastname, Value = item.UserID });
             }
