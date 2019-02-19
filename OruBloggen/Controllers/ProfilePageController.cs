@@ -158,19 +158,59 @@ namespace OruBloggen.Controllers
         public ActionResult CancelMeeting(int meetingId, string title, DateTime startDate)
         {
             var ctx = new OruBloggenDbContext();
+            var appCtx = new ApplicationDbContext();
+            var userMeetings = ctx.UserMeetings.Where(m => m.MeetingID == meetingId);
+            var applicationUsers = appCtx.Users.ToList();
+            var emails = new List<string>();
+            var phoneNumbers = new List<string>();
+            var notification = new NotificationController();
+            string ebody = "";
+
+            var userList = ctx.Users.ToList() as IEnumerable<UserModel>;
+
             //var meetingActive = ctx.Meetings.FirstOrDefault(m => m.MeetingID == meetingId).MeetingActive;
 
             if (ctx.Meetings.FirstOrDefault(m => m.MeetingID == meetingId).MeetingActive)
             {
                 ctx.Meetings.FirstOrDefault(m => m.MeetingID == meetingId).MeetingActive = false;
 
-                var appCtx = new ApplicationDbContext();
-
-                var userMeetings = ctx.UserMeetings.Where(m => m.MeetingID == meetingId);
-                var emails = new List<string>();
+                
+               
                 foreach (var user in userMeetings)
+
                 {
-                    emails.Add(appCtx.Users.FirstOrDefault(u => u.Id.Equals(user.UserID)).Email);
+
+                    userList = userList.Where(u => u.UserID == user.UserID);
+
+                    var body = "Följande möte har blivit inställt: " + user.MeetingModel.MeetingTitle + Environment.NewLine +
+                               "Startdatum: " + user.MeetingModel.MeetingStartDate.ToShortDateString() + " "
+                               + user.MeetingModel.MeetingStartDate.ToShortTimeString() + Environment.NewLine +
+
+                               "Slutdatum: " + user.MeetingModel.MeetingEndDate.ToShortDateString() + " "
+                               + user.MeetingModel.MeetingEndDate.ToShortTimeString() + Environment.NewLine +
+
+                               "Beskrivning: " + user.MeetingModel.MeetingDesc;
+                    ebody = body;
+
+                    foreach(var userModel in userList) { 
+
+                        if (userModel.UserEmailNotification == true)
+                        {
+                            emails.Add(applicationUsers.FirstOrDefault(e => e.Id == userModel.UserID).Email);
+                        }
+
+                        if (userModel.UserSmsNotification == true)
+                        {
+                            phoneNumbers.Add(userModel.UserPhoneNumber.ToString());
+                            notification.SendSms(userModel.UserPhoneNumber.ToString(), body);
+                        }
+
+                        if (userModel.UserPmNotification == true)       
+                        {
+                            notification.SendReminderPM(user.UserID, user.MeetingModel.MeetingTitle, user.MeetingModel.MeetingDesc, body, user.MeetingModel.MeetingStartDate, user.MeetingModel.MeetingEndDate);
+                        }
+
+                    }
                 }
                 ctx.SaveChanges();
 
