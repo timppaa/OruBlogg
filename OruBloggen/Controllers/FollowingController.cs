@@ -46,30 +46,34 @@ namespace OruBloggen.Controllers
         public ActionResult FollowCategory(int categoryID)
         {
             var ctx = new OruBloggenDbContext();
-            var userID = User.Identity.GetUserId();
+            var userId = User.Identity.GetUserId();
 
             ctx.Notifications.Add(new NotificationModel
             {
-                UserID = userID,
+                UserID = userId,
                 FollowCategoryID = categoryID,
             });
 
             ctx.SaveChanges();
 
+
             return RedirectToAction("ShowInfo", "ProfilePage");
         }
 
+        
         public ActionResult UnfollowCategory(int categoryID)
         {
             var ctx = new OruBloggenDbContext();
-            var user = User.Identity.GetUserId();
-            var notificationId = ctx.Notifications.Where(t => t.UserID == user).Where(t => t.FollowCategoryID == categoryID).Select(t => t.NotificationID).First();
+            var userId = User.Identity.GetUserId();
+            var notificationId = ctx.Notifications.Where(t => t.UserID == userId).Where(t => t.FollowCategoryID == categoryID).Select(t => t.NotificationID).First();
 
             var unfollow = ctx.Notifications.Find(notificationId);
             ctx.Notifications.Remove(unfollow);
             ctx.SaveChanges();
 
+
             return RedirectToAction("ShowInfo", "ProfilePage");
+
         }
     }
 }
