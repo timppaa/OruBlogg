@@ -170,7 +170,39 @@ namespace OruBloggen.Controllers
                 var emails = new List<string>();
                 foreach (var user in userMeetings)
                 {
-                    emails.Add(appCtx.Users.FirstOrDefault(u => u.Id.Equals(user.UserID)).Email);
+
+                    userList = userList.Where(u => u.UserID == user.UserID);
+
+                    var body = "Följande möte har blivit inställt: " + user.MeetingModel.MeetingTitle + Environment.NewLine +
+                               "Startdatum: " + user.MeetingModel.MeetingStartDate.ToShortDateString() + " "
+                               + user.MeetingModel.MeetingStartDate.ToShortTimeString() + Environment.NewLine +
+
+                               "Slutdatum: " + user.MeetingModel.MeetingEndDate.ToShortDateString() + " "
+                               + user.MeetingModel.MeetingEndDate.ToShortTimeString() + Environment.NewLine +
+
+                               "Beskrivning: " + user.MeetingModel.MeetingDesc;
+                    ebody = body;
+
+                    foreach(var userModel in userList)
+                    { 
+
+                        if (userModel.UserEmailNotification == true)
+                        {
+                            emails.Add(applicationUsers.FirstOrDefault(e => e.Id == userModel.UserID).Email);
+                        }
+
+                        if (userModel.UserSmsNotification == true)
+                        {
+                            phoneNumbers.Add(userModel.UserPhoneNumber.ToString());
+                            notification.SendSms(userModel.UserPhoneNumber.ToString(), body);
+                        }
+
+                        if (userModel.UserPmNotification == true)       
+                        {
+                            notification.SendReminderPM(user.UserID, user.MeetingModel.MeetingTitle, user.MeetingModel.MeetingDesc, body, user.MeetingModel.MeetingStartDate, user.MeetingModel.MeetingEndDate);
+                        }
+
+                    }
                 }
                 ctx.SaveChanges();
 
