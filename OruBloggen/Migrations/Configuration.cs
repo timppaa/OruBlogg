@@ -39,6 +39,7 @@ namespace OruBloggen.Migrations
                 new CategoryModel() { CategoryName = "Juridik", IsFormel = true },
                 new CategoryModel() { CategoryName = "Statistik", IsFormel = true }
                 );
+
         }
 
     }
