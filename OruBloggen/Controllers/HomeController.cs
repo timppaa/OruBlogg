@@ -28,5 +28,10 @@ namespace OruBloggen.Controllers
             return list;
         }
 
+        public ActionResult Unauthorised()
+        {
+            return View();
+        }
+
     }
 }

@@ -88,7 +88,7 @@ namespace OruBloggen.Controllers
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
                 default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
+                    ModelState.AddModelError("", "Felaktiga inloggningsuppgifter.");
                     return View(model);
             }
         }
@@ -177,6 +177,10 @@ namespace OruBloggen.Controllers
                         string path = Path.Combine(Server.MapPath("~/Images/" + fileName + fileType));
                         model.ImagePath = fileName + fileType;
                         image.SaveAs(path); 
+                    }
+                    else
+                    {
+                        model.ImagePath = "/noProfileImage.png";
                     }
 
 

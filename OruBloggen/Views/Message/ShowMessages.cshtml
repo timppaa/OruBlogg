@@ -12,24 +12,15 @@
     <link rel="stylesheet" type="text/css" href="~/Content/Site.css" />
     if (Model.ListOfMessages.Count != 0)
     {
-
-        //foreach (var sender in Model.ListOfSenders)
-        //{
         foreach (var item in Model.ListOfMessages)
         {
-            //if (sender.UserID == item.MessageSenderID)
-            ///*{*/
             <div class="Mydiv divbutton">
                 <p><strong>Titel</strong>: @item.MessageTitle</p>
-                <p>@*<strong>Text</strong>:*@ @item.MessageText</p>
-
-                @*<p><strong>Avsändare</strong>: @sender.UserFirstname @sender.UserLastname</p>*@
+                <p>@item.MessageText</p>
 
                 <button type="button" style="display:none" onclick="location.href ='@Url.Action("ReturnResponsePage", "Message", new { userId = item.MessageSenderID })'">Svara </button>
             </div>
             <br />
-            //}
-            //}
         }
     }
     else
